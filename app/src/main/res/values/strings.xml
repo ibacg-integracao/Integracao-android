@@ -28,4 +28,6 @@
     <string name="hour_format">%d:%02d</string>
     <string name="street_or_road">Rua ou Estrada</string>
     <string name="invalid_postal_code">CEP inválido</string>
+    <string name="out_of_order_title">Manutenção!</string>
+    <string name="out_of_order_message">O Finder está em manutenção!</string>
 </resources>

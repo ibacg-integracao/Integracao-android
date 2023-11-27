@@ -2,12 +2,26 @@ package br.com.atitude.finder.presentation._base
 
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import br.com.atitude.finder.R
 import br.com.atitude.finder.data.network.entity.ErrorResponse
 import com.google.gson.Gson
 
 
 abstract class BaseActivity: AppCompatActivity() {
     abstract fun getViewModel(): BaseViewModel?
+
+    override fun onResume() {
+        super.onResume()
+        if(getViewModel()?.isOutOfOrder() == true) {
+            val title = getString(R.string.out_of_order_title)
+            val message = getString(R.string.out_of_order_message)
+            AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .show()
+        }
+    }
 
     fun configApiErrorHandler() {
         getViewModel()?.apiError?.observe(this) { error ->

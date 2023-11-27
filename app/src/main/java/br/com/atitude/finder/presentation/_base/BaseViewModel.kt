@@ -4,16 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-abstract class BaseViewModel: ViewModel() {
+abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig): ViewModel() {
 
     private val _lastError = MutableLiveData<Throwable?>(null)
     val lastError: LiveData<Throwable?> = _lastError
 
     private val _apiError = MutableLiveData<ApiError?>()
     val apiError: LiveData<ApiError?> = _apiError
+
+    fun isOutOfOrder() = appRemoteConfig.getBoolean("OutOfOrder")
 
     fun setLastError(throwable: Throwable) {
         _lastError.postValue(throwable)

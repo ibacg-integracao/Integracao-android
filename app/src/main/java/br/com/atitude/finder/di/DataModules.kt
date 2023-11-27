@@ -5,6 +5,7 @@ import br.com.atitude.finder.data.analytics.tracking.AnalyticsTracking
 import br.com.atitude.finder.data.analytics.tracking.AnalyticsTrackingImpl
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.RetrofitConfig
+import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.repository.ApiRepository
 import br.com.atitude.finder.repository.ApiRepositoryImpl
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -24,6 +25,8 @@ val dataModules = module {
     single {
         FirebaseAnalytics.getInstance(androidContext())
     }
+
+    single { AppRemoteConfig() }
 
     factory<AnalyticsTracking> { AnalyticsTrackingImpl(get()) }
     factory<ApiRepository> { ApiRepositoryImpl(get()) }

@@ -2,6 +2,7 @@ package br.com.atitude.finder.presentation.creator
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.WeekDay
@@ -9,7 +10,7 @@ import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
 import com.google.android.gms.maps.model.LatLng
 
-class CreatorViewModel(private val apiRepository: ApiRepository) : BaseViewModel() {
+class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig: AppRemoteConfig) : BaseViewModel(appRemoteConfig) {
 
     private val _addressCoordinates = MutableLiveData<LatLng?>()
     val addressCoordinates: LiveData<LatLng?> = _addressCoordinates

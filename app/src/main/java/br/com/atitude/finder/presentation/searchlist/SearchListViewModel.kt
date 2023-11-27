@@ -2,13 +2,15 @@ package br.com.atitude.finder.presentation.searchlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
 
 class SearchListViewModel(
-    private val repository: ApiRepository
-) : BaseViewModel() {
+    private val repository: ApiRepository,
+    remoteConfig: AppRemoteConfig
+) : BaseViewModel(remoteConfig) {
 
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
     val flow: LiveData<Flow> = _flow
