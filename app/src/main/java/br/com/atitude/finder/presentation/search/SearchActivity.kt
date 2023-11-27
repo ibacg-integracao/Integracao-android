@@ -152,6 +152,7 @@ class SearchActivity : ToolbarActivity() {
 
     private fun handleSearchButton() {
         val postalCode = getPostalCode()
+        getViewModel().trackSearch(postalCode)
 
         binding.includeWithParams.textInputLayoutPostalCode.error = null
 

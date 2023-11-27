@@ -8,7 +8,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val presentationModules = module {
-    viewModel { SearchViewModel(get()) }
+    viewModel { SearchViewModel(get(), get()) }
     viewModel { SearchListViewModel(get()) }
     viewModel { CreatorViewModel(get()) }
     viewModel { PointMapViewModel(get()) }
