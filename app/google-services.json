@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:352435438616:android:fbb37233b5ee37bbbd6f6d",
+        "mobilesdk_app_id": "1:352435438616:android:71ca8c208c37c8f5bd6f6d",
         "android_client_info": {
           "package_name": "br.com.atitude.finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTu4lVYPPUGYGNgdeSrnOqTFWf2wdohj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:352435438616:android:e76700e506b6c752bd6f6d",
+        "android_client_info": {
+          "package_name": "br.com.atitude.finder.dev"
         }
       },
       "oauth_client": [],

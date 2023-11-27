@@ -16,8 +16,8 @@ android {
         applicationId = "br.com.atitude.finder"
         minSdk = 24
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.0.0"
+        versionCode = 6
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -33,6 +33,7 @@ android {
         }
         debug {
             buildConfigField("String", "API_URL", "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\"")
+            applicationIdSuffix = ".dev"
         }
     }
     compileOptions {
