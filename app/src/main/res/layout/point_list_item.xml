@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginVertical="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_point_name"
+        style="@style/Text.Bold.14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Nome da Célula" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_distance"
+        style="@style/Text.Italic.14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/point_distance"
+        app:layout_constraintStart_toEndOf="@+id/text_view_point_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="text_view_distance, text_view_point_name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_address"
+        style="@style/Text.Italic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estrada do Cangalo, 871, Campo Grande, Rio de Janeiro, RJ"
+        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_time"
+        style="@style/Text.14sp"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/point_weekday_time"
+        app:layout_constraintStart_toStartOf="@+id/text_view_address"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_address" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_tag"
+        style="@style/Text.Italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_time"
+        tools:text="Beone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Integração Finder</string>
+    <string name="postal_code">CEP</string>
+    <string name="postal_code_example">Ex.: 99999–999</string>
+    <string name="week_days">Dias da semana</string>
+    <string name="monday">Segunda-Feira</string>
+    <string name="tuesday">Terça-Feira</string>
+    <string name="wednesday">Quarta-Feira</string>
+    <string name="thursday">Quinta-Feira</string>
+    <string name="friday">Sexta-Feira</string>
+    <string name="time">Horário</string>
+    <string name="select_time">Selecione o horário</string>
+    <string name="tag">Categoria</string>
+    <string name="select_tag">Selecione o categoria</string>
+    <string name="search">Buscar</string>
+    <string name="create">Criar</string>
+    <string name="point_distance">(aprox. %.1f %s)</string>
+    <string name="point_weekday_time">%s às %d:%02d</string>
+    <string name="searching">Buscando…</string>
+    <string name="no_points">Nenhuma célula encontrada</string>
+    <string name="search_input">%s: %s</string>
+    <string name="point_name">Nome da célula</string>
+    <string name="leader_name">Nome do Líder</string>
+    <string name="leader_phone">Contato do Líder</string>
+    <string name="title_activity_point_map">PointMapActivity</string>
+    <string name="set_point_location"><u>Confirmar localização</u></string>
+    <string name="edit_point_location">Editar localização da célula</string>
+    <string name="hour_format">%d:%02d</string>
+    <string name="street_or_road">Rua ou Estrada</string>
+    <string name="invalid_postal_code">CEP inválido</string>
+</resources>
