@@ -8,7 +8,8 @@ enum class WeekDay(val response: String, @StringRes val localization: Int) {
     TUESDAY("tuesday", R.string.tuesday),
     WEDNESDAY("wednesday", R.string.wednesday),
     THURSDAY("thursday", R.string.thursday),
-    FRIDAY("friday", R.string.friday);
+    FRIDAY("friday", R.string.friday),
+    SATURDAY("saturday", R.string.saturday);
 
     companion object {
         fun getByResponse(response: String): WeekDay? =

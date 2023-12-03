@@ -6,9 +6,13 @@ import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
+import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.extensions.toPointTime
 
 class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
+    override suspend fun getWeekDays(): List<WeekDay> =
+        networkApi.getWeekDays().mapNotNull { WeekDay.getByResponse(it.name) }
+
     override suspend fun searchPoints(
         postalCode: String,
         weekDays: List<String>,

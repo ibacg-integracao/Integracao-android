@@ -4,8 +4,11 @@ import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
+import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
+
+    suspend fun getWeekDays(): List<WeekDay>
     suspend fun searchPoints(
         postalCode: String,
         weekDays: List<String>,

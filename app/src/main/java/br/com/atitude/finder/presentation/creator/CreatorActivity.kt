@@ -27,21 +27,25 @@ class CreatorActivity : ToolbarActivity() {
     private val pointMapResult =
         registerForActivityResult(PointMapResultContract()) { pointAddress ->
             if (pointAddress != null)
-                creatorViewModel.setAddressCoordinates(pointAddress)
+                getViewModel().setAddressCoordinates(pointAddress)
         }
 
     private fun initWeekDayInput() {
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            WeekDay.values().map { getString(it.localization) }
-        )
 
-        binding.autocompleteWeekDay.setAdapter(adapter)
-        binding.autocompleteWeekDay.setOnItemClickListener { _, _, index, _ ->
-            val weekDay = WeekDay.values()[index]
-            creatorViewModel.setWeekDay(weekDay)
-            binding.autocompleteWeekDay.clearFocus()
+        getViewModel().weekDays.observe(this) { weekDays ->
+            binding.autocompleteWeekDay.isEnabled = weekDays.isNotEmpty()
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                weekDays.map { weekDay -> getString(weekDay.localization) }
+            )
+
+            binding.autocompleteWeekDay.setAdapter(adapter)
+            binding.autocompleteWeekDay.setOnItemClickListener { _, _, index, _ ->
+                val weekDay = weekDays[index]
+                getViewModel().setWeekDay(weekDay)
+                binding.autocompleteWeekDay.clearFocus()
+            }
         }
     }
 
@@ -213,7 +217,11 @@ class CreatorActivity : ToolbarActivity() {
             return
         }
 
-        creatorViewModel.fetchPostalCodeData(textInputText)
+        getViewModel().fetchPostalCodeData(textInputText)
+    }
+
+    private fun fetchWeekDays() {
+        getViewModel().fetchWeekDays()
     }
 
     private fun fillFieldWithPostalCodeData(postalCodeAddressInfo: PostalCodeAddressInfo) {
@@ -272,7 +280,7 @@ class CreatorActivity : ToolbarActivity() {
     }
 
     private fun initPostalCodeDataObserver() {
-        creatorViewModel.postalCodeData.observe(this) { postalCodeAddressInfo ->
+        getViewModel().postalCodeData.observe(this) { postalCodeAddressInfo ->
             if (postalCodeAddressInfo != null) {
                 fillFieldWithPostalCodeData(postalCodeAddressInfo)
             } else {
@@ -286,6 +294,7 @@ class CreatorActivity : ToolbarActivity() {
         super.onStart()
         configApiErrorHandler()
         initPostalCodeDataObserver()
+        fetchWeekDays()
     }
 
     private fun setPostalCodeInputWithInvalidPostalCodeError() {
@@ -322,8 +331,8 @@ class CreatorActivity : ToolbarActivity() {
         val pointMinutes = pointTimeTokens.second
         val pointLeaderName = binding.textInputLeaderName.text.toString()
         val pointLeaderPhone = binding.textInputLeaderPhone.text.toString()
-        val pointCoordinates = creatorViewModel.addressCoordinates.value ?: return
-        val weekDay = creatorViewModel.weekDay.value ?: return
+        val pointCoordinates = getViewModel().addressCoordinates.value ?: return
+        val weekDay = getViewModel().weekDay.value ?: return
         val pointPostalCode = binding.textInputPostalCode.text.toString()
         val pointPostalStreet = binding.textInputStreet.text.toString()
         val pointPostalNeighborhood = binding.textInputNeighborhood.text.toString()
@@ -331,7 +340,7 @@ class CreatorActivity : ToolbarActivity() {
         val pointPostalCity = binding.textInputCity.text.toString()
 
         if (scrollToFirstInputWithError().not()) {
-            creatorViewModel.createPoint(
+            getViewModel().createPoint(
                 name = pointName,
                 street = pointPostalStreet,
                 neighborhood = pointPostalNeighborhood,

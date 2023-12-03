@@ -8,6 +8,7 @@
     <string name="wednesday">Quarta-Feira</string>
     <string name="thursday">Quinta-Feira</string>
     <string name="friday">Sexta-Feira</string>
+    <string name="saturday">Sábado</string>
     <string name="time">Horário</string>
     <string name="select_time">Selecione o horário</string>
     <string name="tag">Categoria</string>

@@ -40,6 +40,7 @@ class SearchWeekDayAdapter(private val context: Context) :
                 WeekDay.WEDNESDAY -> textViewWeekDay.setText(R.string.wednesday)
                 WeekDay.THURSDAY -> textViewWeekDay.setText(R.string.thursday)
                 WeekDay.FRIDAY -> textViewWeekDay.setText(R.string.friday)
+                WeekDay.SATURDAY -> textViewWeekDay.setText(R.string.saturday)
             }
 
             textViewWeekDay.setOnClickListener {

@@ -12,6 +12,9 @@ import com.google.android.gms.maps.model.LatLng
 
 class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig: AppRemoteConfig) : BaseViewModel(appRemoteConfig) {
 
+    private val _weekDays = MutableLiveData<List<WeekDay>>(emptyList())
+    val weekDays: LiveData<List<WeekDay>> = _weekDays
+
     private val _addressCoordinates = MutableLiveData<LatLng?>()
     val addressCoordinates: LiveData<LatLng?> = _addressCoordinates
 
@@ -27,6 +30,13 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
 
     fun setWeekDay(weekDay: WeekDay) {
         _weekDay.postValue(weekDay)
+    }
+
+    fun fetchWeekDays() {
+        launch {
+            val weekDays = apiRepository.getWeekDays()
+            _weekDays.postValue(weekDays)
+        }
     }
 
     fun fetchPostalCodeData(postalCode: String) {
