@@ -12,7 +12,7 @@ data class SimplePointResponse(
     @SerializedName("hour") val hour: Int,
     @SerializedName("minute") val minute: Int,
     @SerializedName("tag") val tag: String,
-    @SerializedName("distance") val distance: DistanceResponse,
+    @SerializedName("distance") val distance: DistanceResponse?,
 )
 
 fun SimplePointResponse.toDomain() = SimplePoint(
@@ -23,5 +23,5 @@ fun SimplePointResponse.toDomain() = SimplePoint(
     hour = this.hour,
     minute = this.minute,
     tag = this.tag,
-    distance = this.distance.distance
+    distance = this.distance?.distance
 )

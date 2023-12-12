@@ -10,6 +10,13 @@ import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.extensions.toPointTime
 
 class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
+    override suspend fun deletePoint(id: String) {
+        networkApi.deletePoint(id)
+    }
+
+    override suspend fun getAllPoints(): List<SimplePoint> =
+        networkApi.getAllPoints().map { it.toDomain() }
+
     override suspend fun getWeekDays(): List<WeekDay> =
         networkApi.getWeekDays().mapNotNull { WeekDay.getByResponse(it.name) }
 

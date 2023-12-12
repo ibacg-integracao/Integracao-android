@@ -11,20 +11,20 @@ enum class SearchType(val type: String) {
     POSTAL_CODE("postal_code"), ADDRESS("address");
 
     companion object {
-        fun findByType(type: String) = SearchType.values().find { it.type == type }
+        fun findByType(type: String): SearchType? = SearchType.values().find { it.type == type }
     }
 }
 
 fun Context.openSearchList(
-    input: String,
-    type: SearchType,
+    input: String?,
+    type: SearchType?,
     weekDays: Set<WeekDay> = setOf(),
     tags: Set<String> = setOf(),
     times: Set<String> = setOf()
 ) {
     val intent = Intent(this, SearchListActivity::class.java).apply {
         putExtra(EXTRA_INPUT, input)
-        putExtra(EXTRA_INPUT_TYPE, type.type)
+        putExtra(EXTRA_INPUT_TYPE, type?.type)
         putExtra(EXTRA_WEEK_DAYS, weekDays.map { it.response }.toTypedArray())
         putExtra(EXTRA_TAGS, tags.toTypedArray())
         putExtra(EXTRA_TIMES, times.toTypedArray())

@@ -8,9 +8,11 @@ data class SimplePoint(
     val hour: Int,
     val minute: Int,
     val tag: String,
-    val distance: Double,
+    val distance: Double?,
 ) {
-    fun getPreciseDistance(): DistancePrecision {
+    fun getPreciseDistance(): DistancePrecision? {
+        if (distance == null) return null
+
         return DistancePrecision(
             if (distance >= 1000) DistanceUnit.KILOMETERS else DistanceUnit.METERS,
             if (distance >= 1000) distance / 1000 else distance,

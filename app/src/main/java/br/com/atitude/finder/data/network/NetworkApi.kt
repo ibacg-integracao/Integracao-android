@@ -6,12 +6,16 @@ import br.com.atitude.finder.data.network.entity.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface NetworkApi {
+
+    @DELETE("v1/point/{id}")
+    suspend fun deletePoint(@Path("id") id: String)
 
     @GET("v1/point/search")
     suspend fun searchPoints(
@@ -20,6 +24,9 @@ interface NetworkApi {
         @Query("tag") tags: List<String>,
         @Query("time") times: List<String>,
     ): List<SimplePointResponse>
+
+    @GET("v1/point/")
+    suspend fun getAllPoints(): List<SimplePointResponse>
 
     @GET("v1/point/time")
     suspend fun pointsTime(): List<String>

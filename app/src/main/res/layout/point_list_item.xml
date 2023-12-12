@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginVertical="8dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_point_name"
@@ -25,12 +25,22 @@
         app:layout_constraintStart_toEndOf="@+id/text_view_point_name"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/image_button_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_more_vert_24"
+        android:tint="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="text_view_distance, text_view_point_name" />
+        app:constraint_referenced_ids="text_view_distance, text_view_point_name, image_button_options" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_address"
@@ -43,9 +53,9 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_time"
         style="@style/Text.14sp"
-        android:layout_marginTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/point_weekday_time"
         app:layout_constraintStart_toStartOf="@+id/text_view_address"
         app:layout_constraintTop_toBottomOf="@+id/text_view_address" />

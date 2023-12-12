@@ -8,6 +8,10 @@ import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
 
+    suspend fun deletePoint(id: String)
+
+    suspend fun getAllPoints(): List<SimplePoint>
+
     suspend fun getWeekDays(): List<WeekDay>
     suspend fun searchPoints(
         postalCode: String,

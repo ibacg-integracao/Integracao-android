@@ -1,6 +1,7 @@
 package br.com.atitude.finder.presentation.searchlist
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DividerItemDecoration
 import br.com.atitude.finder.R
@@ -17,7 +18,7 @@ import br.com.atitude.finder.presentation._base.ToolbarActivity
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
-    private val input: String by lazy { intent.getStringExtra(EXTRA_INPUT).orEmpty() }
+    private val input: String? by lazy { intent.getStringExtra(EXTRA_INPUT) }
     private val inputType: SearchType? by lazy {
         intent.getStringExtra(EXTRA_INPUT_TYPE)?.let { SearchType.findByType(it) }
     }
@@ -36,7 +37,7 @@ class SearchListActivity : ToolbarActivity() {
 
     private lateinit var binding: ActivitySearchListBinding
 
-    private val adapter = SearchListAdapter(this)
+    private val adapter = SearchListAdapter(this, SearchListAdapterCallbackImpl())
 
     override fun getViewModel() = getViewModel<SearchListViewModel>()
 
@@ -84,10 +85,14 @@ class SearchListActivity : ToolbarActivity() {
                         weekDays.joinToString(", ") { getString(it.localization) }
                     stringBuilder.append("Dias: $weekDaysFormatted")
                 }
-
             }
 
-            binding.textViewInput.text = stringBuilder.toString()
+            if(stringBuilder.isBlank()) {
+                binding.textViewInput.visibleOrGone(false)
+            } else {
+                binding.textViewInput.text = stringBuilder.toString()
+            }
+
         }
     }
 
@@ -123,6 +128,10 @@ class SearchListActivity : ToolbarActivity() {
             visibleOrGone(true)
             text = getString(R.string.no_points)
         }
+        
+        with(binding.recyclerViewPoints) {
+            visibleOrGone(false)
+        }
     }
 
     private fun handleSearchingPoints() {
@@ -148,11 +157,42 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     private fun initViewModel() {
-        getViewModel().search(
-            postalCode = input,
-            weekDays = weekDays.map { it.response },
-            tags = tags,
-            times = times
-        )
+        fetchPoints()
+    }
+
+    private fun fetchPoints() {
+        input?.let { input ->
+            getViewModel().search(
+                postalCode = input,
+                weekDays = weekDays.map { it.response },
+                tags = tags,
+                times = times
+            )
+        } ?: run {
+            getViewModel().fetchAllPoints()
+        }
+    }
+
+    inner class SearchListAdapterCallbackImpl: SearchListAdapterCallback {
+        override fun onSelectDelete(id: String) {
+            AlertDialog.Builder(this@SearchListActivity)
+                .setTitle("Exclusão de Célula")
+                .setMessage("Tem certeza que deseja excluir esta Célula?")
+                .setPositiveButton("Excluir") { dialog, which ->
+                    getViewModel().deletePoint(id) {
+                        fetchPoints()
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Não Excluir") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+
+        override fun onSelectEdit() {
+
+        }
+
     }
 }

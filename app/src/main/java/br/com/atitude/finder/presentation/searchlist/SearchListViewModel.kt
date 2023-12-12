@@ -15,11 +15,27 @@ class SearchListViewModel(
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
     val flow: LiveData<Flow> = _flow
 
-    private val _expandedSearchParams = MutableLiveData<Boolean>(false)
+    private val _expandedSearchParams = MutableLiveData(false)
     val expandedSearchParams: LiveData<Boolean> = _expandedSearchParams
 
     fun toggleExpandSearchParams() {
         _expandedSearchParams.value = !(expandedSearchParams.value ?: false)
+    }
+
+    fun fetchAllPoints() {
+        launch {
+            val points = repository.getAllPoints()
+
+            if (points.isEmpty()) _flow.postValue(Flow.NoPoints)
+            else _flow.postValue(Flow.Success(points))
+        }
+    }
+
+    fun deletePoint(id: String, onSuccessDelete: () -> Unit) {
+        launch {
+            repository.deletePoint(id)
+            onSuccessDelete.invoke()
+        }
     }
 
     fun search(

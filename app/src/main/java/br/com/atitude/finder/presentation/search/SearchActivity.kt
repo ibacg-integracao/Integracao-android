@@ -156,19 +156,14 @@ class SearchActivity : ToolbarActivity() {
 
         binding.includeWithParams.textInputLayoutPostalCode.error = null
 
-        if (postalCode.isEmpty()) {
-            binding.includeWithParams.textInputLayoutPostalCode.error = "CEP está vazio"
-            return
-        }
-
-        if (postalCode.length != 8) {
+        if (postalCode.isNotEmpty() && postalCode.length != 8) {
             binding.includeWithParams.textInputLayoutPostalCode.error = "CEP inválido"
             return
         }
 
         this.openSearchList(
-            input = postalCode,
-            type = SearchType.POSTAL_CODE,
+            input = postalCode.takeIf { it.isNotBlank() },
+            type = postalCode.takeIf { it.isNotBlank() }?.let { SearchType.POSTAL_CODE },
             weekDays = getSelectedWeekDays(),
             tags = getSelectedTags(),
             times = getSelectedTimes()

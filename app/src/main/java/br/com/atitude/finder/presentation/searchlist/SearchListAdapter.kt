@@ -9,7 +9,7 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.PointListItemBinding
 import br.com.atitude.finder.domain.SimplePoint
 
-class SearchListAdapter(private val context: Context) :
+class SearchListAdapter(private val context: Context, private val callback: SearchListAdapterCallback) :
     RecyclerView.Adapter<SearchListViewHolder>() {
 
     var points: List<SimplePoint> = emptyList()
@@ -20,7 +20,8 @@ class SearchListAdapter(private val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchListViewHolder {
         return SearchListViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.point_list_item, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.point_list_item, parent, false),
+            callback
         )
     }
 
