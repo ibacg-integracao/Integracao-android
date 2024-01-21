@@ -49,6 +49,7 @@ class SearchListActivity : ToolbarActivity() {
         setFinishOnBack()
         initObservers()
         initSearchParamsView()
+        setSuccessLoginBehaviour {  }
     }
 
     private fun initSearchParamsView() {

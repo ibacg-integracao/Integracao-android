@@ -33,7 +33,7 @@ android {
             buildConfigField("String", "API_URL", "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\"")
         }
         debug {
-            buildConfigField("String", "API_URL", "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\"")
+            buildConfigField("String", "API_URL", "\"http://localhost:8080/api/\"")
             applicationIdSuffix = ".dev"
         }
     }

@@ -1,12 +1,16 @@
 package br.com.atitude.finder.repository
 
+import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
+import br.com.atitude.finder.domain.Token
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
+
+    suspend fun login(email: String, password: String): Token
 
     suspend fun deletePoint(id: String)
 

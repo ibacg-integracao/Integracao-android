@@ -3,6 +3,7 @@ package br.com.atitude.finder.presentation.map
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
@@ -12,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 class PointMapViewModel(
     private val geocoder: Geocoder,
     remoteConfig: AppRemoteConfig
-): BaseViewModel(remoteConfig) {
+) : BaseViewModel(remoteConfig) {
     private val _lastSearchedAddress = MutableLiveData<Address?>()
     val lastSearchedAddress: LiveData<Address?> = _lastSearchedAddress
 
@@ -28,7 +29,8 @@ class PointMapViewModel(
 
     fun findAddressFromLatLng(latLng: LatLng) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1
+            geocoder.getFromLocation(
+                latLng.latitude, latLng.longitude, 1
             ) { addressList ->
                 addressList.firstOrNull()?.let {
                     _lastSearchedAddress.postValue(it)
@@ -36,14 +38,15 @@ class PointMapViewModel(
                 }
             }
         } else {
-            setLastError(Exception("Minimum SDK not met"))
+            Log.e(this.javaClass.name, "Minimum SDK not met")
         }
     }
 
     fun searchAddress(address: String) {
         _searching.postValue(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocationName(address, 1
+            geocoder.getFromLocationName(
+                address, 1
             ) { addressList ->
                 addressList.firstOrNull()?.let {
                     _lastSearchedAddress.postValue(it)
@@ -52,7 +55,7 @@ class PointMapViewModel(
                 }
             }
         } else {
-            setLastError(Exception("Minimum SDK not met"))
+            Log.e(this.javaClass.name, "Minimum SDK not met")
             _searching.postValue(false)
         }
     }
