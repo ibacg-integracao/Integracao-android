@@ -2,6 +2,7 @@ package br.com.atitude.finder.data.network
 
 import br.com.atitude.finder.data.network.entity.PostalCodeAddressInfoResponse
 import br.com.atitude.finder.data.network.entity.SearchParamsResponse
+import br.com.atitude.finder.data.network.entity.SectorResponse
 import br.com.atitude.finder.data.network.entity.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
@@ -42,4 +43,7 @@ interface NetworkApi {
 
     @GET("v1/weekdays/")
     suspend fun getWeekDays(): List<WeekDayResponse>
+
+    @GET("v1/sectors/")
+    suspend fun getSectors(): List<SectorResponse>
 }

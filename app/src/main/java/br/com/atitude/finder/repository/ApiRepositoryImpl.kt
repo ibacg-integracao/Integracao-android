@@ -5,6 +5,7 @@ import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
+import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.extensions.toPointTime
@@ -55,6 +56,7 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         hour: Int,
         minutes: Int,
         weekDay: String,
+        sectorId: String
     ) {
         networkApi.createPoint(
             CreatePointRequest(
@@ -73,12 +75,14 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 city = city,
                 state = state,
                 complement = complement,
-                neighborhood = neighborhood
+                neighborhood = neighborhood,
+                sectorId = sectorId
             )
         )
     }
 
-    override suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo? {
-        return networkApi.findPostalCodeAddressInfo(postalCode)?.toDomain()
-    }
+    override suspend fun getPostalCodeAddress(postalCode: String) =
+        networkApi.findPostalCodeAddressInfo(postalCode)?.toDomain()
+
+    override suspend fun getAllSectors() = networkApi.getSectors().map { it.toDomain() }
 }

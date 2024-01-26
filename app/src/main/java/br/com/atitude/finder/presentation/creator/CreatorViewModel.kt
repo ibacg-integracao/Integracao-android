@@ -5,12 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
+import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
 import com.google.android.gms.maps.model.LatLng
 
-class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig: AppRemoteConfig) : BaseViewModel(appRemoteConfig) {
+class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig: AppRemoteConfig) :
+    BaseViewModel(appRemoteConfig) {
+
+    private val _sectors = MutableLiveData<List<Sector>>(emptyList())
+    val sectors: LiveData<List<Sector>> = _sectors
 
     private val _weekDays = MutableLiveData<List<WeekDay>>(emptyList())
     val weekDays: LiveData<List<WeekDay>> = _weekDays
@@ -24,12 +29,20 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
     private val _postalCodeData = MutableLiveData<PostalCodeAddressInfo?>()
     val postalCodeData: LiveData<PostalCodeAddressInfo?> = _postalCodeData
 
+    var selectedSector: Sector? = null
+
     fun setAddressCoordinates(coordinates: LatLng) {
         _addressCoordinates.postValue(coordinates)
     }
 
     fun setWeekDay(weekDay: WeekDay) {
         _weekDay.postValue(weekDay)
+    }
+
+    fun fetchSectors() {
+        launch {
+            _sectors.postValue(apiRepository.getAllSectors())
+        }
     }
 
     fun fetchWeekDays() {
@@ -40,9 +53,12 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
     }
 
     fun fetchPostalCodeData(postalCode: String) {
-        launch(showAlertOnError = false, errorBlock = {
-            _postalCodeData.postValue(null)
-        }) {
+        launch(
+            loadingReason = "Buscando informações do CEP...",
+            showAlertOnError = false,
+            errorBlock = {
+                _postalCodeData.postValue(null)
+            }) {
             _postalCodeData.postValue(apiRepository.getPostalCodeAddress(postalCode))
         }
     }
@@ -62,6 +78,7 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
         state: String,
         city: String,
         complement: String?,
+        sectorId: String,
         onFail: (() -> Unit)? = null,
         onSuccess: () -> Unit,
     ) {
@@ -84,7 +101,8 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
                 neighborhood = neighborhood,
                 complement = complement,
                 state = state,
-                city = city
+                city = city,
+                sectorId = sectorId
             )
             onSuccess.invoke()
         }

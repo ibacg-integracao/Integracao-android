@@ -52,7 +52,10 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     private fun initSearchParamsView() {
-        binding.cardView.setOnClickListener {
+
+        binding.viewSearchParams.visibleOrGone(getViewModel().isSearchParamsViewEnabled())
+
+        binding.viewSearchParams.setOnClickListener {
             getViewModel().toggleExpandSearchParams()
         }
     }

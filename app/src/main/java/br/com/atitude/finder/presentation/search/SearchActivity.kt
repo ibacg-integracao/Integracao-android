@@ -1,6 +1,7 @@
 package br.com.atitude.finder.presentation.search
 
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import br.com.atitude.finder.databinding.ActivitySearchBinding
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.WeekDay
@@ -13,6 +14,8 @@ import br.com.atitude.finder.presentation._base.openCreator
 import br.com.atitude.finder.presentation._base.openSearchList
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 const val VIEW_FLIPPER_NO_PARAMS = 0
@@ -28,8 +31,15 @@ class SearchActivity : ToolbarActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configToolbar(binding.toolbar)
+        initObservers()
         initSearchButton()
         initCreateButton()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getViewModel().fetchSearchParams()
+        binding.includeWithParams.buttonSearch.isEnabled = true
     }
 
     private fun clearChipGroup(chipGroup: ChipGroup) {
@@ -48,18 +58,14 @@ class SearchActivity : ToolbarActivity() {
         clearChipGroup(binding.includeWithParams.chipGroupTime)
     }
 
-    override fun onStart() {
-        super.onStart()
-        initObservers()
-        getViewModel().fetchSearchParams()
-    }
-
     private fun initObservers() {
-        getViewModel().searchParams.observe(this) { searchParams ->
-            if (searchParams != null) {
-                handleWithSearchParams(searchParams)
-            } else {
-                handleNoSearchParams()
+        with(getViewModel()) {
+            searchParams.observe(this@SearchActivity) { searchParams ->
+                if (searchParams != null) {
+                    handleWithSearchParams(searchParams)
+                } else {
+                    handleNoSearchParams()
+                }
             }
         }
     }
@@ -152,7 +158,12 @@ class SearchActivity : ToolbarActivity() {
 
     private fun handleSearchButton() {
         val postalCode = getPostalCode()
-        getViewModel().trackSearch(postalCode)
+        getViewModel().trackSearch(
+            postalCode = postalCode,
+            weekDays = getSelectedWeekDays().toList(),
+            categories = getSelectedTags().toList(),
+            times = getSelectedTimes().toList()
+        )
 
         binding.includeWithParams.textInputLayoutPostalCode.error = null
 
@@ -161,6 +172,7 @@ class SearchActivity : ToolbarActivity() {
             return
         }
 
+        binding.includeWithParams.buttonSearch.isEnabled = false
         this.openSearchList(
             input = postalCode.takeIf { it.isNotBlank() },
             type = postalCode.takeIf { it.isNotBlank() }?.let { SearchType.POSTAL_CODE },

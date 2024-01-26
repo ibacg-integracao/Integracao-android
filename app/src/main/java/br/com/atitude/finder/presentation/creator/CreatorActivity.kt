@@ -9,7 +9,6 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
-import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation.map.PointMapResultContract
 import com.google.android.material.textfield.TextInputLayout
@@ -29,6 +28,24 @@ class CreatorActivity : ToolbarActivity() {
             if (pointAddress != null)
                 getViewModel().setAddressCoordinates(pointAddress)
         }
+
+    private fun initSectorInput() {
+        getViewModel().sectors.observe(this) { sectors ->
+            binding.autocompleteSector.isEnabled = sectors.isNotEmpty()
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                sectors.map { sector -> sector.name }
+            )
+
+            binding.autocompleteSector.setAdapter(adapter)
+            binding.autocompleteSector.setOnItemClickListener { _, _, index, _ ->
+                val sector = sectors[index]
+                getViewModel().selectedSector = sector
+                binding.autocompleteSector.clearFocus()
+            }
+        }
+    }
 
     private fun initWeekDayInput() {
 
@@ -157,15 +174,9 @@ class CreatorActivity : ToolbarActivity() {
     }
 
     private fun initTextInputPostalCode() {
-        binding.textInputPostalCode.setOnFocusChangeListener { _, focus ->
-            if (!focus) {
-                fetchPostalCodeAddressData()
-            }
-        }
-
         binding.textInputPostalCode.addTextChangedListener { editableText ->
             editableText?.let {
-                if (editableText.length >= 8) {
+                if (editableText.length == 8) {
                     binding.textInputPostalCode.clearFocus()
                     fetchPostalCodeAddressData()
                 }
@@ -195,6 +206,7 @@ class CreatorActivity : ToolbarActivity() {
         setContentView(binding.root)
         initToolbar()
         initWeekDayInput()
+        initSectorInput()
         initTimePicker()
         configButtonCreateClickListener()
         configConfirmLocationClickListener()
@@ -218,10 +230,6 @@ class CreatorActivity : ToolbarActivity() {
         }
 
         getViewModel().fetchPostalCodeData(textInputText)
-    }
-
-    private fun fetchWeekDays() {
-        getViewModel().fetchWeekDays()
     }
 
     private fun fillFieldWithPostalCodeData(postalCodeAddressInfo: PostalCodeAddressInfo) {
@@ -294,7 +302,14 @@ class CreatorActivity : ToolbarActivity() {
         super.onStart()
         configApiErrorHandler()
         initPostalCodeDataObserver()
-        fetchWeekDays()
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        with(getViewModel()) {
+            fetchWeekDays()
+            fetchSectors()
+        }
     }
 
     private fun setPostalCodeInputWithInvalidPostalCodeError() {
@@ -333,6 +348,7 @@ class CreatorActivity : ToolbarActivity() {
         val pointLeaderPhone = binding.textInputLeaderPhone.text.toString()
         val pointCoordinates = getViewModel().addressCoordinates.value ?: return
         val weekDay = getViewModel().weekDay.value ?: return
+        val sector = getViewModel().selectedSector ?: return
         val pointPostalCode = binding.textInputPostalCode.text.toString()
         val pointPostalStreet = binding.textInputStreet.text.toString()
         val pointPostalNeighborhood = binding.textInputNeighborhood.text.toString()
@@ -358,6 +374,7 @@ class CreatorActivity : ToolbarActivity() {
                     minutes = pointMinutes
                 ),
                 weekDay = weekDay,
+                sectorId = sector.id
             ) {
                 Toast.makeText(this, "Célula criada com sucesso", Toast.LENGTH_LONG).show()
                 finish()
@@ -412,7 +429,9 @@ class CreatorActivity : ToolbarActivity() {
                     return@setOnFocusChangeListener
                 }
 
-                if (binding.textInputLeaderName.editableText.firstOrNull()?.isUpperCase() == false) {
+                if (binding.textInputLeaderName.editableText.firstOrNull()
+                        ?.isUpperCase() == false
+                ) {
                     binding.textInputLayoutLeaderName.error =
                         "A primeira letra do nome deve ser maiuscula"
                     return@setOnFocusChangeListener

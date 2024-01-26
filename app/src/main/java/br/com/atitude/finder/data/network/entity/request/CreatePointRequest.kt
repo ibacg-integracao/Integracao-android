@@ -19,4 +19,5 @@ data class CreatePointRequest(
     @SerializedName("hour") val hour: Int,
     @SerializedName("minutes") val minutes: Int,
     @SerializedName("week_day") val weekDay: String,
+    @SerializedName("sector_id") val sectorId: String
 )

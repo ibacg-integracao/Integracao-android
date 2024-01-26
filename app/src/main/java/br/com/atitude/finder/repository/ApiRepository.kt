@@ -4,6 +4,7 @@ import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
+import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
@@ -39,7 +40,10 @@ interface ApiRepository {
         hour: Int,
         minutes: Int,
         weekDay: String,
+        sectorId: String
     )
 
     suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo?
+
+    suspend fun getAllSectors(): List<Sector>
 }

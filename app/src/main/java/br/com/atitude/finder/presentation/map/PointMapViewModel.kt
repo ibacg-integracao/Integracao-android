@@ -12,7 +12,7 @@ import com.google.android.gms.maps.model.LatLng
 class PointMapViewModel(
     private val geocoder: Geocoder,
     remoteConfig: AppRemoteConfig
-): BaseViewModel(remoteConfig) {
+) : BaseViewModel(remoteConfig) {
     private val _lastSearchedAddress = MutableLiveData<Address?>()
     val lastSearchedAddress: LiveData<Address?> = _lastSearchedAddress
 
@@ -22,28 +22,11 @@ class PointMapViewModel(
     private val _searching = MutableLiveData(false)
     val searching: LiveData<Boolean> = _searching
 
-    fun setCameraTarget(target: LatLng) {
-        _cameraTarget.postValue(target)
-    }
-
-    fun findAddressFromLatLng(latLng: LatLng) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1
-            ) { addressList ->
-                addressList.firstOrNull()?.let {
-                    _lastSearchedAddress.postValue(it)
-                    _cameraTarget.postValue(LatLng(it.latitude, it.longitude))
-                }
-            }
-        } else {
-            setLastError(Exception("Minimum SDK not met"))
-        }
-    }
-
     fun searchAddress(address: String) {
         _searching.postValue(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocationName(address, 1
+            geocoder.getFromLocationName(
+                address, 1
             ) { addressList ->
                 addressList.firstOrNull()?.let {
                     _lastSearchedAddress.postValue(it)
