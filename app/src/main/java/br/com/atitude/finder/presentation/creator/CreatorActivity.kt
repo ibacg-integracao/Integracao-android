@@ -4,7 +4,12 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AlertDialogLayout
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
@@ -23,11 +28,20 @@ class CreatorActivity : ToolbarActivity() {
 
     override fun getViewModel() = creatorViewModel
 
+    private lateinit var adapter: CreatorPointContactAdapter
+
     private val pointMapResult =
         registerForActivityResult(PointMapResultContract()) { pointAddress ->
             if (pointAddress != null)
                 getViewModel().setAddressCoordinates(pointAddress)
         }
+
+    private fun initPointContactRecyclerView() {
+        adapter = CreatorPointContactAdapter(this)
+        binding.rvPointContacts.adapter = adapter
+        binding.rvPointContacts.layoutManager =
+            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    }
 
     private fun initSectorInput() {
         getViewModel().sectors.observe(this) { sectors ->
@@ -211,12 +225,34 @@ class CreatorActivity : ToolbarActivity() {
         configButtonCreateClickListener()
         configConfirmLocationClickListener()
         configLeaderNameInputFocusListener()
-        configLeaderPhoneFocusListener()
+//        configLeaderPhoneFocusListener()
         configPointTagFocusListener()
         focusTextInputPointName()
         initTextInputPostalCode()
         configCheckboxNumberChangeListener()
         configCheckboxComplementChangeListener()
+        initPointContactRecyclerView()
+        configAddContact()
+
+        initObservers()
+    }
+
+    private fun initObservers() {
+        with(getViewModel()) {
+            pointContacts.observe(this@CreatorActivity) {
+                adapter.items = it
+            }
+        }
+    }
+
+    private fun configAddContact() {
+        binding.tvAddContact.setOnClickListener {
+            ContactBottomSheet { pointContact ->
+                getViewModel().addPointContact(pointContact)
+            }.run {
+                show(supportFragmentManager, ContactBottomSheet.TAG)
+            }
+        }
     }
 
     private fun fetchPostalCodeAddressData() {
@@ -345,7 +381,7 @@ class CreatorActivity : ToolbarActivity() {
         val pointHour = pointTimeTokens.first
         val pointMinutes = pointTimeTokens.second
         val pointLeaderName = binding.textInputLeaderName.text.toString()
-        val pointLeaderPhone = binding.textInputLeaderPhone.text.toString()
+//        val pointLeaderPhone = binding.textInputLeaderPhone.text.toString()
         val pointCoordinates = getViewModel().addressCoordinates.value ?: return
         val weekDay = getViewModel().weekDay.value ?: return
         val sector = getViewModel().selectedSector ?: return
@@ -364,7 +400,7 @@ class CreatorActivity : ToolbarActivity() {
                 city = pointPostalCity,
                 complement = null,
                 leaderName = pointLeaderName,
-                leaderPhone = pointLeaderPhone,
+                leaderPhone = "(21)912341234",
                 coordinates = pointCoordinates,
                 postalCode = pointPostalCode,
                 number = null,
@@ -390,34 +426,34 @@ class CreatorActivity : ToolbarActivity() {
         }
     }
 
-    private fun configLeaderPhoneFocusListener() {
-        binding.textInputLeaderPhone.setOnFocusChangeListener { _, focus ->
-            if (!focus) {
-                binding.textInputLayoutLeaderPhone.error = null
-
-                var text =
-                    binding.textInputLeaderPhone.editableText.toString().filter { it.isDigit() }
-
-
-
-                if (text.length >= 2) {
-                    binding.textInputLeaderPhone.editableText.clear()
-                    binding.textInputLeaderPhone.editableText.append("(")
-                    binding.textInputLeaderPhone.editableText.insert(1, text.substring(0..1))
-                    binding.textInputLeaderPhone.editableText.append(")")
-                    binding.textInputLeaderPhone.editableText.append(text.substring(2..<text.length))
-                }
-
-                text = binding.textInputLeaderPhone.editableText.toString()
-
-                val regex = Regex("\\(\\d{2}\\)\\d{8,9}").matches(text)
-
-                if (!regex) {
-                    binding.textInputLayoutLeaderPhone.error = "Formato de telefone inválido"
-                }
-            }
-        }
-    }
+//    private fun configLeaderPhoneFocusListener() {
+//        binding.textInputLeaderPhone.setOnFocusChangeListener { _, focus ->
+//            if (!focus) {
+//                binding.textInputLayoutLeaderPhone.error = null
+//
+//                var text =
+//                    binding.textInputLeaderPhone.editableText.toString().filter { it.isDigit() }
+//
+//
+//
+//                if (text.length >= 2) {
+//                    binding.textInputLeaderPhone.editableText.clear()
+//                    binding.textInputLeaderPhone.editableText.append("(")
+//                    binding.textInputLeaderPhone.editableText.insert(1, text.substring(0..1))
+//                    binding.textInputLeaderPhone.editableText.append(")")
+//                    binding.textInputLeaderPhone.editableText.append(text.substring(2..<text.length))
+//                }
+//
+//                text = binding.textInputLeaderPhone.editableText.toString()
+//
+//                val regex = Regex("\\(\\d{2}\\)\\d{8,9}").matches(text)
+//
+//                if (!regex) {
+//                    binding.textInputLayoutLeaderPhone.error = "Formato de telefone inválido"
+//                }
+//            }
+//        }
+//    }
 
     private fun configLeaderNameInputFocusListener() {
         binding.textInputLeaderName.setOnFocusChangeListener { _, focus ->

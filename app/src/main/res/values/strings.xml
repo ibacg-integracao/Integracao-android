@@ -22,7 +22,7 @@
     <string name="search_input">%s: %s</string>
     <string name="point_name">Nome da célula</string>
     <string name="leader_name">Nome do Líder</string>
-    <string name="leader_phone">Contato do Líder</string>
+    <string name="leader_phone">Contatos</string>
     <string name="title_activity_point_map">PointMapActivity</string>
     <string name="set_point_location"><u>Confirmar localização</u></string>
     <string name="edit_point_location">Editar localização da célula</string>
@@ -31,4 +31,6 @@
     <string name="invalid_postal_code">CEP inválido</string>
     <string name="out_of_order_title">Manutenção!</string>
     <string name="out_of_order_message">O Finder está em manutenção!</string>
+    <string name="add_new_contact">Adicionar novo contato</string>
+    <string name="remove">Remover</string>
 </resources>

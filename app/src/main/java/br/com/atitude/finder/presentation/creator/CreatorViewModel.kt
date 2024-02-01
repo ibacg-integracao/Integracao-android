@@ -3,6 +3,7 @@ package br.com.atitude.finder.presentation.creator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
+import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.Sector
@@ -28,6 +29,13 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
 
     private val _postalCodeData = MutableLiveData<PostalCodeAddressInfo?>()
     val postalCodeData: LiveData<PostalCodeAddressInfo?> = _postalCodeData
+
+    private val _pointContacts = MutableLiveData(emptyList<PointContact>())
+    val pointContacts: LiveData<List<PointContact>> = _pointContacts
+
+    fun addPointContact(pointContact: PointContact) {
+        _pointContacts.postValue((pointContacts.value ?: emptyList()) + listOf(pointContact))
+    }
 
     var selectedSector: Sector? = null
 

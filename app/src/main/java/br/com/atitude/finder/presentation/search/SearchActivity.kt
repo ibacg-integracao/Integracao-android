@@ -1,7 +1,8 @@
 package br.com.atitude.finder.presentation.search
 
 import android.os.Bundle
-import androidx.core.os.bundleOf
+import android.view.Menu
+import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivitySearchBinding
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.WeekDay
@@ -14,8 +15,6 @@ import br.com.atitude.finder.presentation._base.openCreator
 import br.com.atitude.finder.presentation._base.openSearchList
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.analytics
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 const val VIEW_FLIPPER_NO_PARAMS = 0
@@ -34,6 +33,21 @@ class SearchActivity : ToolbarActivity() {
         initObservers()
         initSearchButton()
         initCreateButton()
+
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.person -> {
+                    return@setOnMenuItemClickListener true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        //menuInflater.inflate(R.menu.toolbar_menu, menu)
+        return true
     }
 
     override fun onResume() {
