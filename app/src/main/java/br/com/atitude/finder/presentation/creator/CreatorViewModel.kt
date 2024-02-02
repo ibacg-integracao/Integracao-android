@@ -9,7 +9,6 @@ import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
-import br.com.atitude.finder.presentation._base.toPhoneFormat
 import br.com.atitude.finder.repository.ApiRepository
 import com.google.android.gms.maps.model.LatLng
 

@@ -33,10 +33,10 @@ class SearchListViewModel(
         }
     }
 
-    fun deletePoint(id: String, onSuccessDelete: () -> Unit) {
-        launch {
+    fun deletePoint(id: String) {
+        launch(loadingReason = "Deletando célula") {
             repository.deletePoint(id)
-            onSuccessDelete.invoke()
+            _flow.postValue(Flow.DeletedPoint)
         }
     }
 
@@ -64,5 +64,6 @@ class SearchListViewModel(
         data object SearchingPoints : Flow()
         data class Success(val points: List<SimplePoint>) : Flow()
         data object NoPoints : Flow()
+        data object DeletedPoint: Flow()
     }
 }
