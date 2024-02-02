@@ -1,5 +1,6 @@
 package br.com.atitude.finder.repository
 
+import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
@@ -40,7 +41,8 @@ interface ApiRepository {
         hour: Int,
         minutes: Int,
         weekDay: String,
-        sectorId: String
+        sectorId: String,
+        phoneContacts: List<PointContact>
     )
 
     suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo?

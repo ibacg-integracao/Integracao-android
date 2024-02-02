@@ -4,7 +4,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 object Validators {
     fun TextInputLayout.validatePhone() = validateField(this) { input ->
-        input.trim().length == 8 || input.trim().length == 9
+        input.trim().length == 10 || input.trim().length == 11
     }
 
     fun TextInputLayout.validateName() = validateField(this) { input ->

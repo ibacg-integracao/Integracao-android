@@ -3,11 +3,11 @@ package br.com.atitude.finder.repository
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.toDomain
-import br.com.atitude.finder.domain.PostalCodeAddressInfo
+import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.SearchParams
-import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.domain.toRequest
 import br.com.atitude.finder.extensions.toPointTime
 
 class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
@@ -56,7 +56,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         hour: Int,
         minutes: Int,
         weekDay: String,
-        sectorId: String
+        sectorId: String,
+        phoneContacts: List<PointContact>
     ) {
         networkApi.createPoint(
             CreatePointRequest(
@@ -76,7 +77,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 state = state,
                 complement = complement,
                 neighborhood = neighborhood,
-                sectorId = sectorId
+                sectorId = sectorId,
+                phoneContacts = phoneContacts.map { it.toRequest() }
             )
         )
     }

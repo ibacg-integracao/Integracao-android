@@ -9,6 +9,7 @@ import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
+import br.com.atitude.finder.presentation._base.toPhoneFormat
 import br.com.atitude.finder.repository.ApiRepository
 import com.google.android.gms.maps.model.LatLng
 
@@ -35,6 +36,10 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
 
     fun addPointContact(pointContact: PointContact) {
         _pointContacts.postValue((pointContacts.value ?: emptyList()) + listOf(pointContact))
+    }
+
+    fun getSimplePointContacts(): List<PointContact> {
+        return (pointContacts.value ?: emptyList()).map { it.toSimplePhone() }
     }
 
     var selectedSector: Sector? = null
@@ -87,6 +92,7 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
         city: String,
         complement: String?,
         sectorId: String,
+        pointContacts: List<PointContact>,
         onFail: (() -> Unit)? = null,
         onSuccess: () -> Unit,
     ) {
@@ -110,7 +116,8 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
                 complement = complement,
                 state = state,
                 city = city,
-                sectorId = sectorId
+                sectorId = sectorId,
+                phoneContacts = pointContacts
             )
             onSuccess.invoke()
         }

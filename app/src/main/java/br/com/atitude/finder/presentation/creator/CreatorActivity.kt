@@ -1,13 +1,11 @@
 package br.com.atitude.finder.presentation.creator
 
+import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AlertDialogLayout
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atitude.finder.R
@@ -225,7 +223,6 @@ class CreatorActivity : ToolbarActivity() {
         configButtonCreateClickListener()
         configConfirmLocationClickListener()
         configLeaderNameInputFocusListener()
-//        configLeaderPhoneFocusListener()
         configPointTagFocusListener()
         focusTextInputPointName()
         initTextInputPostalCode()
@@ -247,11 +244,15 @@ class CreatorActivity : ToolbarActivity() {
 
     private fun configAddContact() {
         binding.tvAddContact.setOnClickListener {
-            ContactBottomSheet { pointContact ->
-                getViewModel().addPointContact(pointContact)
-            }.run {
-                show(supportFragmentManager, ContactBottomSheet.TAG)
-            }
+            openAddPointContactBottomSheet()
+        }
+    }
+
+    private fun openAddPointContactBottomSheet() {
+        ContactBottomSheet { pointContact ->
+            getViewModel().addPointContact(pointContact)
+        }.run {
+            show(supportFragmentManager, ContactBottomSheet.TAG)
         }
     }
 
@@ -381,8 +382,13 @@ class CreatorActivity : ToolbarActivity() {
         val pointHour = pointTimeTokens.first
         val pointMinutes = pointTimeTokens.second
         val pointLeaderName = binding.textInputLeaderName.text.toString()
-//        val pointLeaderPhone = binding.textInputLeaderPhone.text.toString()
-        val pointCoordinates = getViewModel().addressCoordinates.value ?: return
+        val pointCoordinates = getViewModel().addressCoordinates.value
+
+        if (pointCoordinates == null) {
+            pointMapResult.launch(getInputtedFullAddress())
+            return
+        }
+
         val weekDay = getViewModel().weekDay.value ?: return
         val sector = getViewModel().selectedSector ?: return
         val pointPostalCode = binding.textInputPostalCode.text.toString()
@@ -390,6 +396,22 @@ class CreatorActivity : ToolbarActivity() {
         val pointPostalNeighborhood = binding.textInputNeighborhood.text.toString()
         val pointPostalState = binding.textInputState.text.toString()
         val pointPostalCity = binding.textInputCity.text.toString()
+        val phoneContacts = getViewModel().getSimplePointContacts()
+
+        if (phoneContacts.isEmpty()) {
+            AlertDialog.Builder(this)
+                .setTitle("Nenhum contato adicionado")
+                .setMessage("Deseja adicionar um contato?")
+                .setPositiveButton("Sim") { _, _ ->
+                    openAddPointContactBottomSheet()
+                }
+                .setNegativeButton("Não") { _, _ ->
+                    binding.scrollView.smoothScrollTo(0, binding.tvAddContact.top)
+                }
+                .show()
+            return
+        }
+
 
         if (scrollToFirstInputWithError().not()) {
             getViewModel().createPoint(
@@ -410,7 +432,8 @@ class CreatorActivity : ToolbarActivity() {
                     minutes = pointMinutes
                 ),
                 weekDay = weekDay,
-                sectorId = sector.id
+                sectorId = sector.id,
+                pointContacts = getViewModel().getSimplePointContacts()
             ) {
                 Toast.makeText(this, "Célula criada com sucesso", Toast.LENGTH_LONG).show()
                 finish()
@@ -425,35 +448,6 @@ class CreatorActivity : ToolbarActivity() {
             }
         }
     }
-
-//    private fun configLeaderPhoneFocusListener() {
-//        binding.textInputLeaderPhone.setOnFocusChangeListener { _, focus ->
-//            if (!focus) {
-//                binding.textInputLayoutLeaderPhone.error = null
-//
-//                var text =
-//                    binding.textInputLeaderPhone.editableText.toString().filter { it.isDigit() }
-//
-//
-//
-//                if (text.length >= 2) {
-//                    binding.textInputLeaderPhone.editableText.clear()
-//                    binding.textInputLeaderPhone.editableText.append("(")
-//                    binding.textInputLeaderPhone.editableText.insert(1, text.substring(0..1))
-//                    binding.textInputLeaderPhone.editableText.append(")")
-//                    binding.textInputLeaderPhone.editableText.append(text.substring(2..<text.length))
-//                }
-//
-//                text = binding.textInputLeaderPhone.editableText.toString()
-//
-//                val regex = Regex("\\(\\d{2}\\)\\d{8,9}").matches(text)
-//
-//                if (!regex) {
-//                    binding.textInputLayoutLeaderPhone.error = "Formato de telefone inválido"
-//                }
-//            }
-//        }
-//    }
 
     private fun configLeaderNameInputFocusListener() {
         binding.textInputLeaderName.setOnFocusChangeListener { _, focus ->
