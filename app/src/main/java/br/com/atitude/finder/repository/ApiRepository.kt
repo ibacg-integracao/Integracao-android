@@ -36,7 +36,6 @@ interface ApiRepository {
         postalCode: String,
         number: Int?,
         leaderName: String,
-        leaderPhone: String,
         tag: String,
         hour: Int,
         minutes: Int,

@@ -12,6 +12,7 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
+import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation.map.PointMapResultContract
 import com.google.android.material.textfield.TextInputLayout
@@ -230,7 +231,6 @@ class CreatorActivity : ToolbarActivity() {
         configCheckboxComplementChangeListener()
         initPointContactRecyclerView()
         configAddContact()
-
         initObservers()
     }
 
@@ -397,6 +397,12 @@ class CreatorActivity : ToolbarActivity() {
         val pointPostalState = binding.textInputState.text.toString()
         val pointPostalCity = binding.textInputCity.text.toString()
         val phoneContacts = getViewModel().getSimplePointContacts()
+        val pointNumber = binding.textInputNumber.text.toString().toIntOrNull()?.takeIf {
+            binding.checkboxNumber.isChecked.not()
+        }
+        val pointComplement = binding.textInputComplement.text.toString().takeIf {
+            binding.checkboxComplement.isChecked.not()
+        }
 
         if (phoneContacts.isEmpty()) {
             AlertDialog.Builder(this)
@@ -420,12 +426,11 @@ class CreatorActivity : ToolbarActivity() {
                 neighborhood = pointPostalNeighborhood,
                 state = pointPostalState,
                 city = pointPostalCity,
-                complement = null,
+                complement = pointComplement,
                 leaderName = pointLeaderName,
-                leaderPhone = "(21)912341234",
                 coordinates = pointCoordinates,
                 postalCode = pointPostalCode,
-                number = null,
+                number = pointNumber,
                 tag = pointTag,
                 pointTime = PointTime(
                     hour = pointHour,
