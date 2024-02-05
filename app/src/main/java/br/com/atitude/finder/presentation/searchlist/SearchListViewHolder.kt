@@ -17,6 +17,9 @@ class SearchListViewHolder(private val itemView: View, private val callback: Sea
     private val imageButtonOptions = PointListItemBinding.bind(itemView).imageButtonOptions
 
     fun bind(point: SimplePoint) {
+        itemView.setOnClickListener {
+            callback.onSelect(point.id)
+        }
         textViewPointName.text = point.name
         val distancePrecision = point.getPreciseDistance()
 

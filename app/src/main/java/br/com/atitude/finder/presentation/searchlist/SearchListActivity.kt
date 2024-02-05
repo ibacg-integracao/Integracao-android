@@ -15,6 +15,7 @@ import br.com.atitude.finder.presentation._base.EXTRA_TIMES
 import br.com.atitude.finder.presentation._base.EXTRA_WEEK_DAYS
 import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.ToolbarActivity
+import br.com.atitude.finder.presentation._base.openPointDetail
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
@@ -182,15 +183,19 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     inner class SearchListAdapterCallbackImpl: SearchListAdapterCallback {
+        override fun onSelect(id: String) {
+            openPointDetail(id)
+        }
+
         override fun onSelectDelete(id: String) {
             AlertDialog.Builder(this@SearchListActivity)
                 .setTitle("Exclusão de Célula")
                 .setMessage("Tem certeza que deseja excluir esta Célula?")
-                .setPositiveButton("Excluir") { dialog, which ->
+                .setPositiveButton("Excluir") { dialog, _ ->
                     getViewModel().deletePoint(id)
                     dialog.dismiss()
                 }
-                .setNegativeButton("Não Excluir") { dialog, which ->
+                .setNegativeButton("Não Excluir") { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()

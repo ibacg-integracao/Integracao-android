@@ -1,6 +1,7 @@
 package br.com.atitude.finder.di
 
 import br.com.atitude.finder.presentation.creator.CreatorViewModel
+import br.com.atitude.finder.presentation.detail.DetailViewModel
 import br.com.atitude.finder.presentation.map.PointMapViewModel
 import br.com.atitude.finder.presentation.search.SearchViewModel
 import br.com.atitude.finder.presentation.searchlist.SearchListViewModel
@@ -12,4 +13,5 @@ val presentationModules = module {
     viewModel { SearchListViewModel(get(), get()) }
     viewModel { CreatorViewModel(get(), get()) }
     viewModel { PointMapViewModel(get(), get()) }
+    viewModel { DetailViewModel(get(), get()) }
 }

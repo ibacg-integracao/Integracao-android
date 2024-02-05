@@ -1,4 +1,4 @@
-package br.com.atitude.finder.data.network.entity
+package br.com.atitude.finder.data.network.entity.response
 
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import com.google.android.gms.maps.model.LatLng

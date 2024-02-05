@@ -1,6 +1,7 @@
 package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.domain.PointContact
+import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
@@ -9,6 +10,8 @@ import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
+
+    suspend fun getPointById(id: String): PointDetail
 
     suspend fun deletePoint(id: String)
 

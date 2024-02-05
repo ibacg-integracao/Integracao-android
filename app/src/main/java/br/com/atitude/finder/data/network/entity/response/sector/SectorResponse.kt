@@ -1,4 +1,4 @@
-package br.com.atitude.finder.data.network.entity
+package br.com.atitude.finder.data.network.entity.response.sector
 
 import br.com.atitude.finder.domain.Sector
 import com.google.gson.annotations.SerializedName
