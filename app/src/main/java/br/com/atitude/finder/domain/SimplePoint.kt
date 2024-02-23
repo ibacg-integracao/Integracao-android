@@ -4,6 +4,7 @@ data class SimplePoint(
     val id: String,
     val name: String,
     val address: String,
+    val reference: String?,
     val weekDay: WeekDay,
     val hour: Int,
     val minute: Int,

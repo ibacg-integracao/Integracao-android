@@ -91,6 +91,7 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
         complement: String?,
         sectorId: String,
         pointContacts: List<PointContact>,
+        reference: String?,
         onFail: (() -> Unit)? = null,
         onSuccess: () -> Unit,
     ) {
@@ -114,7 +115,8 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
                 state = state,
                 city = city,
                 sectorId = sectorId,
-                phoneContacts = pointContacts
+                phoneContacts = pointContacts,
+                reference = reference
             )
             onSuccess.invoke()
         }

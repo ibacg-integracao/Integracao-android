@@ -23,5 +23,6 @@ fun SimplePointResponse.toDomain() = SimplePoint(
     hour = this.hour,
     minute = this.minute,
     tag = this.tag,
-    distance = this.distance?.distance
+    distance = this.distance?.distance,
+    reference = this.address.reference
 )

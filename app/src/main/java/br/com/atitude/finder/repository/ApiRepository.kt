@@ -41,7 +41,8 @@ interface ApiRepository {
         minutes: Int,
         weekDay: String,
         sectorId: String,
-        phoneContacts: List<PointContact>
+        phoneContacts: List<PointContact>,
+        reference: String?
     )
 
     suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo?

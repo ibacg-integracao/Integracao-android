@@ -8,19 +8,24 @@ import br.com.atitude.finder.databinding.PointListItemBinding
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.extensions.visibleOrGone
 
-class SearchListViewHolder(private val itemView: View, private val callback: SearchListAdapterCallback) : RecyclerView.ViewHolder(itemView) {
+class SearchListViewHolder(
+    itemView: View,
+    private val callback: SearchListAdapterCallback
+) : RecyclerView.ViewHolder(itemView) {
     private val textViewPointName = PointListItemBinding.bind(itemView).textViewPointName
     private val textViewPointDistance = PointListItemBinding.bind(itemView).textViewDistance
     private val textViewPointTag = PointListItemBinding.bind(itemView).textViewTag
     private val textViewPointAddress = PointListItemBinding.bind(itemView).textViewAddress
     private val textViewPointWeekDayAndTime = PointListItemBinding.bind(itemView).textViewTime
     private val imageButtonOptions = PointListItemBinding.bind(itemView).imageButtonOptions
+    private val textViewPointAddressReference =
+        PointListItemBinding.bind(itemView).textViewReference
 
     fun bind(point: SimplePoint) {
         textViewPointName.text = point.name
         val distancePrecision = point.getPreciseDistance()
 
-        if(distancePrecision != null) {
+        if (distancePrecision != null) {
             textViewPointDistance.visibleOrGone(true)
             textViewPointDistance.text = itemView.context.getString(
                 R.string.point_distance,
@@ -40,6 +45,11 @@ class SearchListViewHolder(private val itemView: View, private val callback: Sea
             point.minute
         )
 
+        point.reference?.let { reference ->
+            textViewPointAddressReference.visibleOrGone(true)
+            textViewPointAddressReference.text = reference
+        }
+
         imageButtonOptions.setOnClickListener {
             showOptionsDialog(point.id)
         }
@@ -48,7 +58,7 @@ class SearchListViewHolder(private val itemView: View, private val callback: Sea
     private fun showOptionsDialog(id: String) {
         AlertDialog.Builder(itemView.context)
             .setItems(arrayOf("Editar", "Excluir")) { _, which ->
-                when(which) {
+                when (which) {
                     0 -> callback.onSelectEdit()
                     1 -> callback.onSelectDelete(id)
                 }
