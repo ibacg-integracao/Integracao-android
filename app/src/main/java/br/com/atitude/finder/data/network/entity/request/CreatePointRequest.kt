@@ -19,5 +19,6 @@ data class CreatePointRequest(
     @SerializedName("minutes") val minutes: Int,
     @SerializedName("week_day") val weekDay: String,
     @SerializedName("sector_id") val sectorId: String,
-    @SerializedName("phone_contacts") val phoneContacts: List<CreatePointContactRequest>
+    @SerializedName("phone_contacts") val phoneContacts: List<CreatePointContactRequest>,
+    @SerializedName("reference") val reference: String?,
 )

@@ -56,7 +56,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         minutes: Int,
         weekDay: String,
         sectorId: String,
-        phoneContacts: List<PointContact>
+        phoneContacts: List<PointContact>,
+        reference: String?
     ) {
         networkApi.createPoint(
             CreatePointRequest(
@@ -76,7 +77,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 complement = complement,
                 neighborhood = neighborhood,
                 sectorId = sectorId,
-                phoneContacts = phoneContacts.map { it.toRequest() }
+                phoneContacts = phoneContacts.map { it.toRequest() },
+                reference = reference
             )
         )
     }

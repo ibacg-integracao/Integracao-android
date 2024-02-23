@@ -44,11 +44,22 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_address"
-        style="@style/Text.Italic"
+        style="@style/Text.Italic.11sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Estrada do Cangalo, 871, Campo Grande, Rio de Janeiro, RJ"
-        app:layout_constraintTop_toBottomOf="@+id/barrier" />
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        tools:text="Estrada do Cangalo, 871, Campo Grande, Rio de Janeiro, RJ" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_reference"
+        style="@style/Text.Italic.11sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_address"
+        tools:text="Referência: do lado de tal lugar"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_time"
@@ -58,7 +69,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/point_weekday_time"
         app:layout_constraintStart_toStartOf="@+id/text_view_address"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_address" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_reference" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/text_view_tag"

@@ -3,6 +3,7 @@ package br.com.atitude.finder.presentation.creator
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.InputFilter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -178,6 +179,12 @@ class CreatorActivity : ToolbarActivity() {
         return listOf(street, neighborhood, city, state, number, complement).all { it != null }
     }
 
+    private fun validateReference(): Boolean {
+        return validateField(binding.textInputLayoutReference) {
+            return@validateField !binding.checkboxReference.isChecked && it.isBlank()
+        } != null
+    }
+
     private fun configConfirmLocationClickListener() {
         binding.textViewPointLocation.setOnClickListener {
             if (validateAddressFields()) {
@@ -213,6 +220,12 @@ class CreatorActivity : ToolbarActivity() {
         }
     }
 
+    private fun configCheckboxReferenceChangeListener() {
+        binding.checkboxReference.setOnCheckedChangeListener { _, checked ->
+            binding.textInputLayoutReference.isEnabled = !checked
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatorBinding.inflate(layoutInflater)
@@ -229,6 +242,7 @@ class CreatorActivity : ToolbarActivity() {
         initTextInputPostalCode()
         configCheckboxNumberChangeListener()
         configCheckboxComplementChangeListener()
+        configCheckboxReferenceChangeListener()
         initPointContactRecyclerView()
         configAddContact()
         initObservers()
@@ -403,6 +417,9 @@ class CreatorActivity : ToolbarActivity() {
         val pointComplement = binding.textInputComplement.text.toString().takeIf {
             binding.checkboxComplement.isChecked.not()
         }
+        val pointReference = binding.textInputReference.text.toString().takeIf {
+            binding.checkboxReference.isChecked.not()
+        }
 
         if (phoneContacts.isEmpty()) {
             AlertDialog.Builder(this)
@@ -419,7 +436,7 @@ class CreatorActivity : ToolbarActivity() {
         }
 
 
-        if (scrollToFirstInputWithError().not()) {
+        if (scrollToFirstInputWithError().not() && validateReference()) {
             getViewModel().createPoint(
                 name = pointName,
                 street = pointPostalStreet,
@@ -438,7 +455,8 @@ class CreatorActivity : ToolbarActivity() {
                 ),
                 weekDay = weekDay,
                 sectorId = sector.id,
-                pointContacts = getViewModel().getSimplePointContacts()
+                pointContacts = getViewModel().getSimplePointContacts(),
+                reference = pointReference
             ) {
                 Toast.makeText(this, "Célula criada com sucesso", Toast.LENGTH_LONG).show()
                 finish()
