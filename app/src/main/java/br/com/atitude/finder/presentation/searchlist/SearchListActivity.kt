@@ -53,7 +53,10 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     private fun initSearchParamsView() {
-        binding.cardView.setOnClickListener {
+
+        binding.viewSearchParams.visibleOrGone(getViewModel().isSearchParamsViewEnabled())
+
+        binding.viewSearchParams.setOnClickListener {
             getViewModel().toggleExpandSearchParams()
         }
     }
@@ -120,8 +123,13 @@ class SearchListActivity : ToolbarActivity() {
                 is SearchListViewModel.Flow.Success -> handleSuccessState(it)
                 is SearchListViewModel.Flow.SearchingPoints -> handleSearchingPoints()
                 is SearchListViewModel.Flow.NoPoints -> handleNoPoints()
+                is SearchListViewModel.Flow.DeletedPoint -> handleDeletedPoint()
             }
         }
+    }
+
+    private fun handleDeletedPoint() {
+        fetchPoints()
     }
 
     private fun handleNoPoints() {
@@ -180,9 +188,7 @@ class SearchListActivity : ToolbarActivity() {
                 .setTitle("Exclusão de Célula")
                 .setMessage("Tem certeza que deseja excluir esta Célula?")
                 .setPositiveButton("Excluir") { dialog, which ->
-                    getViewModel().deletePoint(id) {
-                        fetchPoints()
-                    }
+                    getViewModel().deletePoint(id)
                     dialog.dismiss()
                 }
                 .setNegativeButton("Não Excluir") { dialog, which ->

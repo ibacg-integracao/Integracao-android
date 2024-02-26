@@ -56,7 +56,7 @@ class PointMapActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun searchAddressOnMap() {
         val address = binding.textInputAddress.text?.toString().orEmpty()
-        pointMapViewModel.searchAddress(address)
+        getViewModel().searchAddress(address)
     }
 
     private fun initViews() {
@@ -82,7 +82,7 @@ class PointMapActivity : BaseActivity(), OnMapReadyCallback {
     }
 
     private fun initObservers() {
-        with(pointMapViewModel) {
+        with(getViewModel()) {
             searching.observe(this@PointMapActivity) { searching ->
                 binding.textInputLayoutAddress.setEndIconActivated(!searching)
             }
@@ -117,10 +117,10 @@ class PointMapActivity : BaseActivity(), OnMapReadyCallback {
 
         val initialAddress = getInitialAddress()
 
-        if(initialAddress != null) {
-           binding.textInputAddress.text?.clear()
-           binding.textInputAddress.text?.insert(0, initialAddress)
-           searchAddressOnMap()
+        if (initialAddress != null) {
+            binding.textInputAddress.text?.clear()
+            binding.textInputAddress.text?.insert(0, initialAddress)
+            searchAddressOnMap()
         }
     }
 }

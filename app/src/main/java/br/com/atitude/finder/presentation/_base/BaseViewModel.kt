@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.atitude.finder.BuildConfig
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.extensions.toBackendFriendlyError
 import kotlinx.coroutines.launch
@@ -14,20 +15,31 @@ abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig) : Vie
     private val _errorState = MutableLiveData<ErrorState?>()
     val errorState: LiveData<ErrorState?> = _errorState
 
+    private val _loading = MutableLiveData<String?>()
+    val loading: LiveData<String?> = _loading
+
     fun isOutOfOrder() = appRemoteConfig.getBoolean("OutOfOrder")
 
     open fun launch(
+        loadingReason: String? = null,
         showAlertOnError: Boolean = true,
         errorBlock: ((Throwable) -> Unit)? = null,
         apiErrorBlock: ((BackendFriendlyError) -> Unit)? = null,
         finally: (() -> Unit)? = null,
         block: suspend () -> Unit
     ) {
+        if (loadingReason != null) {
+            _loading.value = loadingReason
+        }
+
         viewModelScope.launch {
             try {
                 block.invoke()
-                finally?.invoke()
+                _loading.postValue(null)
             } catch (err: Throwable) {
+                if(BuildConfig.DEBUG)
+                    err.printStackTrace()
+
                 (err as? HttpException)?.let {
                     err.toBackendFriendlyError()?.let { backendFriendlyError ->
 
@@ -40,7 +52,7 @@ abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig) : Vie
                     }
                 }
                 errorBlock?.invoke(err)
-                finally?.invoke()
+                _loading.postValue(null)
             }
         }
     }

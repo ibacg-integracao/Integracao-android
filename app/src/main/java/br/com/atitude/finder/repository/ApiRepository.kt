@@ -1,11 +1,13 @@
 package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.entity.TokenResponse
+import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.Token
+import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
@@ -38,12 +40,15 @@ interface ApiRepository {
         postalCode: String,
         number: Int?,
         leaderName: String,
-        leaderPhone: String,
         tag: String,
         hour: Int,
         minutes: Int,
         weekDay: String,
+        sectorId: String,
+        phoneContacts: List<PointContact>
     )
 
     suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo?
+
+    suspend fun getAllSectors(): List<Sector>
 }

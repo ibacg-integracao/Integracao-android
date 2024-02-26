@@ -14,9 +14,10 @@ data class CreatePointRequest(
     @SerializedName("longitude") val longitude: Double,
     @SerializedName("postal_code") val postalCode: String,
     @SerializedName("leader_name") val leaderName: String,
-    @SerializedName("leader_phone") val leaderPhone: String,
     @SerializedName("tag") val tag: String,
     @SerializedName("hour") val hour: Int,
     @SerializedName("minutes") val minutes: Int,
     @SerializedName("week_day") val weekDay: String,
+    @SerializedName("sector_id") val sectorId: String,
+    @SerializedName("phone_contacts") val phoneContacts: List<CreatePointContactRequest>
 )

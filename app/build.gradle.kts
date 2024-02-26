@@ -17,8 +17,8 @@ android {
         applicationId = "br.com.atitude.finder"
         minSdk = 24
         targetSdk = 34
-        versionCode = 8
-        versionName = "1.2.0"
+        versionCode = 12
+        versionName = "1.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,10 +30,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "API_URL", "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\"")
+            buildConfigField(
+                "String",
+                "API_URL",
+                "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\""
+            )
         }
         debug {
-            buildConfigField("String", "API_URL", "\"http://localhost:8080/api/\"")
+            buildConfigField(
+                "String",
+                "API_URL",
+                "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\""
+            )
             applicationIdSuffix = ".dev"
         }
     }
@@ -60,7 +68,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:21.5.0")
     implementation("com.google.firebase:firebase-config:21.6.0")
     implementation("com.google.firebase:firebase-perf:20.5.1")
-    //implementation("com.google.firebase:firebase-perf:21.6.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

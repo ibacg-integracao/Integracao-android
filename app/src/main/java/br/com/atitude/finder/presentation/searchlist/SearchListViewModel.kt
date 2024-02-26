@@ -9,7 +9,7 @@ import br.com.atitude.finder.repository.ApiRepository
 
 class SearchListViewModel(
     private val repository: ApiRepository,
-    remoteConfig: AppRemoteConfig
+    private val remoteConfig: AppRemoteConfig
 ) : BaseViewModel(remoteConfig) {
 
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
@@ -17,6 +17,8 @@ class SearchListViewModel(
 
     private val _expandedSearchParams = MutableLiveData(false)
     val expandedSearchParams: LiveData<Boolean> = _expandedSearchParams
+
+    fun isSearchParamsViewEnabled() = remoteConfig.getBoolean("SearchParamsViewEnabled")
 
     fun toggleExpandSearchParams() {
         _expandedSearchParams.value = !(expandedSearchParams.value ?: false)
@@ -31,10 +33,10 @@ class SearchListViewModel(
         }
     }
 
-    fun deletePoint(id: String, onSuccessDelete: () -> Unit) {
-        launch {
+    fun deletePoint(id: String) {
+        launch(loadingReason = "Deletando célula") {
             repository.deletePoint(id)
-            onSuccessDelete.invoke()
+            _flow.postValue(Flow.DeletedPoint)
         }
     }
 
@@ -62,5 +64,6 @@ class SearchListViewModel(
         data object SearchingPoints : Flow()
         data class Success(val points: List<SimplePoint>) : Flow()
         data object NoPoints : Flow()
+        data object DeletedPoint: Flow()
     }
 }

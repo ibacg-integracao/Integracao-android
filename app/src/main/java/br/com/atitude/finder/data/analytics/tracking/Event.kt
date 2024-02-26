@@ -4,4 +4,6 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.ParametersBuilder
 
-abstract class Event(val name: String, val params: ParametersBuilder.() -> Unit)
+abstract class Event(val name: String) {
+    abstract fun toBundle(): Bundle
+}

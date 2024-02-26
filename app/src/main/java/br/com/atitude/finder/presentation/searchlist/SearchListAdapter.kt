@@ -2,11 +2,9 @@ package br.com.atitude.finder.presentation.searchlist
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atitude.finder.R
-import br.com.atitude.finder.databinding.PointListItemBinding
 import br.com.atitude.finder.domain.SimplePoint
 
 class SearchListAdapter(private val context: Context, private val callback: SearchListAdapterCallback) :
@@ -14,7 +12,7 @@ class SearchListAdapter(private val context: Context, private val callback: Sear
 
     var points: List<SimplePoint> = emptyList()
         set(value) {
-            notifyItemChanged(0, value.size)
+            notifyDataSetChanged()
             field = value
         }
 
@@ -28,6 +26,8 @@ class SearchListAdapter(private val context: Context, private val callback: Sear
     override fun getItemCount() = points.size
 
     override fun onBindViewHolder(holder: SearchListViewHolder, position: Int) {
-        holder.bind(points[position])
+        points.getOrNull(position)?.let { simplePoint ->
+            holder.bind(simplePoint)
+        }
     }
 }

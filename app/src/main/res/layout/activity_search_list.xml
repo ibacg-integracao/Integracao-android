@@ -12,12 +12,12 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Resultados"
         app:navigationIconTint="?attr/colorPrimary"
+        app:title="Resultados"
         app:titleTextColor="?attr/colorPrimary" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/view_search_params"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -78,7 +78,7 @@
         android:paddingHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/view_search_params"
         tools:listitem="@layout/point_list_item" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -90,6 +90,6 @@
         android:gravity="center"
         android:text="@string/searching"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/view_search_params" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

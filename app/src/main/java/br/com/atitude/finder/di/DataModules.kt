@@ -8,7 +8,11 @@ import br.com.atitude.finder.data.network.RetrofitConfig
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.repository.ApiRepository
 import br.com.atitude.finder.repository.ApiRepositoryImpl
+import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.app
+import com.google.firebase.initialize
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import java.util.Locale
@@ -22,12 +26,8 @@ val dataModules = module {
         Geocoder(androidContext(), Locale("pt_br", "Brazil"))
     }
 
-    single {
-        FirebaseAnalytics.getInstance(androidContext())
-    }
-
     single { AppRemoteConfig() }
 
-    factory<AnalyticsTracking> { AnalyticsTrackingImpl(get()) }
+    factory<AnalyticsTracking> { AnalyticsTrackingImpl(Firebase.analytics) }
     factory<ApiRepository> { ApiRepositoryImpl(get()) }
 }

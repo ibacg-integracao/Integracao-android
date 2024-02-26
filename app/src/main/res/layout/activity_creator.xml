@@ -117,6 +117,29 @@
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Setor" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:hint="Selecione o setor">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/autocomplete_sector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:completionThreshold="0"
+                    android:editable="false"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,20 +174,30 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/leader_phone" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout_leader_phone"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_point_contacts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="2"
+                tools:listitem="@layout/point_contact_list_item" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text_input_leader_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:singleLine="true"
-                    android:textColorHint="#6B6B6B" />
-            </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_add_contact"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/round_add_circle_24"
+                android:drawablePadding="4dp"
+                android:drawableTint="?attr/colorPrimary"
+                android:text="@string/add_new_contact"
+                android:textAlignment="center" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -306,10 +339,10 @@
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/checkbox_number"
-                android:layout_marginHorizontal="16dp"
-                android:text="Sem número"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Sem número" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_view_complement"
@@ -335,10 +368,10 @@
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/checkbox_complement"
-                android:layout_marginHorizontal="16dp"
-                android:text="Sem complemento"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Sem complemento" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_view_point_location"

@@ -23,25 +23,6 @@ class PointMapViewModel(
     private val _searching = MutableLiveData(false)
     val searching: LiveData<Boolean> = _searching
 
-    fun setCameraTarget(target: LatLng) {
-        _cameraTarget.postValue(target)
-    }
-
-    fun findAddressFromLatLng(latLng: LatLng) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geocoder.getFromLocation(
-                latLng.latitude, latLng.longitude, 1
-            ) { addressList ->
-                addressList.firstOrNull()?.let {
-                    _lastSearchedAddress.postValue(it)
-                    _cameraTarget.postValue(LatLng(it.latitude, it.longitude))
-                }
-            }
-        } else {
-            Log.e(this.javaClass.name, "Minimum SDK not met")
-        }
-    }
-
     fun searchAddress(address: String) {
         _searching.postValue(true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

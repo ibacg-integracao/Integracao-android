@@ -1,5 +1,7 @@
 package br.com.atitude.finder.presentation._base
 
+import android.app.ProgressDialog
+import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +10,20 @@ import br.com.atitude.finder.R
 
 abstract class BaseActivity : AppCompatActivity() {
     abstract fun getViewModel(): BaseViewModel?
+    private var progressDialog: ProgressDialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        getViewModel()?.let { viewModel ->
+            viewModel.loading.observe(this) { reason ->
+                if (reason == null) {
+                    progressDialog?.dismiss()
+                } else {
+                    progressDialog = ProgressDialog.show(this@BaseActivity, null, reason, true)
+                }
+            }
+        }
+    }
 
     private var successLoginBehaviour: (() -> Unit)? = null
 

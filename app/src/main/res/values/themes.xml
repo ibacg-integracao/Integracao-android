@@ -56,12 +56,23 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="fontFamily">@font/poppins_bold</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="elevation">0dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_height">24sp</item>
     </style>
 
     <style name="NotFoundText" parent="Text.Bold.72sp"/>
+
+    <style name="Text.Accent" parent="Text.Bold.14sp">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
 
     <style name="Theme.IntegracaoAndroid" parent="Base.Theme.IntegracaoAndroid" />
 </resources>
