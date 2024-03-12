@@ -31,8 +31,6 @@ interface ApiRepository {
         state: String,
         city: String,
         complement: String?,
-        latitude: Double,
-        longitude: Double,
         postalCode: String,
         number: Int?,
         leaderName: String,

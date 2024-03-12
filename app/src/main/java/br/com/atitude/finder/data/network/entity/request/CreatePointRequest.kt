@@ -10,8 +10,6 @@ data class CreatePointRequest(
     @SerializedName("city") val city: String,
     @SerializedName("complement") val complement: String?,
     @SerializedName("number") val number: Int?,
-    @SerializedName("latitude") val latitude: Double,
-    @SerializedName("longitude") val longitude: Double,
     @SerializedName("postal_code") val postalCode: String,
     @SerializedName("leader_name") val leaderName: String,
     @SerializedName("tag") val tag: String,

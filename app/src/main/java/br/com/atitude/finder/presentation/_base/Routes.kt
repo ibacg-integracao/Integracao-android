@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation.creator.CreatorActivity
-import br.com.atitude.finder.presentation.map.PointMapActivity
 import br.com.atitude.finder.presentation.searchlist.SearchListActivity
 
 enum class SearchType(val type: String) {
@@ -35,10 +34,4 @@ fun Context.openSearchList(
 fun Context.openCreator() {
     val intent = Intent(this, CreatorActivity::class.java)
     startActivity(intent)
-}
-
-fun Context.intentPointMap(address: String?): Intent {
-    return Intent(this, PointMapActivity::class.java).apply {
-        address?.let { putExtra(EXTRA_ADDRESS_LINE, address) }
-    }
 }

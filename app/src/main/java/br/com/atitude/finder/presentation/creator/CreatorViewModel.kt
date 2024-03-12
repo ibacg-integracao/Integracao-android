@@ -21,9 +21,6 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
     private val _weekDays = MutableLiveData<List<WeekDay>>(emptyList())
     val weekDays: LiveData<List<WeekDay>> = _weekDays
 
-    private val _addressCoordinates = MutableLiveData<LatLng?>()
-    val addressCoordinates: LiveData<LatLng?> = _addressCoordinates
-
     private val _weekDay = MutableLiveData<WeekDay?>()
     val weekDay: LiveData<WeekDay?> = _weekDay
 
@@ -42,10 +39,6 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
     }
 
     var selectedSector: Sector? = null
-
-    fun setAddressCoordinates(coordinates: LatLng) {
-        _addressCoordinates.postValue(coordinates)
-    }
 
     fun setWeekDay(weekDay: WeekDay) {
         _weekDay.postValue(weekDay)
@@ -79,7 +72,6 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
         name: String,
         street: String,
         leaderName: String,
-        coordinates: LatLng,
         postalCode: String,
         number: Int?,
         tag: String,
@@ -102,8 +94,6 @@ class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig
                 name = name,
                 street = street,
                 leaderName = leaderName,
-                latitude = coordinates.latitude,
-                longitude = coordinates.longitude,
                 number = number,
                 postalCode = postalCode,
                 tag = tag,

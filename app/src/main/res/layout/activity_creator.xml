@@ -413,19 +413,6 @@
                 android:layout_marginHorizontal="16dp"
                 android:text="Sem referência" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_point_location"
-                style="@style/Text.Bold.14sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:drawableStart="@drawable/round_edit_24"
-                android:drawablePadding="4dp"
-                android:drawableTint="@color/primary"
-                android:text="@string/set_point_location"
-                android:textColor="@color/primary" />
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_create"
                 style="@style/Button"

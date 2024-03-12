@@ -20,10 +20,6 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".presentation.map.PointMapActivity"
-            android:exported="false"
-            android:label="@string/title_activity_point_map" />
-        <activity
             android:name=".presentation.creator.CreatorActivity"
             android:exported="false" />
         <activity
