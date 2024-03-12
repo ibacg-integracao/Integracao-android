@@ -9,12 +9,14 @@ import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
+import br.com.atitude.finder.repository.SharedPrefs
 
 class SearchViewModel(
     private val apiRepository: ApiRepository,
     private val analyticsTracking: AnalyticsTracking,
-    remoteConfig: AppRemoteConfig
-) : BaseViewModel(remoteConfig) {
+    remoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(remoteConfig, sharedPreferences) {
 
     private val _searchParams = MutableLiveData<SearchParams?>()
     val searchParams: LiveData<SearchParams?> = _searchParams

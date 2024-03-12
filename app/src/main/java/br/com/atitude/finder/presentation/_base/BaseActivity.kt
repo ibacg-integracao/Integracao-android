@@ -14,6 +14,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         getViewModel()?.let { viewModel ->
             viewModel.loading.observe(this) { reason ->
                 if (reason == null) {
@@ -22,8 +23,13 @@ abstract class BaseActivity : AppCompatActivity() {
                     progressDialog = ProgressDialog.show(this@BaseActivity, null, reason, true)
                 }
             }
+            viewModel.errorState.observe(this) { errorState ->
+                if (errorState != null) handleError(errorState)
+            }
         }
     }
+
+    open fun requireAuthentication(): Boolean = true
 
     private var successLoginBehaviour: (() -> Unit)? = null
 
@@ -38,6 +44,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
         if (getViewModel()?.isOutOfOrder() == true) {
             val title = getString(R.string.out_of_order_title)
             val message = getString(R.string.out_of_order_message)
@@ -46,13 +53,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setCancelable(false)
                 .show()
-        }
-    }
-
-    open fun configApiErrorHandler() {
-        getViewModel()?.errorState?.observe(this) { errorState ->
-            if (errorState != null) handleError(errorState)
-
+            return
         }
     }
 
@@ -64,8 +65,35 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun handleUnauthorizedOrForbiddenError() {
-        if (successLoginBehaviour != null)
-            loginResult.launch(intentAuthentication())
+        if (requireAuthentication())
+            launchAuthenticationActivity()
+    }
+
+    private fun launchAuthenticationActivityIfNoStoredToken(): Boolean {
+        if(requireAuthentication()) {
+            getViewModel()?.let { viewModel ->
+                if(viewModel.hasToken().not()) {
+                    launchAuthenticationActivity()
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    fun logout() {
+        if(requireAuthentication()) {
+            getViewModel()?.run {
+                logout()
+                finish()
+                launchAuthenticationActivityIfNoStoredToken()
+            }
+        }
+    }
+
+    private fun launchAuthenticationActivity() {
+        loginResult.launch(intentAuthentication())
     }
 
     private fun handleGenericError(error: BaseViewModel.ErrorState.Generic) {

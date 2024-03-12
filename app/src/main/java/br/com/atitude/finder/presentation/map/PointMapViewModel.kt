@@ -8,12 +8,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.presentation._base.BaseViewModel
+import br.com.atitude.finder.repository.SharedPrefs
 import com.google.android.gms.maps.model.LatLng
 
 class PointMapViewModel(
     private val geocoder: Geocoder,
-    remoteConfig: AppRemoteConfig
-) : BaseViewModel(remoteConfig) {
+    remoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(remoteConfig, sharedPreferences) {
     private val _lastSearchedAddress = MutableLiveData<Address?>()
     val lastSearchedAddress: LiveData<Address?> = _lastSearchedAddress
 

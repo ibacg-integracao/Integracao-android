@@ -20,3 +20,7 @@ fun HttpException.toBackendFriendlyError(): BaseViewModel.BackendFriendlyError? 
         return null
     }
 }
+
+fun BaseViewModel.BackendFriendlyError.isAuthenticationError(): Boolean {
+    return this.statusCode == 401 || this.statusCode == 403 || this.message == "Invalid token" || this.message == "no authorization header"
+}

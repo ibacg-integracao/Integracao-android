@@ -1,19 +1,20 @@
 package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
-import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.toDomain
+import br.com.atitude.finder.data.network.entity.toUser
 import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
-import br.com.atitude.finder.domain.Token
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.domain.toRequest
 import br.com.atitude.finder.extensions.toPointTime
 
 class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
+
+    override suspend fun getAuthenticatedUser() = networkApi.getAuthenticatedUser().toUser()
 
     override suspend fun login(email: String, password: String) =
         networkApi.login(LoginRequest(email, password)).toDomain()

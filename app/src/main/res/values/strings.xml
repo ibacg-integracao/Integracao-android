@@ -36,4 +36,11 @@
     <string name="male">Masculino</string>
     <string name="female">Feminino</string>
     <string name="contact_name_gender_display">%s (%s)</string>
+
+    <string name="profile_logout">Sair</string>
+    <string name="created_at">Criado em %s</string>
+    <string name="dmy_date_format">%02d/%02d/%d</string>
+    <string name="hm_date_format">%02d:%02d</string>
+    <string name="last_update_at">Última atualização em %s às %s</string>
+    <string name="need_to_be_logged">É necessário estar logado para usar o app</string>
 </resources>

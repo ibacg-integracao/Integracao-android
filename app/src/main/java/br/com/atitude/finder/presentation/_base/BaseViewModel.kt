@@ -6,17 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.atitude.finder.BuildConfig
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
+import br.com.atitude.finder.extensions.isAuthenticationError
 import br.com.atitude.finder.extensions.toBackendFriendlyError
+import br.com.atitude.finder.repository.SharedPrefs
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
-abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig) : ViewModel() {
+abstract class BaseViewModel(
+    private val appRemoteConfig: AppRemoteConfig,
+    private val sharedPreferences: SharedPrefs
+) : ViewModel() {
 
     private val _errorState = MutableLiveData<ErrorState?>()
     val errorState: LiveData<ErrorState?> = _errorState
 
     private val _loading = MutableLiveData<String?>()
     val loading: LiveData<String?> = _loading
+
+    fun hasToken(): Boolean = sharedPreferences.hasToken()
 
     fun isOutOfOrder() = appRemoteConfig.getBoolean("OutOfOrder")
 
@@ -42,10 +49,15 @@ abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig) : Vie
 
                 (err as? HttpException)?.let {
                     err.toBackendFriendlyError()?.let { backendFriendlyError ->
-
-                        when(backendFriendlyError.statusCode) {
-                            401, 403 -> _errorState.postValue(ErrorState.Unauthorized)
-                            else -> _errorState.postValue(ErrorState.Generic(backendFriendlyError.message, backendFriendlyError.statusCode))
+                        if (backendFriendlyError.isAuthenticationError()) {
+                            _errorState.postValue(ErrorState.Unauthorized)
+                        } else {
+                            _errorState.postValue(
+                                ErrorState.Generic(
+                                    backendFriendlyError.message,
+                                    backendFriendlyError.statusCode
+                                )
+                            )
                         }
 
                         apiErrorBlock?.invoke(backendFriendlyError)
@@ -55,6 +67,10 @@ abstract class BaseViewModel(private val appRemoteConfig: AppRemoteConfig) : Vie
                 _loading.postValue(null)
             }
         }
+    }
+
+    fun logout() {
+        sharedPreferences.clearToken()
     }
 
     sealed  class ErrorState {

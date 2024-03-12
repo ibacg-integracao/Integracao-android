@@ -8,9 +8,12 @@ import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.Token
 import br.com.atitude.finder.domain.Sector
+import br.com.atitude.finder.domain.User
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
+
+    suspend fun getAuthenticatedUser(): User
 
     suspend fun login(email: String, password: String): Token
 

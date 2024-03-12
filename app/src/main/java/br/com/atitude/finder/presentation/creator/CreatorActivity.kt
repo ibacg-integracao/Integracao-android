@@ -337,7 +337,6 @@ class CreatorActivity : ToolbarActivity() {
 
     override fun onStart() {
         super.onStart()
-        configApiErrorHandler()
         initPostalCodeDataObserver()
         initViewModel()
     }

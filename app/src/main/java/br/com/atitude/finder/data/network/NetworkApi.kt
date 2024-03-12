@@ -1,5 +1,6 @@
 package br.com.atitude.finder.data.network
 
+import br.com.atitude.finder.data.network.entity.AuthenticatedUserResponse
 import br.com.atitude.finder.data.network.entity.PostalCodeAddressInfoResponse
 import br.com.atitude.finder.data.network.entity.SearchParamsResponse
 import br.com.atitude.finder.data.network.entity.SectorResponse
@@ -17,7 +18,10 @@ import retrofit2.http.Query
 
 interface NetworkApi {
 
-    @GET("v1/auth/login")
+    @GET("v1/users/")
+    suspend fun getAuthenticatedUser(): AuthenticatedUserResponse
+
+    @POST("v1/auth/login")
     suspend fun login(@Body request: LoginRequest): TokenResponse
 
     @DELETE("v1/point/{id}")

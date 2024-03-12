@@ -10,10 +10,14 @@ import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
+import br.com.atitude.finder.repository.SharedPrefs
 import com.google.android.gms.maps.model.LatLng
 
-class CreatorViewModel(private val apiRepository: ApiRepository, appRemoteConfig: AppRemoteConfig) :
-    BaseViewModel(appRemoteConfig) {
+class CreatorViewModel(
+    private val apiRepository: ApiRepository,
+    appRemoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(appRemoteConfig, sharedPreferences) {
 
     private val _sectors = MutableLiveData<List<Sector>>(emptyList())
     val sectors: LiveData<List<Sector>> = _sectors

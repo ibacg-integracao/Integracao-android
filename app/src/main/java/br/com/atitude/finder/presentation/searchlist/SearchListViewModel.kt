@@ -6,11 +6,13 @@ import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
+import br.com.atitude.finder.repository.SharedPrefs
 
 class SearchListViewModel(
     private val repository: ApiRepository,
-    private val remoteConfig: AppRemoteConfig
-) : BaseViewModel(remoteConfig) {
+    private val remoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(remoteConfig, sharedPreferences) {
 
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
     val flow: LiveData<Flow> = _flow

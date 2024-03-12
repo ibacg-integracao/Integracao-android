@@ -11,6 +11,7 @@ import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.StringChip
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation._base.WeekDayChip
+import br.com.atitude.finder.presentation._base.intentProfile
 import br.com.atitude.finder.presentation._base.openCreator
 import br.com.atitude.finder.presentation._base.openSearchList
 import com.google.android.material.chip.Chip
@@ -21,6 +22,7 @@ const val VIEW_FLIPPER_NO_PARAMS = 0
 const val VIEW_FLIPPER_WITH_PARAMS = 1
 
 class SearchActivity : ToolbarActivity() {
+
     private lateinit var binding: ActivitySearchBinding
 
     override fun getViewModel() = getViewModel<SearchViewModel>()
@@ -33,21 +35,6 @@ class SearchActivity : ToolbarActivity() {
         initObservers()
         initSearchButton()
         initCreateButton()
-
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.person -> {
-                    return@setOnMenuItemClickListener true
-                }
-
-                else -> false
-            }
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        //menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
     }
 
     override fun onResume() {
