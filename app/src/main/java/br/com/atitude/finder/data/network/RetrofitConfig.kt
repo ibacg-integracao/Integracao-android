@@ -12,10 +12,6 @@ class RetrofitConfig {
         private fun client(sharedPrefs: SharedPrefs): OkHttpClient {
             return OkHttpClient.Builder()
                 .addInterceptor(TokenInterceptor(sharedPrefs))
-                .addInterceptor {
-                    // Logger.getLogger("Interceptor").log(Level.WARNING, it.request().body().toString())
-                    return@addInterceptor it.proceed(it.request())
-                }
                 .build()
         }
 

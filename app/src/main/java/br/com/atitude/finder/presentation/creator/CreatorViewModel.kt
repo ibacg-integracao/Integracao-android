@@ -68,9 +68,9 @@ class CreatorViewModel(
         }
     }
 
-    fun fetchPostalCodeData(postalCode: String) {
+    fun fetchPostalCodeData(loadingReason: String, postalCode: String) {
         launch(
-            loadingReason = "Buscando informações do CEP...",
+            loadingReason = loadingReason,
             showAlertOnError = false,
             errorBlock = {
                 _postalCodeData.postValue(null)

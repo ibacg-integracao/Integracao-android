@@ -98,15 +98,15 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun handleGenericError(error: BaseViewModel.ErrorState.Generic) {
         AlertDialog.Builder(this)
-            .setTitle("Erro sem tratativa")
+            .setTitle(getString(R.string.unhandled_error))
             .setMessage("${error.message}-${error.statusCode}")
             .show()
     }
 
     private fun handleUnknownError() {
         AlertDialog.Builder(this)
-            .setTitle("Erro desconhecido")
-            .setMessage("Ocorreu um erro e não foi possível identificá-lo. Relate ao administrador.")
+            .setTitle(getString(R.string.unknown_error))
+            .setMessage(getString(R.string.unknown_error_description))
             .show()
     }
 }

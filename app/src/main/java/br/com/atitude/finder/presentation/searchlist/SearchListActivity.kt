@@ -184,13 +184,13 @@ class SearchListActivity : ToolbarActivity() {
     inner class SearchListAdapterCallbackImpl: SearchListAdapterCallback {
         override fun onSelectDelete(id: String) {
             AlertDialog.Builder(this@SearchListActivity)
-                .setTitle("Exclusão de Célula")
-                .setMessage("Tem certeza que deseja excluir esta Célula?")
-                .setPositiveButton("Excluir") { dialog, which ->
-                    getViewModel().deletePoint(id)
+                .setTitle(getString(R.string.point_deletion))
+                .setMessage(getString(R.string.point_deletion_confirmation))
+                .setPositiveButton(getString(R.string.delete)) { dialog, _ ->
+                    getViewModel().deletePoint(loadingReason = getString(R.string.deleting_point), id = id)
                     dialog.dismiss()
                 }
-                .setNegativeButton("Não Excluir") { dialog, which ->
+                .setNegativeButton(getString(R.string.do_not_delete)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .show()

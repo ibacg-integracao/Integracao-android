@@ -39,7 +39,7 @@ class SearchActivity : ToolbarActivity() {
 
     override fun onResume() {
         super.onResume()
-        getViewModel().fetchSearchParams()
+        getViewModel().fetchSearchParams(getString(R.string.searching_point_data))
         binding.includeWithParams.buttonSearch.isEnabled = true
     }
 

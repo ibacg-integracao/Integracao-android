@@ -103,7 +103,7 @@ class AuthenticatorActivity : BaseActivity() {
 
     private fun handleInvalidCredentials() {
         AlertDialog.Builder(this)
-            .setMessage("Credenciais inválidas")
+            .setMessage(getString(R.string.invalid_credentials))
             .show()
     }
 }

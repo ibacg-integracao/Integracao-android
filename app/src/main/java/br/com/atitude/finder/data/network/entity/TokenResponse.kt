@@ -10,6 +10,6 @@ data class TokenResponse(
 )
 
 fun TokenResponse.toDomain() = Token(
-    token = this.token,
+    token = token,
     expiresAt = expiresAt
 )

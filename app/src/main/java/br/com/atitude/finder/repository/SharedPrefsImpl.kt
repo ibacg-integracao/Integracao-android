@@ -7,14 +7,14 @@ private const val PASSWORD = "password"
 private const val TOKEN = "token"
 
 class SharedPrefsImpl(private val sharedPreferences: SharedPreferences) : SharedPrefs {
-    override fun getToken(): String = sharedPreferences.getString(TOKEN, "").orEmpty()
+    override fun getToken(): String = sharedPreferences.getString(TOKEN, String()).orEmpty()
     override fun setToken(token: String) {
         sharedPreferences.edit().putString(TOKEN, token).apply()
     }
 
-    override fun getEmail() = sharedPreferences.getString(EMAIL, "").orEmpty()
+    override fun getEmail() = sharedPreferences.getString(EMAIL, String()).orEmpty()
 
-    override fun getPassword() = sharedPreferences.getString(PASSWORD, "").orEmpty()
+    override fun getPassword() = sharedPreferences.getString(PASSWORD, String()).orEmpty()
 
     override fun setEmail(email: String) {
         sharedPreferences.edit().putString(EMAIL, email).apply()

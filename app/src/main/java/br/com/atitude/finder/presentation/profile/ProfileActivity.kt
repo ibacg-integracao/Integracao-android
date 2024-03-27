@@ -24,7 +24,7 @@ class ProfileActivity : BaseActivity() {
         setContentView(binding.root)
         configLogoutButton()
         observeUser()
-        getViewModel().fetchUser()
+        getViewModel().fetchUser(getString(R.string.searching_user_data))
     }
 
     private fun observeUser() {

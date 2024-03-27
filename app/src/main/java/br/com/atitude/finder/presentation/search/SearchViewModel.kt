@@ -37,8 +37,8 @@ class SearchViewModel(
         }
     }
 
-    fun fetchSearchParams() {
-        launch(loadingReason = "Buscando informações das células...") {
+    fun fetchSearchParams(loadingReason: String) {
+        launch(loadingReason = loadingReason) {
             val searchParams: SearchParams = apiRepository.searchParams()
 
             if (searchParams.tags.isEmpty() || searchParams.times.isEmpty() || searchParams.weekDays.isEmpty()) {

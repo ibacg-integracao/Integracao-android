@@ -17,8 +17,8 @@ class ProfileViewModel(
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
 
-    fun fetchUser() {
-        launch(loadingReason = "Buscando informações do usuário...") {
+    fun fetchUser(loadingReason: String) {
+        launch(loadingReason = loadingReason) {
             val user = apiRepository.getAuthenticatedUser()
             _user.postValue(user)
         }
