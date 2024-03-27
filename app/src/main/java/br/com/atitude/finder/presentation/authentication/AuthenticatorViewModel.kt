@@ -29,7 +29,9 @@ class AuthenticatorViewModel(
     }
 
     fun login(email: String, password: String) {
-        launch(showAlertOnError = false, apiErrorBlock = { onFailedLogin(it) }) {
+        launch(
+            showAlertOnError = false,
+            apiErrorBlock = { onFailedLogin(it) }) {
             val token: Token = repository.login(email, password)
             sharedPrefs.setToken(token.token)
             _state.postValue(State.Success(token))

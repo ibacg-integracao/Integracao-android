@@ -70,9 +70,7 @@ class AuthenticatorActivity : BaseActivity() {
         val email = binding.textInputEmail.text?.toString().orEmpty()
         val password = binding.textInputPassword.text?.toString().orEmpty()
 
-        if (email.isBlank() || password.isBlank()) return false
-
-        return true
+        return !(email.isBlank() || password.isBlank())
     }
 
     private fun handleAccessButtonAction() {
@@ -82,6 +80,7 @@ class AuthenticatorActivity : BaseActivity() {
     }
 
     private fun tryLogin(email: String, password: String) {
+        binding.buttonLogin.isEnabled = false
         getViewModel().login(email, password)
     }
 
@@ -92,7 +91,7 @@ class AuthenticatorActivity : BaseActivity() {
             when(state) {
                 is State.InvalidCredentials -> handleInvalidCredentials()
                 is State.Success -> handleSuccess()
-                else -> Unit
+                else -> binding.buttonLogin.isEnabled = true
             }
         }
     }
