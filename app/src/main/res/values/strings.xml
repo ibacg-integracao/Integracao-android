@@ -55,4 +55,9 @@
     <string name="point_deletion_confirmation">Tem certeza que deseja excluir esta Célula?</string>
     <string name="delete">Excluir</string>
     <string name="do_not_delete">Não Excluir</string>
+    <string name="finder">Finder</string>
+    <string name="location">Integração - Campo Grande</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="access">Acessar</string>
 </resources>
