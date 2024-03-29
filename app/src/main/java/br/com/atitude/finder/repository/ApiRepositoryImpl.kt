@@ -2,8 +2,10 @@ package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.domain.PointContact
+import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
@@ -87,4 +89,6 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.findPostalCodeAddressInfo(postalCode)?.toDomain()
 
     override suspend fun getAllSectors() = networkApi.getSectors().map { it.toDomain() }
+    override suspend fun updatePoint(id: String, state: PointState?) =
+        networkApi.updatePoint(id, UpdatePointRequest(state = state?.label)).toDomain()
 }

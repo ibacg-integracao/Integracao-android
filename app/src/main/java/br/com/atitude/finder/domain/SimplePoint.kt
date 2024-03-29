@@ -10,6 +10,7 @@ data class SimplePoint(
     val minute: Int,
     val tag: String,
     val distance: Double?,
+    val state: PointState
 ) {
     fun getPreciseDistance(): DistancePrecision? {
         if (distance == null) return null
