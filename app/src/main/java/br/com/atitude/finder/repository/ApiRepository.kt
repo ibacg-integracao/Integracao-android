@@ -1,11 +1,12 @@
 package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.domain.PointContact
-import br.com.atitude.finder.domain.SimplePoint
+import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.Sector
+import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
@@ -48,4 +49,6 @@ interface ApiRepository {
     suspend fun getPostalCodeAddress(postalCode: String): PostalCodeAddressInfo?
 
     suspend fun getAllSectors(): List<Sector>
+
+    suspend fun updatePoint(id: String, state: PointState?): SimplePoint
 }

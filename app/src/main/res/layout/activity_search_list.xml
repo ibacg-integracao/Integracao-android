@@ -90,6 +90,7 @@
         android:gravity="center"
         android:text="@string/searching"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_search_params" />
+        app:layout_constraintTop_toBottomOf="@+id/view_search_params"
+        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
