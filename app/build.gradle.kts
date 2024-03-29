@@ -42,7 +42,7 @@ android {
             buildConfigField(
                 "String",
                 "API_URL",
-                "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\""
+                "\"http://10.0.2.2:8080/api/\""
             )
             applicationIdSuffix = ".dev"
         }
