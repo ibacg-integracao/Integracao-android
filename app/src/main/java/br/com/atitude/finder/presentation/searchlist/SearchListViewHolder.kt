@@ -1,10 +1,10 @@
 package br.com.atitude.finder.presentation.searchlist
 
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.PointListItemBinding
+import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.extensions.visibleOrGone
 
@@ -17,9 +17,10 @@ class SearchListViewHolder(
     private val textViewPointTag = PointListItemBinding.bind(itemView).textViewTag
     private val textViewPointAddress = PointListItemBinding.bind(itemView).textViewAddress
     private val textViewPointWeekDayAndTime = PointListItemBinding.bind(itemView).textViewTime
-    private val imageButtonOptions = PointListItemBinding.bind(itemView).imageButtonOptions
     private val textViewPointAddressReference =
         PointListItemBinding.bind(itemView).textViewReference
+    private val groupPointInfo = PointListItemBinding.bind(itemView).groupInfo
+    private val textViewPointState = PointListItemBinding.bind(itemView).textViewPointState
 
     fun bind(point: SimplePoint) {
         textViewPointName.text = point.name
@@ -50,19 +51,37 @@ class SearchListViewHolder(
             textViewPointAddressReference.text = reference
         }
 
-        imageButtonOptions.setOnClickListener {
-            showOptionsDialog(point.id)
+        itemView.setOnClickListener {
+            showOptionsDialog(point)
+        }
+
+        point.state.takeIf { it != PointState.ACTIVE }.let { showPointInfoOrState(it) }
+    }
+
+    private fun showOptionsDialog(simplePoint: SimplePoint) {
+        callback.onClick(simplePoint)
+    }
+
+    private fun showPointInfoOrState(state: PointState?) {
+        if (state == null) {
+            unFadePointName()
+            groupPointInfo.visibleOrGone(true)
+            textViewPointState.visibleOrGone(false)
+        } else {
+            fadePointName()
+            groupPointInfo.visibleOrGone(false)
+            with(textViewPointState) {
+                visibleOrGone(true)
+                text = context.getText(state.message)
+            }
         }
     }
 
-    private fun showOptionsDialog(id: String) {
-        AlertDialog.Builder(itemView.context)
-            .setItems(arrayOf("Editar", "Excluir")) { _, which ->
-                when (which) {
-                    0 -> callback.onSelectEdit()
-                    1 -> callback.onSelectDelete(id)
-                }
-            }
-            .show()
+    private fun fadePointName() {
+        textViewPointName.alpha = 0.5F
+    }
+
+    private fun unFadePointName() {
+        textViewPointName.alpha = 1F
     }
 }
