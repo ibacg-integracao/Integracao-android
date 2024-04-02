@@ -8,11 +8,13 @@ import br.com.atitude.finder.data.network.entity.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -55,4 +57,10 @@ interface NetworkApi {
 
     @GET("v1/sectors/")
     suspend fun getSectors(): List<SectorResponse>
+
+    @PUT("v1/point/{id}")
+    suspend fun updatePoint(
+        @Path("id") id: String,
+        @Body request: UpdatePointRequest
+    ): SimplePointResponse
 }

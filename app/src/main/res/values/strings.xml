@@ -36,7 +36,10 @@
     <string name="male">Masculino</string>
     <string name="female">Feminino</string>
     <string name="contact_name_gender_display">%s (%s)</string>
-
+    <string name="point_state_active">Ativo</string>
+    <string name="point_state_inactive">Inativo</string>
+    <string name="point_state_suspended">Suspenso</string>
+    <string name="point_state_unknown">Desconhecido</string>
     <string name="profile_logout">Sair</string>
     <string name="created_at">Criado em %s</string>
     <string name="dmy_date_format">%02d/%02d/%d</string>

@@ -40,7 +40,9 @@
                 android:id="@+id/text_input_layout_point_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="32">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_point_name"
@@ -63,12 +65,15 @@
                 android:id="@+id/text_input_layout_point_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="8">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_point_tag"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"
                     android:singleLine="true"
                     android:textColorHint="#6B6B6B" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -156,7 +161,9 @@
                 android:id="@+id/text_input_layout_leader_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="40">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_leader_name"
@@ -356,7 +363,9 @@
                 android:id="@+id/text_input_layout_complement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp">
+                android:layout_marginHorizontal="16dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="50">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_complement"
@@ -372,6 +381,37 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:text="Sem complemento" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_view_reference"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Referência" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_reference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="32">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/text_input_reference"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"
+                    android:textColorHint="#6B6B6B" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkbox_reference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Sem referência" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/text_view_point_location"

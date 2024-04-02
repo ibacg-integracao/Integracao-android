@@ -2,10 +2,12 @@ package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.data.network.entity.toUser
 import br.com.atitude.finder.domain.PointContact
+import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
@@ -64,7 +66,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         minutes: Int,
         weekDay: String,
         sectorId: String,
-        phoneContacts: List<PointContact>
+        phoneContacts: List<PointContact>,
+        reference: String?
     ) {
         networkApi.createPoint(
             CreatePointRequest(
@@ -84,7 +87,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 complement = complement,
                 neighborhood = neighborhood,
                 sectorId = sectorId,
-                phoneContacts = phoneContacts.map { it.toRequest() }
+                phoneContacts = phoneContacts.map { it.toRequest() },
+                reference = reference
             )
         )
     }
@@ -93,4 +97,6 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.findPostalCodeAddressInfo(postalCode)?.toDomain()
 
     override suspend fun getAllSectors() = networkApi.getSectors().map { it.toDomain() }
+    override suspend fun updatePoint(id: String, state: PointState?) =
+        networkApi.updatePoint(id, UpdatePointRequest(state = state?.label)).toDomain()
 }
