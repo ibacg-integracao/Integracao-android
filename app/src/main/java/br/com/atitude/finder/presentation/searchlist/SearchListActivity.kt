@@ -236,7 +236,10 @@ class SearchListActivity : ToolbarActivity() {
         }
 
         override fun onDelete(pointId: String) {
-            getViewModel().deletePoint(pointId)
+            getViewModel().deletePoint(
+                loadingReason = getString(R.string.deleting_point),
+                id = pointId
+            )
         }
     }
 }
