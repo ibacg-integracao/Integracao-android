@@ -7,11 +7,13 @@ import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
+import br.com.atitude.finder.repository.SharedPrefs
 
 class SearchListViewModel(
     private val repository: ApiRepository,
-    private val remoteConfig: AppRemoteConfig
-) : BaseViewModel(remoteConfig) {
+    private val remoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(remoteConfig, sharedPreferences) {
 
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
     val flow: LiveData<Flow> = _flow
@@ -34,8 +36,8 @@ class SearchListViewModel(
         }
     }
 
-    fun deletePoint(id: String) {
-        launch(loadingReason = "Deletando célula") {
+    fun deletePoint(loadingReason: String, id: String) {
+        launch(loadingReason = loadingReason) {
             repository.deletePoint(id)
             _flow.postValue(Flow.DeletedPoint)
         }

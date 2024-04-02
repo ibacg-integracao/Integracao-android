@@ -10,8 +10,12 @@
 
     <style name="Text" parent="Widget.MaterialComponents.TextView" />
 
-    <style name="Text.14sp" parent="Widget.MaterialComponents.TextView">
+    <style name="Text.14sp" parent="Text">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Bold.36sp" parent="Text.Bold">
+        <item name="android:textSize">36sp</item>
     </style>
 
     <style name="Text.Bold" parent="Text">

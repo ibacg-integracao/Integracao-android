@@ -3,16 +3,19 @@ package br.com.atitude.finder.presentation.map
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.presentation._base.BaseViewModel
+import br.com.atitude.finder.repository.SharedPrefs
 import com.google.android.gms.maps.model.LatLng
 
 class PointMapViewModel(
     private val geocoder: Geocoder,
-    remoteConfig: AppRemoteConfig
-) : BaseViewModel(remoteConfig) {
+    remoteConfig: AppRemoteConfig,
+    sharedPreferences: SharedPrefs
+) : BaseViewModel(remoteConfig, sharedPreferences) {
     private val _lastSearchedAddress = MutableLiveData<Address?>()
     val lastSearchedAddress: LiveData<Address?> = _lastSearchedAddress
 
@@ -35,7 +38,7 @@ class PointMapViewModel(
                 }
             }
         } else {
-            setLastError(Exception("Minimum SDK not met"))
+            Log.e(this.javaClass.name, "Minimum SDK not met")
             _searching.postValue(false)
         }
     }

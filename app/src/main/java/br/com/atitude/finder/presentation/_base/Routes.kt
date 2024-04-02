@@ -3,8 +3,10 @@ package br.com.atitude.finder.presentation._base
 import android.content.Context
 import android.content.Intent
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.presentation.authentication.AuthenticatorActivity
 import br.com.atitude.finder.presentation.creator.CreatorActivity
 import br.com.atitude.finder.presentation.map.PointMapActivity
+import br.com.atitude.finder.presentation.profile.ProfileActivity
 import br.com.atitude.finder.presentation.searchlist.SearchListActivity
 
 enum class SearchType(val type: String) {
@@ -41,4 +43,12 @@ fun Context.intentPointMap(address: String?): Intent {
     return Intent(this, PointMapActivity::class.java).apply {
         address?.let { putExtra(EXTRA_ADDRESS_LINE, address) }
     }
+}
+
+fun Context.intentAuthentication(): Intent {
+    return Intent(this, AuthenticatorActivity::class.java)
+}
+
+fun Context.intentProfile(): Intent {
+    return Intent(this, ProfileActivity::class.java)
 }

@@ -13,7 +13,6 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
-import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation.map.PointMapResultContract
 import com.google.android.material.textfield.TextInputLayout
@@ -280,7 +279,10 @@ class CreatorActivity : ToolbarActivity() {
             return
         }
 
-        getViewModel().fetchPostalCodeData(textInputText)
+        getViewModel().fetchPostalCodeData(
+            loadingReason = getString(R.string.searching_postal_code_data),
+            postalCode = textInputText
+        )
     }
 
     private fun fillFieldWithPostalCodeData(postalCodeAddressInfo: PostalCodeAddressInfo) {
@@ -351,7 +353,6 @@ class CreatorActivity : ToolbarActivity() {
 
     override fun onStart() {
         super.onStart()
-        configApiErrorHandler()
         initPostalCodeDataObserver()
         initViewModel()
     }

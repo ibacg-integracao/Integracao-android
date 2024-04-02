@@ -144,7 +144,7 @@ class SearchListActivity : ToolbarActivity() {
             visibleOrGone(true)
             text = getString(R.string.no_points)
         }
-        
+
         with(binding.recyclerViewPoints) {
             visibleOrGone(false)
         }
@@ -236,8 +236,10 @@ class SearchListActivity : ToolbarActivity() {
         }
 
         override fun onDelete(pointId: String) {
-            getViewModel().deletePoint(pointId)
+            getViewModel().deletePoint(
+                loadingReason = getString(R.string.deleting_point),
+                id = pointId
+            )
         }
-
     }
 }

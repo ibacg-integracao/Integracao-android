@@ -12,9 +12,8 @@ data class PostalCodeAddressInfoResponse(
     @SerializedName("city") val city: String,
     @SerializedName("country") val country: String,
     @SerializedName("latitude") val latitude: Double,
-    @SerializedName("longitude") val longitude: Double,
-
-    )
+    @SerializedName("longitude") val longitude: Double
+)
 
 fun PostalCodeAddressInfoResponse.toDomain(): PostalCodeAddressInfo = PostalCodeAddressInfo(
     postalCode = this.postalCode,

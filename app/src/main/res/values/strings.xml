@@ -40,4 +40,27 @@
     <string name="point_state_inactive">Inativo</string>
     <string name="point_state_suspended">Suspenso</string>
     <string name="point_state_unknown">Desconhecido</string>
+    <string name="profile_logout">Sair</string>
+    <string name="created_at">Criado em %s</string>
+    <string name="dmy_date_format">%02d/%02d/%d</string>
+    <string name="hm_date_format">%02d:%02d</string>
+    <string name="last_update_at">Última atualização em %s às %s</string>
+    <string name="need_to_be_logged">É necessário estar logado para usar o app</string>
+    <string name="unknown_error">Erro desconhecido</string>
+    <string name="unknown_error_description">Ocorreu um erro e não foi possível identificá-lo. Relate ao administrador.</string>
+    <string name="unhandled_error">Erro sem tratativa</string>
+    <string name="invalid_credentials">Credenciais inválidas</string>
+    <string name="searching_user_data">Buscando informações do usuário…</string>
+    <string name="searching_postal_code_data">Buscando informações do CEP…</string>
+    <string name="searching_point_data">Buscando informações das células…</string>
+    <string name="deleting_point">Deletando célula…</string>
+    <string name="point_deletion">Exclusão de Célula</string>
+    <string name="point_deletion_confirmation">Tem certeza que deseja excluir esta Célula?</string>
+    <string name="delete">Excluir</string>
+    <string name="do_not_delete">Não Excluir</string>
+    <string name="finder">Finder</string>
+    <string name="location">Integração - Campo Grande</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="access">Acessar</string>
 </resources>

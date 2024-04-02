@@ -1,12 +1,15 @@
 package br.com.atitude.finder.data.network
 
+import br.com.atitude.finder.data.network.entity.AuthenticatedUserResponse
 import br.com.atitude.finder.data.network.entity.PostalCodeAddressInfoResponse
 import br.com.atitude.finder.data.network.entity.SearchParamsResponse
 import br.com.atitude.finder.data.network.entity.SectorResponse
 import br.com.atitude.finder.data.network.entity.SimplePointResponse
+import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
+import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,6 +19,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface NetworkApi {
+
+    @GET("v1/users/")
+    suspend fun getAuthenticatedUser(): AuthenticatedUserResponse
+
+    @POST("v1/auth/login")
+    suspend fun login(@Body request: LoginRequest): TokenResponse
 
     @DELETE("v1/point/{id}")
     suspend fun deletePoint(@Path("id") id: String)

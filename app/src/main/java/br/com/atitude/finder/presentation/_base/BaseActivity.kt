@@ -2,11 +2,10 @@ package br.com.atitude.finder.presentation._base
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.atitude.finder.R
-import br.com.atitude.finder.data.network.entity.ErrorResponse
-import com.google.gson.Gson
 
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -15,6 +14,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         getViewModel()?.let { viewModel ->
             viewModel.loading.observe(this) { reason ->
                 if (reason == null) {
@@ -23,11 +23,28 @@ abstract class BaseActivity : AppCompatActivity() {
                     progressDialog = ProgressDialog.show(this@BaseActivity, null, reason, true)
                 }
             }
+            viewModel.errorState.observe(this) { errorState ->
+                if (errorState != null) handleError(errorState)
+            }
         }
+    }
+
+    open fun requireAuthentication(): Boolean = true
+
+    private var successLoginBehaviour: (() -> Unit)? = null
+
+    private val loginResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) successLoginBehaviour?.invoke()
+        }
+
+    fun setSuccessLoginBehaviour(callback: () -> Unit) {
+        successLoginBehaviour = callback
     }
 
     override fun onResume() {
         super.onResume()
+
         if (getViewModel()?.isOutOfOrder() == true) {
             val title = getString(R.string.out_of_order_title)
             val message = getString(R.string.out_of_order_message)
@@ -36,30 +53,60 @@ abstract class BaseActivity : AppCompatActivity() {
                 .setMessage(message)
                 .setCancelable(false)
                 .show()
+            return
         }
     }
 
-    fun configApiErrorHandler() {
-        getViewModel()?.apiError?.observe(this) { error ->
+    private fun handleError(errorState: BaseViewModel.ErrorState) {
+        when (errorState) {
+            is BaseViewModel.ErrorState.Unauthorized -> handleUnauthorizedOrForbiddenError()
+            is BaseViewModel.ErrorState.Generic -> handleGenericError(errorState)
+        }
+    }
 
-            if (error != null) {
+    private fun handleUnauthorizedOrForbiddenError() {
+        if (requireAuthentication())
+            launchAuthenticationActivity()
+    }
 
-                if (error.showAlert) {
-                    val errorBody: String? = error.httpException.response()?.errorBody()?.string()
-                    val errorResponse: ErrorResponse? =
-                        Gson().fromJson(errorBody, ErrorResponse::class.java)
-
-                    if (errorResponse != null) {
-                        val message = errorResponse.message
-
-                        AlertDialog.Builder(this)
-                            .setTitle("Erro:")
-                            .setMessage(message)
-                            .create()
-                            .show()
-                    }
+    private fun launchAuthenticationActivityIfNoStoredToken(): Boolean {
+        if(requireAuthentication()) {
+            getViewModel()?.let { viewModel ->
+                if(viewModel.hasToken().not()) {
+                    launchAuthenticationActivity()
+                    return true
                 }
             }
         }
+
+        return false
+    }
+
+    fun logout() {
+        if(requireAuthentication()) {
+            getViewModel()?.run {
+                logout()
+                finish()
+                launchAuthenticationActivityIfNoStoredToken()
+            }
+        }
+    }
+
+    private fun launchAuthenticationActivity() {
+        loginResult.launch(intentAuthentication())
+    }
+
+    private fun handleGenericError(error: BaseViewModel.ErrorState.Generic) {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.unhandled_error))
+            .setMessage("${error.message}-${error.statusCode}")
+            .show()
+    }
+
+    private fun handleUnknownError() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.unknown_error))
+            .setMessage(getString(R.string.unknown_error_description))
+            .show()
     }
 }
