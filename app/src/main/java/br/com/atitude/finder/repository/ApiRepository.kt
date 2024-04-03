@@ -58,4 +58,6 @@ interface ApiRepository {
     suspend fun getAllSectors(): List<Sector>
 
     suspend fun updatePoint(id: String, state: PointState?): SimplePoint
+
+    suspend fun registerAccount(name: String, email: String, password: String)
 }

@@ -63,4 +63,14 @@
     <string name="email">Email</string>
     <string name="password">Senha</string>
     <string name="access">Acessar</string>
+    <string name="register_account_has_lowercase_letter">Contém letra minuscula</string>
+    <string name="register_account_has_uppercase_letter">Contém letra maiúscula</string>
+    <string name="register_account_has_numbers">Contém número</string>
+    <string name="register_account_has_symbol">Contém símbolo</string>
+    <string name="register_account_confirmed_password">Senha confirmada</string>
+    <string name="register">Registrar</string>
+    <string name="name">Nome</string>
+    <string name="confirm_password">Confirmar senha</string>
+    <string name="register_account_min_chars">Mínimo de 8 caracteres</string>
+    <string name="register_account">Não tenho conta</string>
 </resources>

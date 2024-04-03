@@ -20,12 +20,11 @@ class AuthenticatorViewModel(
     val state: LiveData<State> = _state
 
     private fun onFailedLogin(backendFriendlyError: BackendFriendlyError) {
-        if (backendFriendlyError.message == "invalid credentials" || backendFriendlyError.message == "user not found") {
-            _state.postValue(State.InvalidCredentials)
-            return
+        when (backendFriendlyError.message) {
+            "invalid credentials", "user not found" -> _state.postValue(State.InvalidCredentialsError)
+            "user not accepted" -> _state.postValue(State.UserNotAcceptedError)
+            else -> _state.postValue(State.Error)
         }
-
-        _state.postValue(State.Error)
     }
 
     fun login(email: String, password: String) {
@@ -42,5 +41,6 @@ class AuthenticatorViewModel(
 sealed class State {
     data class Success(val token: Token) : State()
     data object Error : State()
-    data object InvalidCredentials : State()
+    data object InvalidCredentialsError : State()
+    data object UserNotAcceptedError : State()
 }

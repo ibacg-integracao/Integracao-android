@@ -8,8 +8,9 @@ import br.com.atitude.finder.data.network.entity.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
-import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
+import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -63,4 +64,7 @@ interface NetworkApi {
         @Path("id") id: String,
         @Body request: UpdatePointRequest
     ): SimplePointResponse
+
+    @POST("v1/auth/register")
+    suspend fun registerAccount(@Body request: RegisterAccountRequest)
 }

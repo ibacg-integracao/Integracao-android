@@ -1,6 +1,7 @@
 package br.com.atitude.finder.di
 
 import br.com.atitude.finder.presentation.authentication.AuthenticatorViewModel
+import br.com.atitude.finder.presentation.authentication.RegisterAccountViewModel
 import br.com.atitude.finder.presentation.creator.CreatorViewModel
 import br.com.atitude.finder.presentation.map.PointMapViewModel
 import br.com.atitude.finder.presentation.profile.ProfileViewModel
@@ -16,4 +17,5 @@ val presentationModules = module {
     viewModel { PointMapViewModel(get(), get(), get()) }
     viewModel { AuthenticatorViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { RegisterAccountViewModel(get(), get(), get()) }
 }

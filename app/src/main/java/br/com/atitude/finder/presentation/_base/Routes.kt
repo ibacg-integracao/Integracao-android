@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation.authentication.AuthenticatorActivity
+import br.com.atitude.finder.presentation.authentication.RegisterAccountActivity
 import br.com.atitude.finder.presentation.creator.CreatorActivity
 import br.com.atitude.finder.presentation.map.PointMapActivity
 import br.com.atitude.finder.presentation.profile.ProfileActivity
@@ -51,4 +52,8 @@ fun Context.intentAuthentication(): Intent {
 
 fun Context.intentProfile(): Intent {
     return Intent(this, ProfileActivity::class.java)
+}
+
+fun Context.intentRegisterAccount(): Intent {
+    return Intent(this, RegisterAccountActivity::class.java)
 }

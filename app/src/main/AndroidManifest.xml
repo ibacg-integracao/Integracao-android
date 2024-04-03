@@ -35,7 +35,11 @@
             android:name=".presentation.creator.CreatorActivity"
             android:exported="false" />
         <activity
+            android:windowSoftInputMode="adjustResize|adjustPan"
             android:name=".presentation.searchlist.SearchListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.authentication.RegisterAccountActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.search.SearchActivity"

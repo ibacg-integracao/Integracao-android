@@ -8,6 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityAuthenticatorBinding
 import br.com.atitude.finder.presentation._base.BaseActivity
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AuthenticatorActivity : BaseActivity() {
@@ -16,7 +17,12 @@ class AuthenticatorActivity : BaseActivity() {
 
     private val authenticationViewModel: AuthenticatorViewModel by viewModel()
     override fun getViewModel() = authenticationViewModel
+
     private var lastToast: Toast? = null
+
+    private var registerAccountContract = registerForActivityResult(RegisterAccountContract()) {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,13 +30,27 @@ class AuthenticatorActivity : BaseActivity() {
         setContentView(binding.root)
 
         configEmailPasswordChangeListener()
+        configLoginButton()
+        configOnBackPressedDispatcher()
+        configRegisterText()
+    }
 
-        binding.buttonLogin.setOnClickListener {
-            handleAccessButtonAction()
+    private fun configRegisterText() {
+        binding.textViewRegisterAccount.setOnClickListener {
+            registerAccountContract.launch(null)
         }
+    }
+
+    private fun configOnBackPressedDispatcher() {
         onBackPressedDispatcher.addCallback {
             showNeedToBeLoggedToast()
             this.handleOnBackCancelled()
+        }
+    }
+
+    private fun configLoginButton() {
+        binding.buttonLogin.setOnClickListener {
+            handleAccessButtonAction()
         }
     }
 
@@ -88,12 +108,17 @@ class AuthenticatorActivity : BaseActivity() {
         super.onStart()
 
         getViewModel().state.observe(this) { state ->
-            when(state) {
-                is State.InvalidCredentials -> handleInvalidCredentials()
+            when (state) {
+                is State.InvalidCredentialsError -> handleInvalidCredentials()
                 is State.Success -> handleSuccess()
+                is State.UserNotAcceptedError -> handleUserNotAcceptedError()
                 else -> binding.buttonLogin.isEnabled = true
             }
         }
+    }
+
+    private fun handleUserNotAcceptedError() {
+        Snackbar.make(binding.root, "Esse usuário não tem acesso ao sistema", Snackbar.LENGTH_LONG).show()
     }
 
     private fun handleSuccess() {

@@ -2,8 +2,9 @@ package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
-import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
+import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.data.network.entity.toUser
 import br.com.atitude.finder.domain.PointContact
@@ -99,4 +100,14 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
     override suspend fun getAllSectors() = networkApi.getSectors().map { it.toDomain() }
     override suspend fun updatePoint(id: String, state: PointState?) =
         networkApi.updatePoint(id, UpdatePointRequest(state = state?.label)).toDomain()
+
+    override suspend fun registerAccount(name: String, email: String, password: String) {
+        networkApi.registerAccount(
+            RegisterAccountRequest(
+                name = name,
+                email = email,
+                password = password
+            )
+        )
+    }
 }
