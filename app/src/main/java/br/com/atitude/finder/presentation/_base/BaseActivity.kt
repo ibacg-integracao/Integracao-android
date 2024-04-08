@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.atitude.finder.R
-import br.com.atitude.finder.data.network.entity.ErrorResponse
+import br.com.atitude.finder.data.network.entity.response.ErrorResponse
 import com.google.gson.Gson
 
 

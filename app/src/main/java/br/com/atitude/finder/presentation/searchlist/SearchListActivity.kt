@@ -16,6 +16,7 @@ import br.com.atitude.finder.presentation._base.EXTRA_TIMES
 import br.com.atitude.finder.presentation._base.EXTRA_WEEK_DAYS
 import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.ToolbarActivity
+import br.com.atitude.finder.presentation._base.openPointDetail
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
@@ -212,6 +213,10 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     inner class PointOptionsCallbackImpl : PointOptionsBottomSheet.Callback {
+        override fun onClickSeeDetails(point: SimplePoint) {
+            openPointDetail(point.id)
+        }
+
         override fun onSave(newState: SimplePoint) {
             val text = getString(newState.state.message)
             when (newState.state) {

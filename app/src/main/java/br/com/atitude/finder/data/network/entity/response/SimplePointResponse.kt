@@ -1,5 +1,7 @@
-package br.com.atitude.finder.data.network.entity
+package br.com.atitude.finder.data.network.entity.response
 
+import br.com.atitude.finder.data.network.entity.response.address.AddressResponse
+import br.com.atitude.finder.data.network.entity.response.address.DistanceResponse
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
@@ -21,7 +23,7 @@ fun SimplePointResponse.toDomain() = SimplePoint(
     id = this.id,
     name = this.name,
     address = this.address.address,
-    weekDay = WeekDay.getByResponse(this.weekDay) ?: WeekDay.WEDNESDAY,
+    weekDay = WeekDay.getByResponse(this.weekDay),
     hour = this.hour,
     minute = this.minute,
     tag = this.tag,
