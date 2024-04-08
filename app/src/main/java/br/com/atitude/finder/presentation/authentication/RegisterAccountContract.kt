@@ -7,10 +7,13 @@ import androidx.activity.result.contract.ActivityResultContract
 import br.com.atitude.finder.domain.User
 import br.com.atitude.finder.presentation._base.intentRegisterAccount
 
-class RegisterAccountContract : ActivityResultContract<User?, RegisterAccountContract.Result>() {
+typealias UserEditingFieldMap = Pair<User, RegisterAccountActivity.EditingField>
 
-    override fun createIntent(context: Context, input: User?): Intent =
-        context.intentRegisterAccount()
+class RegisterAccountContract :
+    ActivityResultContract<UserEditingFieldMap?, RegisterAccountContract.Result>() {
+
+    override fun createIntent(context: Context, input: UserEditingFieldMap?): Intent =
+        context.intentRegisterAccount(input)
 
     override fun parseResult(resultCode: Int, intent: Intent?): Result {
         if (resultCode == Activity.RESULT_OK) return Result.OK

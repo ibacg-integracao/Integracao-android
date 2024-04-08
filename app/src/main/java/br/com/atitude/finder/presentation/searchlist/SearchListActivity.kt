@@ -16,6 +16,7 @@ import br.com.atitude.finder.presentation._base.EXTRA_TIMES
 import br.com.atitude.finder.presentation._base.EXTRA_WEEK_DAYS
 import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.ToolbarActivity
+import br.com.atitude.finder.presentation.searchlist.PointOptionsBottomSheet.Companion.openPointOptionsBottomSheet
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
@@ -190,12 +191,10 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     fun openPointOptionsModal(simplePoint: SimplePoint) {
-        pointOptionsBottomSheet = PointOptionsBottomSheet(
+        pointOptionsBottomSheet = openPointOptionsBottomSheet(
             simplePoint,
             PointOptionsCallbackImpl()
-        ).also {
-            it.show(supportFragmentManager, PointOptionsBottomSheet.TAG)
-        }
+        )
     }
 
     fun closePointOptionsModal() {

@@ -27,13 +27,28 @@ class RegisterAccountViewModel(
             }
         }) {
             apiRepository.registerAccount(name, email, password)
-            _event.postValue(Event.Success)
+            _event.postValue(Event.RegisterUserSuccess)
+        }
+    }
+
+    fun updatePassword(loadingReason: String, oldPassword: String, newPassword: String) {
+        launch(loadingReason = loadingReason, showAlertOnError = false, apiErrorBlock = {
+            when (it.message) {
+                "wrong old password" -> _event.postValue(Event.WrongOldPasswordError)
+                else -> Event.ChangePasswordError
+            }
+        }) {
+            apiRepository.changePassword(oldPassword, newPassword)
+            _event.postValue(Event.ChangePasswordSuccess)
         }
     }
 
     sealed class Event {
-        data object Success : Event()
+        data object RegisterUserSuccess : Event()
+        data object ChangePasswordSuccess : Event()
         data object Error : Event()
         data object EmailInUseError : Event()
+        data object ChangePasswordError : Event()
+        data object WrongOldPasswordError : Event()
     }
 }

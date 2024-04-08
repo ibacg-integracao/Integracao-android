@@ -10,6 +10,7 @@ import br.com.atitude.finder.domain.Token
 import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.User
+import br.com.atitude.finder.domain.UserManagerItem
 import br.com.atitude.finder.domain.WeekDay
 
 interface ApiRepository {
@@ -60,4 +61,12 @@ interface ApiRepository {
     suspend fun updatePoint(id: String, state: PointState?): SimplePoint
 
     suspend fun registerAccount(name: String, email: String, password: String)
+
+    suspend fun changePassword(oldPassword: String, newPassword: String)
+
+    suspend fun getAllUsers(): List<UserManagerItem>
+
+    suspend fun disableUser(userId: String)
+    suspend fun enableUser(userId: String)
+    suspend fun deleteUser(userId: String)
 }

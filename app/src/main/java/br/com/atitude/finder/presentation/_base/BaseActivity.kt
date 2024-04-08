@@ -1,6 +1,7 @@
 package br.com.atitude.finder.presentation._base
 
 import android.app.ProgressDialog
+import android.app.TaskStackBuilder
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -93,6 +94,10 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun launchAuthenticationActivity() {
+        finish()
+        intentHome().run {
+            startActivity(this)
+        }
         loginResult.launch(intentAuthentication())
     }
 

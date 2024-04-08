@@ -20,9 +20,7 @@ class AuthenticatorActivity : BaseActivity() {
 
     private var lastToast: Toast? = null
 
-    private var registerAccountContract = registerForActivityResult(RegisterAccountContract()) {
-
-    }
+    private var registerAccountContract = registerForActivityResult(RegisterAccountContract()) { }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

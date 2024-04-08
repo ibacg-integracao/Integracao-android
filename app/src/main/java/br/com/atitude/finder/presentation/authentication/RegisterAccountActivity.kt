@@ -8,7 +8,13 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityRegisterAccountBinding
 import br.com.atitude.finder.domain.Password
 import br.com.atitude.finder.domain.toPassword
+import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.BaseActivity
+import br.com.atitude.finder.presentation._base.EXTRA_EDITING_FIELD
+import br.com.atitude.finder.presentation._base.EXTRA_EDITING_FIELD_EMAIL
+import br.com.atitude.finder.presentation._base.EXTRA_EDITING_FIELD_NAME
+import br.com.atitude.finder.presentation._base.EXTRA_EDITING_FIELD_PASSWORD
+import br.com.atitude.finder.presentation._base.EXTRA_USER_ID
 import br.com.atitude.finder.presentation.authentication.passwordcondition.HasLowercaseLetter
 import br.com.atitude.finder.presentation.authentication.passwordcondition.HasMinChars
 import br.com.atitude.finder.presentation.authentication.passwordcondition.HasNumber
@@ -24,26 +30,108 @@ class RegisterAccountActivity : BaseActivity() {
     private val registerAccountViewModel: RegisterAccountViewModel by viewModel()
     override fun getViewModel() = registerAccountViewModel
 
+    private val userId: String? by lazy { intent.extras?.getString(EXTRA_USER_ID) }
+    private val editingField: String? by lazy { intent.extras?.getString(EXTRA_EDITING_FIELD) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        configPasswordField()
-        configRegisterButton()
-        observeEvent()
+        configInitialState()
     }
 
-    override fun requireAuthentication() = false
+    private fun setNameFieldVisibility(visible: Boolean) {
+        binding.textViewName.visibleOrGone(visible)
+        binding.textInputLayoutName.visibleOrGone(visible)
+    }
 
-    private fun observeEvent() {
+    private fun setEmailFieldVisibility(visible: Boolean) {
+        binding.textViewEmail.visibleOrGone(visible)
+        binding.textInputLayoutEmail.visibleOrGone(visible)
+    }
+
+    private fun setPasswordsFieldVisibility(visible: Boolean) {
+        binding.textViewOldPassword.visibleOrGone(visible)
+        binding.textViewPassword.visibleOrGone(visible)
+        binding.textViewConfirmPassword.visibleOrGone(visible)
+        binding.textInputPassword.visibleOrGone(visible)
+        binding.textInputLayoutPassword.visibleOrGone(visible)
+        binding.textInputPassword.visibleOrGone(visible)
+        binding.textInputLayoutPassword.visibleOrGone(visible)
+        binding.textInputLayoutOldPassword.visibleOrGone(visible)
+    }
+
+    private fun configInitialState() {
+        if (isInEditMode()) {
+            handleEditingModeState()
+        } else {
+            handleRegisteringModeState()
+        }
+    }
+
+    private fun handleRegisteringModeState() {
+        configPasswordField()
+        configRegisterButton()
+        observeEvents()
+    }
+
+    private fun handleEditingModeState() {
+        setNameFieldVisibility(false)
+        setEmailFieldVisibility(false)
+        setPasswordsFieldVisibility(false)
+        observeEvents()
+
+        when (getEditingField()) {
+            EditingField.NAME -> handleEditingNameState()
+            EditingField.EMAIL -> handleEditingEmailState()
+            EditingField.PASSWORD -> handleEditingPasswordState()
+        }
+    }
+
+    private fun handleEditingNameState() {
+        setNameFieldVisibility(true)
+    }
+
+    private fun handleEditingEmailState() {
+        setEmailFieldVisibility(true)
+    }
+
+    private fun handleEditingPasswordState() {
+        setPasswordsFieldVisibility(true)
+        configConfirmButtonToUpdatePassword()
+        configPasswordField()
+    }
+
+    private fun isInEditMode() = userId != null
+
+    private fun getEditingField(): EditingField {
+        return EditingField.entries.find { it.extra == editingField }
+            ?: throw IllegalStateException("Invalid editing field extra")
+    }
+
+    override fun requireAuthentication() = isInEditMode()
+
+    private fun observeEvents() {
         getViewModel().event.observe(this) { event ->
             when (event) {
                 RegisterAccountViewModel.Event.Error -> handleErrorEvent()
-                RegisterAccountViewModel.Event.Success -> handleSuccessEvent()
+                RegisterAccountViewModel.Event.RegisterUserSuccess -> handleRegisterAccountSuccessEvent()
+                RegisterAccountViewModel.Event.ChangePasswordSuccess -> handleChangePasswordSuccessEvent()
                 RegisterAccountViewModel.Event.EmailInUseError -> handleEmailInUseEvent()
+                RegisterAccountViewModel.Event.ChangePasswordError -> handleChangePasswordErrorEvent()
+                RegisterAccountViewModel.Event.WrongOldPasswordError -> handleWrongOldPassword()
             }
         }
+    }
+
+    private fun handleWrongOldPassword() {
+        binding.textViewOldPassword.requestFocus()
+        binding.textInputLayoutOldPassword.error = "Senha inválida"
+    }
+
+    private fun handleChangePasswordErrorEvent() {
+        binding.textInputPassword.requestFocus()
+        binding.textInputLayoutPassword.error = "Senha inválida"
     }
 
     private fun handleEmailInUseEvent() {
@@ -51,7 +139,12 @@ class RegisterAccountActivity : BaseActivity() {
         binding.textInputLayoutEmail.error = "Email in uso"
     }
 
-    private fun handleSuccessEvent() {
+    private fun handleChangePasswordSuccessEvent() {
+        Snackbar.make(binding.root, "Senha alterada com sucesso!", Snackbar.LENGTH_LONG).show()
+        logout()
+    }
+
+    private fun handleRegisterAccountSuccessEvent() {
         setResult(RESULT_OK)
         finish()
     }
@@ -61,48 +154,81 @@ class RegisterAccountActivity : BaseActivity() {
             .show()
     }
 
+    private fun validateName(): Boolean {
+        val inputName = binding.textInputName
+        val inputLayoutName = binding.textInputLayoutName
+        inputLayoutName.error = null
+
+        if (inputName.text?.toString()?.trim()?.isBlank() == true) {
+            inputLayoutName.error = "Nome inválido"
+            return false
+        }
+
+        return true
+    }
+
+    private fun validateEmail(): Boolean {
+        val inputEmail = binding.textInputEmail
+        val inputLayoutEmail = binding.textInputLayoutEmail
+        inputLayoutEmail.error = null
+
+        if (inputEmail.text?.toString()?.trim()?.isBlank() == true) {
+            inputLayoutEmail.error = "Email inválido"
+            return false
+        }
+
+        return true
+    }
+
+    private fun validatePasswords(): Boolean {
+        val inputPassword = binding.textInputPassword
+        val inputConfirmPassword = binding.textInputConfirmPassword
+        val inputLayoutPassword = binding.textInputLayoutPassword
+        val inputConfirmLayoutPassword = binding.textInputLayoutConfirmPassword
+
+        inputLayoutPassword.error = null
+        inputConfirmLayoutPassword.error = null
+
+        if (inputConfirmPassword.text?.toString() != inputPassword.text?.toString()) {
+            inputConfirmLayoutPassword.error = "Senhas não coincidem."
+            return false
+        }
+
+        if (!getPassword().hasMetAllConditions()) {
+            inputLayoutPassword.error = "Senha inválida"
+            return false
+        }
+
+        return true
+    }
+
+    private fun validateFieldsForRegister(): Boolean {
+        return validateName() && validateEmail() && validatePasswords()
+    }
+
+    private fun configConfirmButtonToUpdatePassword() {
+        binding.buttonRegister.setOnClickListener {
+            if (validatePasswords()) {
+                val inputPassword = binding.textInputPassword.text?.toString().orEmpty()
+                val inputOldPassword = binding.textInputOldPassword.text?.toString().orEmpty()
+                getViewModel().updatePassword("Alterando senha...", inputOldPassword, inputPassword)
+            }
+        }
+    }
+
     private fun configRegisterButton() {
         binding.buttonRegister.setOnClickListener {
-            val inputEmail = binding.textInputEmail
-            val inputName = binding.textInputName
-            val inputPassword = binding.textInputPassword
-            val inputConfirmPassword = binding.textInputConfirmPassword
+            if (validateFieldsForRegister()) {
+                val inputEmail = binding.textInputEmail
+                val inputName = binding.textInputName
+                val inputPassword = binding.textInputPassword
 
-            val inputLayoutEmail = binding.textInputLayoutEmail
-            val inputLayoutName = binding.textInputLayoutName
-            val inputLayoutPassword = binding.textInputLayoutPassword
-            val inputConfirmLayoutPassword = binding.textInputLayoutConfirmPassword
+                val name = inputName.text?.toString().orEmpty()
+                val email = inputEmail.text?.toString().orEmpty()
+                val password = inputPassword.text?.toString().orEmpty()
 
-            inputLayoutName.error = null
-            inputLayoutEmail.error = null
-            inputLayoutPassword.error = null
-            inputConfirmLayoutPassword.error = null
-
-            if (inputName.text?.toString()?.trim()?.isBlank() == true) {
-                inputLayoutPassword.error = "Nome inválido"
-                return@setOnClickListener
+                getViewModel().registerAccount("Registrando conta...", name, email, password)
             }
-
-            if (inputEmail.text?.toString()?.trim()?.isBlank() == true) {
-                inputLayoutEmail.error = "Email inválido"
-                return@setOnClickListener
-            }
-
-            if (inputConfirmPassword.text?.toString() != inputPassword.text?.toString()) {
-                inputConfirmLayoutPassword.error = "Senhas não coincidem."
-                return@setOnClickListener
-            }
-
-            if (!getPassword().hasMetAllConditions()) {
-                inputLayoutPassword.error = "Senha inválida"
-                return@setOnClickListener
-            }
-
-            val name = inputName.text?.toString().orEmpty()
-            val email = inputEmail.text?.toString().orEmpty()
-            val password = inputPassword.text?.toString().orEmpty()
-
-            getViewModel().registerAccount("Registrando conta...", name, email, password)
         }
     }
 
@@ -149,5 +275,11 @@ class RegisterAccountActivity : BaseActivity() {
                     conditionsMet == getPasswordConditionTextViewMap().size
             }
         }
+    }
+
+    enum class EditingField(val extra: String) {
+        NAME(EXTRA_EDITING_FIELD_NAME),
+        EMAIL(EXTRA_EDITING_FIELD_EMAIL),
+        PASSWORD(EXTRA_EDITING_FIELD_PASSWORD)
     }
 }

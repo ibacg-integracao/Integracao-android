@@ -7,6 +7,8 @@ import br.com.atitude.finder.presentation.map.PointMapViewModel
 import br.com.atitude.finder.presentation.profile.ProfileViewModel
 import br.com.atitude.finder.presentation.search.SearchViewModel
 import br.com.atitude.finder.presentation.searchlist.SearchListViewModel
+import br.com.atitude.finder.presentation.users.UsersManagerViewModel
+import br.com.atitude.finder.presentation.users.UsersManagerOptionsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -18,4 +20,6 @@ val presentationModules = module {
     viewModel { AuthenticatorViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { RegisterAccountViewModel(get(), get(), get()) }
+    viewModel { UsersManagerViewModel(get(), get(), get()) }
+    viewModel { UsersManagerOptionsViewModel(get(), get(), get()) }
 }

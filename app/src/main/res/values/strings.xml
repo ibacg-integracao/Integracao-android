@@ -68,9 +68,21 @@
     <string name="register_account_has_numbers">Contém número</string>
     <string name="register_account_has_symbol">Contém símbolo</string>
     <string name="register_account_confirmed_password">Senha confirmada</string>
-    <string name="register">Registrar</string>
+    <string name="confirm">Confirmar</string>
     <string name="name">Nome</string>
     <string name="confirm_password">Confirmar senha</string>
     <string name="register_account_min_chars">Mínimo de 8 caracteres</string>
     <string name="register_account">Não tenho conta</string>
+    <string name="profile_change_name">Alterar nome</string>
+    <string name="profile_change_email">Alterar email</string>
+    <string name="profile_change_password">Alterar senha</string>
+    <string name="profile_see_users">Ver usuários</string>
+    <string name="register_account_current_password">Senha atual</string>
+    <string name="users_manager_disable_user">Desativar usuário</string>
+    <string name="users_manager_enable_user">Ativar usuário</string>
+    <string name="users_manager_cannot_delete_active_user">Não é possível excluir um usuário ativo</string>
+    <string name="users_manager_delete_user">Excluir usuário</string>
+    <string name="users_manager_accept">Aceitar</string>
+    <string name="users_manager_not_accepted">Não Aceito</string>
+    <string name="users_manager_accepted">Aceito</string>
 </resources>

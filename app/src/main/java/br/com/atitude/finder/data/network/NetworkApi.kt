@@ -6,7 +6,9 @@ import br.com.atitude.finder.data.network.entity.SearchParamsResponse
 import br.com.atitude.finder.data.network.entity.SectorResponse
 import br.com.atitude.finder.data.network.entity.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.TokenResponse
+import br.com.atitude.finder.data.network.entity.UserManagerItemResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
+import br.com.atitude.finder.data.network.entity.request.ChangePasswordRequest
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
@@ -67,4 +69,19 @@ interface NetworkApi {
 
     @POST("v1/auth/register")
     suspend fun registerAccount(@Body request: RegisterAccountRequest)
+
+    @PUT("v1/users/password")
+    suspend fun updatePassword(@Body request: ChangePasswordRequest)
+
+    @GET("v1/users/all")
+    suspend fun getAllUsers(): List<UserManagerItemResponse>
+
+    @PUT("v1/users/accept/{id}")
+    suspend fun enabledUser(@Path("id") id: String)
+
+    @PUT("v1/users/refuse/{id}")
+    suspend fun disableUser(@Path("id") id: String)
+
+    @DELETE("v1/users/{id}")
+    suspend fun deleteNotAcceptedUser(@Path("id") id: String)
 }

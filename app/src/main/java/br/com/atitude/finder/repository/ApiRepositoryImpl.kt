@@ -1,6 +1,7 @@
 package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
+import br.com.atitude.finder.data.network.entity.request.ChangePasswordRequest
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
@@ -11,6 +12,7 @@ import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
+import br.com.atitude.finder.domain.UserManagerItem
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.domain.toRequest
 import br.com.atitude.finder.extensions.toPointTime
@@ -109,5 +111,24 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 password = password
             )
         )
+    }
+
+    override suspend fun changePassword(oldPassword: String, newPassword: String) {
+        networkApi.updatePassword(ChangePasswordRequest(oldPassword, newPassword))
+    }
+
+    override suspend fun getAllUsers(): List<UserManagerItem> =
+        networkApi.getAllUsers().map { it.toDomain() }
+
+    override suspend fun disableUser(userId: String) {
+        networkApi.disableUser(userId)
+    }
+
+    override suspend fun enableUser(userId: String) {
+        networkApi.enabledUser(userId)
+    }
+
+    override suspend fun deleteUser(userId: String) {
+        networkApi.deleteNotAcceptedUser(userId)
     }
 }

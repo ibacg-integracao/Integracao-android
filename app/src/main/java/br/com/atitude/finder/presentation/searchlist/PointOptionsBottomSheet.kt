@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import androidx.fragment.app.FragmentActivity
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.FragmentPointOptionsBottomSheetBinding
 import br.com.atitude.finder.domain.PointState
@@ -80,6 +81,14 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
     }
 
     companion object {
+        fun FragmentActivity.openPointOptionsBottomSheet(simplePoint: SimplePoint, callback: Callback): PointOptionsBottomSheet {
+            return PointOptionsBottomSheet(
+                simplePoint,
+                callback
+            ).also {
+                it.show(this.supportFragmentManager, TAG)
+            }
+        }
         const val TAG = "PointOptionsBottomSheet"
     }
 }

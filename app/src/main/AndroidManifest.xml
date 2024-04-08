@@ -42,6 +42,9 @@
             android:name=".presentation.authentication.RegisterAccountActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.users.UsersManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.search.SearchActivity"
             android:exported="true">
             <intent-filter>

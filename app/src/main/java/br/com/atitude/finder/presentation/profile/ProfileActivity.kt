@@ -8,6 +8,9 @@ import br.com.atitude.finder.extensions.toDMYString
 import br.com.atitude.finder.extensions.toHMString
 import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.BaseActivity
+import br.com.atitude.finder.presentation._base.intentUsersManager
+import br.com.atitude.finder.presentation.authentication.RegisterAccountActivity
+import br.com.atitude.finder.presentation.authentication.RegisterAccountContract
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileActivity : BaseActivity() {
@@ -18,13 +21,35 @@ class ProfileActivity : BaseActivity() {
 
     override fun getViewModel() = profileViewModel
 
+    private var registerAccountContract = registerForActivityResult(RegisterAccountContract()) {
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configLogoutButton()
+        configSeeUsersButton()
         observeUser()
+        configChangePassword()
         getViewModel().fetchUser(getString(R.string.searching_user_data))
+    }
+
+    private fun configSeeUsersButton() {
+        binding.buttonSeeUsers.setOnClickListener {
+            intentUsersManager().run {
+                startActivity(this)
+            }
+        }
+    }
+
+    private fun configChangePassword() {
+        binding.buttonChangePassword.setOnClickListener {
+            getViewModel().user.value?.let { user ->
+                registerAccountContract.launch(user to RegisterAccountActivity.EditingField.PASSWORD)
+            }
+        }
     }
 
     private fun observeUser() {
