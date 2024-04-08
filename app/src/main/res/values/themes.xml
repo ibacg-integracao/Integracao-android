@@ -46,6 +46,10 @@
         <item name="fontFamily">@font/poppins_italic</item>
     </style>
 
+    <style name="Text.Italic.11sp" parent="Text.Italic">
+        <item name="android:textSize">11sp</item>
+    </style>
+
     <style name="Text.Italic.14sp" parent="Text.Italic">
         <item name="android:textSize">14sp</item>
     </style>

@@ -1,7 +1,7 @@
 package br.com.atitude.finder.presentation.searchlist
 
+import br.com.atitude.finder.domain.SimplePoint
+
 interface SearchListAdapterCallback {
-    fun onSelect(id: String)
-    fun onSelectDelete(id: String)
-    fun onSelectEdit()
+    fun onClick(simplePoint: SimplePoint)
 }

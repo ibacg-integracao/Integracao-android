@@ -3,6 +3,7 @@ package br.com.atitude.finder.presentation.creator
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.text.InputFilter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -12,6 +13,7 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
+import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation.map.PointMapResultContract
 import com.google.android.material.textfield.TextInputLayout
@@ -177,6 +179,12 @@ class CreatorActivity : ToolbarActivity() {
         return listOf(street, neighborhood, city, state, number, complement).all { it != null }
     }
 
+    private fun validateReference(): Boolean {
+        return validateField(binding.textInputLayoutReference) {
+            return@validateField !binding.checkboxReference.isChecked && it.isBlank()
+        } != null
+    }
+
     private fun configConfirmLocationClickListener() {
         binding.textViewPointLocation.setOnClickListener {
             if (validateAddressFields()) {
@@ -212,6 +220,12 @@ class CreatorActivity : ToolbarActivity() {
         }
     }
 
+    private fun configCheckboxReferenceChangeListener() {
+        binding.checkboxReference.setOnCheckedChangeListener { _, checked ->
+            binding.textInputLayoutReference.isEnabled = !checked
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreatorBinding.inflate(layoutInflater)
@@ -228,9 +242,9 @@ class CreatorActivity : ToolbarActivity() {
         initTextInputPostalCode()
         configCheckboxNumberChangeListener()
         configCheckboxComplementChangeListener()
+        configCheckboxReferenceChangeListener()
         initPointContactRecyclerView()
         configAddContact()
-
         initObservers()
     }
 
@@ -397,6 +411,15 @@ class CreatorActivity : ToolbarActivity() {
         val pointPostalState = binding.textInputState.text.toString()
         val pointPostalCity = binding.textInputCity.text.toString()
         val phoneContacts = getViewModel().getSimplePointContacts()
+        val pointNumber = binding.textInputNumber.text.toString().toIntOrNull()?.takeIf {
+            binding.checkboxNumber.isChecked.not()
+        }
+        val pointComplement = binding.textInputComplement.text.toString().takeIf {
+            binding.checkboxComplement.isChecked.not()
+        }
+        val pointReference = binding.textInputReference.text.toString().takeIf {
+            binding.checkboxReference.isChecked.not()
+        }
 
         if (phoneContacts.isEmpty()) {
             AlertDialog.Builder(this)
@@ -413,19 +436,18 @@ class CreatorActivity : ToolbarActivity() {
         }
 
 
-        if (scrollToFirstInputWithError().not()) {
+        if (scrollToFirstInputWithError().not() && validateReference()) {
             getViewModel().createPoint(
                 name = pointName,
                 street = pointPostalStreet,
                 neighborhood = pointPostalNeighborhood,
                 state = pointPostalState,
                 city = pointPostalCity,
-                complement = null,
+                complement = pointComplement,
                 leaderName = pointLeaderName,
-                leaderPhone = "(21)912341234",
                 coordinates = pointCoordinates,
                 postalCode = pointPostalCode,
-                number = null,
+                number = pointNumber,
                 tag = pointTag,
                 pointTime = PointTime(
                     hour = pointHour,
@@ -433,7 +455,8 @@ class CreatorActivity : ToolbarActivity() {
                 ),
                 weekDay = weekDay,
                 sectorId = sector.id,
-                pointContacts = getViewModel().getSimplePointContacts()
+                pointContacts = getViewModel().getSimplePointContacts(),
+                reference = pointReference
             ) {
                 Toast.makeText(this, "Célula criada com sucesso", Toast.LENGTH_LONG).show()
                 finish()

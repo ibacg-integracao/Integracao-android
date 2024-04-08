@@ -2,11 +2,14 @@ package br.com.atitude.finder.repository
 
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
+import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.data.network.entity.response.pointdetail.toDomain
 import br.com.atitude.finder.data.network.entity.response.sector.toDomain
 import br.com.atitude.finder.data.network.entity.response.search.toDomain
 import br.com.atitude.finder.data.network.entity.response.toDomain
 import br.com.atitude.finder.domain.PointContact
+import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
@@ -57,20 +60,19 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         postalCode: String,
         number: Int?,
         leaderName: String,
-        leaderPhone: String,
         tag: String,
         hour: Int,
         minutes: Int,
         weekDay: String,
         sectorId: String,
-        phoneContacts: List<PointContact>
+        phoneContacts: List<PointContact>,
+        reference: String?
     ) {
         networkApi.createPoint(
             CreatePointRequest(
                 name = name,
                 street = street,
                 leaderName = leaderName,
-                leaderPhone = leaderPhone,
                 latitude = latitude,
                 longitude = longitude,
                 postalCode = postalCode,
@@ -84,7 +86,8 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 complement = complement,
                 neighborhood = neighborhood,
                 sectorId = sectorId,
-                phoneContacts = phoneContacts.map { it.toRequest() }
+                phoneContacts = phoneContacts.map { it.toRequest() },
+                reference = reference
             )
         )
     }
@@ -93,4 +96,6 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.findPostalCodeAddressInfo(postalCode)?.toDomain()
 
     override suspend fun getAllSectors() = networkApi.getSectors().map { it.toDomain() }
+    override suspend fun updatePoint(id: String, state: PointState?) =
+        networkApi.updatePoint(id, UpdatePointRequest(state = state?.label)).toDomain()
 }

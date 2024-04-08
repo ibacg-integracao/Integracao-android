@@ -40,6 +40,10 @@
     <string name="female">Feminino</string>
     <string name="unknown">Desconhecido</string>
     <string name="contact_name_gender_display">%s (%s)</string>
+    <string name="point_state_active">Ativo</string>
+    <string name="point_state_inactive">Inativo</string>
+    <string name="point_state_suspended">Suspenso</string>
+    <string name="point_state_unknown">Desconhecido</string>
 
     <!--Detail-->
 
@@ -56,5 +60,5 @@
     <string name="detail_edit_point">Editar</string>
     <string name="detail_last_update">Última atualização: %s %s</string>
     <string name="detail_toast_copy_phone">Telefone de %s copiado!</string>
-    
+
 </resources>

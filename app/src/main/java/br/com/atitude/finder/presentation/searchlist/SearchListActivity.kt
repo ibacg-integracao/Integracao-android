@@ -1,11 +1,12 @@
 package br.com.atitude.finder.presentation.searchlist
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DividerItemDecoration
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivitySearchListBinding
+import br.com.atitude.finder.domain.PointState
+import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.EXTRA_INPUT
@@ -39,6 +40,8 @@ class SearchListActivity : ToolbarActivity() {
     private lateinit var binding: ActivitySearchListBinding
 
     private val adapter = SearchListAdapter(this, SearchListAdapterCallbackImpl())
+
+    private var pointOptionsBottomSheet: PointOptionsBottomSheet? = null
 
     override fun getViewModel() = getViewModel<SearchListViewModel>()
 
@@ -124,8 +127,13 @@ class SearchListActivity : ToolbarActivity() {
                 is SearchListViewModel.Flow.SearchingPoints -> handleSearchingPoints()
                 is SearchListViewModel.Flow.NoPoints -> handleNoPoints()
                 is SearchListViewModel.Flow.DeletedPoint -> handleDeletedPoint()
+                is SearchListViewModel.Flow.UpdatedPoint -> handleUpdatedPoint()
             }
         }
+    }
+
+    private fun handleUpdatedPoint() {
+        fetchPoints()
     }
 
     private fun handleDeletedPoint() {
@@ -182,27 +190,54 @@ class SearchListActivity : ToolbarActivity() {
         }
     }
 
+    fun openPointOptionsModal(simplePoint: SimplePoint) {
+        pointOptionsBottomSheet = PointOptionsBottomSheet(
+            simplePoint,
+            PointOptionsCallbackImpl()
+        ).also {
+            it.show(supportFragmentManager, PointOptionsBottomSheet.TAG)
+        }
+    }
+
+    fun closePointOptionsModal() {
+        pointOptionsBottomSheet?.let {
+            it.dismiss()
+            pointOptionsBottomSheet = null
+        }
+    }
+
     inner class SearchListAdapterCallbackImpl: SearchListAdapterCallback {
-        override fun onSelect(id: String) {
-            openPointDetail(id)
+        override fun onClick(simplePoint: SimplePoint) {
+            openPointOptionsModal(simplePoint)
+        }
+    }
+
+    inner class PointOptionsCallbackImpl : PointOptionsBottomSheet.Callback {
+        override fun onSave(newState: SimplePoint) {
+            val text = getString(newState.state.message)
+            when (newState.state) {
+                PointState.INACTIVE -> getViewModel().setPointInactive(
+                    "Tornando ${newState.name} como '${text}'",
+                    newState
+                )
+
+                PointState.SUSPENDED -> getViewModel().setPointSuspended(
+                    "Tornando ${newState.name} como '${text}'",
+                    newState
+                )
+
+                PointState.ACTIVE -> getViewModel().setPointActive(
+                    "Tornando ${newState.name} como '${text}'",
+                    newState
+                )
+
+                else -> throw IllegalStateException("Unknown point state.")
+            }
+            closePointOptionsModal()
         }
 
-        override fun onSelectDelete(id: String) {
-            AlertDialog.Builder(this@SearchListActivity)
-                .setTitle("Exclusão de Célula")
-                .setMessage("Tem certeza que deseja excluir esta Célula?")
-                .setPositiveButton("Excluir") { dialog, _ ->
-                    getViewModel().deletePoint(id)
-                    dialog.dismiss()
-                }
-                .setNegativeButton("Não Excluir") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        }
-
-        override fun onSelectEdit() {
-
+        override fun onDelete(pointId: String) {
+            getViewModel().deletePoint(pointId)
         }
 
     }

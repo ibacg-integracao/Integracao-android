@@ -17,14 +17,15 @@ android {
         applicationId = "br.com.atitude.finder"
         minSdk = 24
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.2.3"
+        versionCode = 16
+        versionName = "1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            resValue("string", "clear_text_config", "false")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -37,10 +38,11 @@ android {
             )
         }
         debug {
+            resValue("string", "clear_text_config", "true")
             buildConfigField(
                 "String",
                 "API_URL",
-                "\"https://integracao-backend-7c1cdc9f31b7.herokuapp.com/api/\""
+                "\"http://10.0.2.2:8080/api/\""
             )
             applicationIdSuffix = ".dev"
         }

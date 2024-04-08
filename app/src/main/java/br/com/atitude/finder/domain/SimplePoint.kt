@@ -4,11 +4,13 @@ data class SimplePoint(
     val id: String,
     val name: String,
     val address: String,
+    val reference: String?,
     val weekDay: WeekDay,
     val hour: Int,
     val minute: Int,
     val tag: String,
     val distance: Double?,
+    val state: PointState
 ) {
     fun getPreciseDistance(): DistancePrecision? {
         if (distance == null) return null
