@@ -30,6 +30,13 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
         configStateRadioGroup()
         configSaveButton()
         configDeleteButton()
+        configSeeDetailButton()
+    }
+
+    private fun configSeeDetailButton() {
+        binding.btnSeePointDetail.setOnClickListener {
+            callback.onClickSeeDetails(point)
+        }
     }
 
     private fun configStateRadioGroup() {
@@ -75,6 +82,7 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
         radioButtonIdToStateMap()[state] ?: throw IllegalStateException("unknown state")
 
     interface Callback {
+        fun onClickSeeDetails(point: SimplePoint)
         fun onSave(newState: SimplePoint)
         fun onDelete(pointId: String)
     }

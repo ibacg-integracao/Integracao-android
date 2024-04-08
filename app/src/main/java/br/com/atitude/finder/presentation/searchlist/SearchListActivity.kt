@@ -213,6 +213,10 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     inner class PointOptionsCallbackImpl : PointOptionsBottomSheet.Callback {
+        override fun onClickSeeDetails(point: SimplePoint) {
+            openPointDetail(point.id)
+        }
+
         override fun onSave(newState: SimplePoint) {
             val text = getString(newState.state.message)
             when (newState.state) {

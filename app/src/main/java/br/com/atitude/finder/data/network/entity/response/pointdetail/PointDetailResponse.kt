@@ -1,21 +1,17 @@
 package br.com.atitude.finder.data.network.entity.response.pointdetail
 
-import br.com.atitude.finder.data.network.entity.response.address.AddressResponse
 import br.com.atitude.finder.data.network.entity.response.address.PointDetailAddressResponse
 import br.com.atitude.finder.data.network.entity.response.sector.SectorResponse
 import br.com.atitude.finder.data.network.entity.response.sector.toDomain
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.domain.pointdetail.PointDetail
-import br.com.atitude.finder.extensions.toDate
 import br.com.atitude.finder.extensions.toLocalDateTime
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
-import java.util.Date
 
 data class PointDetailResponse(
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
-    @SerializedName("leader") val leader: PointDetailLeaderResponse,
+    @SerializedName("leader") val leader: String,
     @SerializedName("week_day") val weekDay: String,
     @SerializedName("hour") val hourDay: Int,
     @SerializedName("minute") val minuteDay: Int,
@@ -30,7 +26,7 @@ fun PointDetailResponse.toDomain(): PointDetail =
     PointDetail(
         id = this.id,
         name = this.name,
-        leaderName = this.leader.leaderName,
+        leaderName = this.leader,
         weekDay = WeekDay.getByResponse(this.weekDay),
         hour = this.hourDay,
         minute = this.minuteDay,

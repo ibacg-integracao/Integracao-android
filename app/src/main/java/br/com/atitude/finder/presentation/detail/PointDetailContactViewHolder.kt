@@ -18,6 +18,8 @@ class PointDetailContactViewHolder(view: View, private val event: AdapterPointCo
         ViewItemDetailContactBinding.bind(view).ibCopyNumber
     private val imageButtonCall: AppCompatImageButton =
         ViewItemDetailContactBinding.bind(view).ibCallNumber
+    private val imageButtonWhatsApp: AppCompatImageButton =
+        ViewItemDetailContactBinding.bind(view).ibWhatsapp
 
     fun bind(pointDetailContact: PointDetailContact) {
         textViewName.text = pointDetailContact.name
@@ -28,6 +30,10 @@ class PointDetailContactViewHolder(view: View, private val event: AdapterPointCo
 
         imageButtonCall.setOnClickListener {
             event.onCall(pointDetailContact)
+        }
+
+        imageButtonWhatsApp.setOnClickListener {
+            event.onOpenWhatsApp(pointDetailContact)
         }
     }
 }

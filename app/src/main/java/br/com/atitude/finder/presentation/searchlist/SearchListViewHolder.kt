@@ -23,9 +23,11 @@ class SearchListViewHolder(
     private val textViewPointState = PointListItemBinding.bind(itemView).textViewPointState
 
     fun bind(point: SimplePoint) {
+
         itemView.setOnClickListener {
-            callback.onSelect(point.id)
+            callback.onClick(point)
         }
+
         textViewPointName.text = point.name
         val distancePrecision = point.getPreciseDistance()
 

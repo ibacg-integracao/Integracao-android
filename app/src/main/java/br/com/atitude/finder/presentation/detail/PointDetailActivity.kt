@@ -14,7 +14,6 @@ import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.domain.pointdetail.PointDetailContact
 import br.com.atitude.finder.extensions.toDate
 import br.com.atitude.finder.extensions.toHour
-import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.EXTRA_POINT_ID
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,7 +38,6 @@ class PointDetailActivity : ToolbarActivity() {
 
         getViewModel().pointDetail.observe(this) { state ->
             when (state) {
-                is DetailViewModel.State.Loading -> handleLoadingState()
                 is DetailViewModel.State.Success -> handleSuccessState(state.pointDetail)
             }
         }
@@ -49,15 +47,6 @@ class PointDetailActivity : ToolbarActivity() {
 
     private fun handleSuccessState(pointDetail: PointDetail) {
         configViewsWithPointDetail(pointDetail)
-        enabledLoading(false)
-    }
-
-    private fun handleLoadingState() {
-        enabledLoading(true)
-    }
-
-    private fun enabledLoading(enable: Boolean) {
-        binding.viewLoading.visibleOrGone(enable)
     }
 
     private fun configViewsWithPointDetail(pointDetail: PointDetail) {
@@ -113,5 +102,11 @@ class PointDetailActivity : ToolbarActivity() {
             startActivity(intent)
         }
 
+        override fun onOpenWhatsApp(pointDetailContact: PointDetailContact) {
+            val url = "https://api.whatsapp.com/send?phone=${pointDetailContact.getPlainPhoneWithCountryCode()}"
+            val i = Intent(Intent.ACTION_VIEW)
+            i.setData(Uri.parse(url))
+            startActivity(i)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.atitude.finder.presentation.detail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
@@ -10,11 +11,12 @@ import br.com.atitude.finder.repository.ApiRepository
 class DetailViewModel(appRemoteConfig: AppRemoteConfig, private val apiRepository: ApiRepository) :
     BaseViewModel(appRemoteConfig) {
 
-    private val _pointDetail = MutableLiveData<State>(State.Loading)
+    private val _pointDetail = MutableLiveData<State>()
     val pointDetail: LiveData<State> = _pointDetail
     fun fetchPoint(id: String) {
-        _pointDetail.value = State.Loading
-        launch(loadingReason = "Buscando dados da célula...") {
+        launch(loadingReason = "Buscando dados da célula...", errorBlock = {
+            it.printStackTrace()
+        }) {
             _pointDetail.postValue(
                 State.Success(
                     apiRepository.getPointById(id)
@@ -24,7 +26,6 @@ class DetailViewModel(appRemoteConfig: AppRemoteConfig, private val apiRepositor
     }
 
     sealed class State {
-        data object Loading : State()
         class Success(val pointDetail: PointDetail) : State()
     }
 }

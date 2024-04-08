@@ -9,4 +9,8 @@ data class PointDetailContact(
     val gender: Gender
 ) {
     fun getPlainPhone() = contactPhone.replace("(", "").replace(")", "").replace(" ", "")
+    fun getPlainPhoneWithCountryCode() = buildString {
+        append("+55")
+        append(getPlainPhone())
+    }
 }
