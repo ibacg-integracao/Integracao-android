@@ -193,6 +193,7 @@ class SearchListActivity : ToolbarActivity() {
     fun openPointOptionsModal(simplePoint: SimplePoint) {
         pointOptionsBottomSheet = PointOptionsBottomSheet(
             simplePoint,
+            Configuration(canDelete = getViewModel().canDeletePoint()),
             PointOptionsCallbackImpl()
         ).also {
             it.show(supportFragmentManager, PointOptionsBottomSheet.TAG)
@@ -215,33 +216,40 @@ class SearchListActivity : ToolbarActivity() {
     inner class PointOptionsCallbackImpl : PointOptionsBottomSheet.Callback {
         override fun onClickSeeDetails(point: SimplePoint) {
             openPointDetail(point.id)
+            getViewModel().trackSeeDetails(point)
         }
 
         override fun onSave(newState: SimplePoint) {
             val text = getString(newState.state.message)
             when (newState.state) {
                 PointState.INACTIVE -> getViewModel().setPointInactive(
-                    "Tornando ${newState.name} como '${text}'",
+                    getString(R.string.point_change_state, newState.name, text),
                     newState
                 )
 
                 PointState.SUSPENDED -> getViewModel().setPointSuspended(
-                    "Tornando ${newState.name} como '${text}'",
+                    getString(R.string.point_change_state, newState.name, text),
                     newState
                 )
 
                 PointState.ACTIVE -> getViewModel().setPointActive(
-                    "Tornando ${newState.name} como '${text}'",
+                    getString(R.string.point_change_state, newState.name, text),
                     newState
                 )
 
                 else -> throw IllegalStateException("Unknown point state.")
             }
             closePointOptionsModal()
+            getViewModel().trackSaveState(newState)
         }
 
-        override fun onDelete(pointId: String) {
-            getViewModel().deletePoint(pointId)
+        override fun onDelete(point: SimplePoint) {
+            getViewModel().deletePoint(point.id)
+            getViewModel().trackSuccessDeletePoint(point)
+        }
+
+        override fun onClickDeleteButton() {
+            getViewModel().trackClickDeletePointButton()
         }
 
     }

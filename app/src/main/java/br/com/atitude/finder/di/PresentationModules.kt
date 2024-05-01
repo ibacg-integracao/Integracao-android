@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 val presentationModules = module {
     viewModel { SearchViewModel(get(), get(), get()) }
-    viewModel { SearchListViewModel(get(), get()) }
+    viewModel { SearchListViewModel(get(), get(), get()) }
     viewModel { CreatorViewModel(get(), get()) }
     viewModel { PointMapViewModel(get(), get()) }
     viewModel { DetailViewModel(get(), get()) }
