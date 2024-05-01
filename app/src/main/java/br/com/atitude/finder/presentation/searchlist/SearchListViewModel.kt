@@ -2,7 +2,10 @@ package br.com.atitude.finder.presentation.searchlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.atitude.finder.data.analytics.tracking.AnalyticsTracking
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
+import br.com.atitude.finder.data.remoteconfig.Constants.CAN_DELETE_POINT
+import br.com.atitude.finder.data.remoteconfig.Constants.SEARCH_PARAMS_VIEW_ENABLED
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.presentation._base.BaseViewModel
@@ -10,7 +13,8 @@ import br.com.atitude.finder.repository.ApiRepository
 
 class SearchListViewModel(
     private val repository: ApiRepository,
-    private val remoteConfig: AppRemoteConfig
+    private val remoteConfig: AppRemoteConfig,
+    private val analyticsTracking: AnalyticsTracking
 ) : BaseViewModel(remoteConfig) {
 
     private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
@@ -19,7 +23,34 @@ class SearchListViewModel(
     private val _expandedSearchParams = MutableLiveData(false)
     val expandedSearchParams: LiveData<Boolean> = _expandedSearchParams
 
-    fun isSearchParamsViewEnabled() = remoteConfig.getBoolean("SearchParamsViewEnabled")
+    fun trackSeeDetails(simplePoint: SimplePoint) {
+        analyticsTracking.log("see_point_details") {
+            param("id", simplePoint.id)
+            param("name", simplePoint.name)
+            param("state", simplePoint.state.label)
+        }
+    }
+
+    fun trackSaveState(simplePoint: SimplePoint) {
+        analyticsTracking.log("save_point_state") {
+            param("id", simplePoint.id)
+            param("name", simplePoint.name)
+            param("state", simplePoint.state.label)
+        }
+    }
+
+    fun trackClickDeletePointButton() {
+        analyticsTracking.log("click_delete_point_button")
+    }
+
+    fun trackSuccessDeletePoint(point: SimplePoint) {
+        analyticsTracking.log("delete_point") {
+            param("id", point.id)
+            param("name", point.name)
+        }
+    }
+
+    fun isSearchParamsViewEnabled() = remoteConfig.getBoolean(SEARCH_PARAMS_VIEW_ENABLED)
 
     fun toggleExpandSearchParams() {
         _expandedSearchParams.value = !(expandedSearchParams.value ?: false)
@@ -79,6 +110,8 @@ class SearchListViewModel(
     fun setPointActive(loadingReason: String, point: SimplePoint) {
         setPointState(loadingReason, point, PointState.ACTIVE)
     }
+
+    fun canDeletePoint() = remoteConfig.getBoolean(CAN_DELETE_POINT)
 
     sealed class Flow {
         data object SearchingPoints : Flow()

@@ -17,7 +17,6 @@ class ApplicationInitialization: Application() {
         super.onCreate()
         startKoin {
             androidContext(this@ApplicationInitialization)
-            androidLogger(Level.DEBUG)
             modules(appModules)
         }
     }

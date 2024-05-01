@@ -60,5 +60,9 @@
     <string name="detail_edit_point">Editar</string>
     <string name="detail_last_update">Última atualização: %s %s</string>
     <string name="detail_toast_copy_phone">Telefone de %s copiado!</string>
+    <string name="point_exclusion_confirmation">Confirmação</string>
+    <string name="point_exclusion_confirmation_message">Tem certeza que deseja excluir a célula %1$s</string>
+    <string name="point_exclusion_action">Excluir</string>
+    <string name="point_change_state">Tornando %1$s como \'%2$s\'</string>
 
 </resources>

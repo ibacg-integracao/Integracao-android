@@ -1,18 +1,26 @@
 package br.com.atitude.finder.presentation.searchlist
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AlertDialog
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.FragmentPointOptionsBottomSheetBinding
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
+import br.com.atitude.finder.extensions.visibleOrGone
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class PointOptionsBottomSheet(private val point: SimplePoint, private val callback: Callback) :
-    BottomSheetDialogFragment() {
+data class Configuration(val canDelete: Boolean)
+
+class PointOptionsBottomSheet(
+    private val point: SimplePoint,
+    private val configuration: Configuration,
+    private val callback: Callback
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentPointOptionsBottomSheetBinding
 
@@ -41,7 +49,7 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
 
     private fun configStateRadioGroup() {
         binding.radioGroupStates.check(getRadioButtonIdByState(point.state))
-        binding.radioGroupStates.setOnCheckedChangeListener { radioGroup, id ->
+        binding.radioGroupStates.setOnCheckedChangeListener { _, id ->
             val oldState: PointState = point.state
             val selectedState: PointState = getStateByRadioButtonId(id)
             binding.btnSave.isEnabled = oldState != selectedState
@@ -50,9 +58,26 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
     }
 
     private fun configDeleteButton() {
+        binding.btnDelete.visibleOrGone(configuration.canDelete)
         binding.btnDelete.setOnClickListener {
-            callback.onDelete(point.id)
-            dismiss()
+            callback.onClickDeleteButton()
+            context?.let { context ->
+                val alertDialogBuilder = AlertDialog.Builder(context).create()
+                alertDialogBuilder.setTitle(getString(R.string.point_exclusion_confirmation))
+                alertDialogBuilder.setMessage(
+                    getString(
+                        R.string.point_exclusion_confirmation_message,
+                        point.name
+                    )
+                )
+                alertDialogBuilder.setButton(
+                    DialogInterface.BUTTON_POSITIVE, getString(R.string.point_exclusion_action)
+                ) { _, _ ->
+                    callback.onDelete(point)
+                    dismiss()
+                }
+                alertDialogBuilder.show()
+            }
         }
     }
 
@@ -84,7 +109,8 @@ class PointOptionsBottomSheet(private val point: SimplePoint, private val callba
     interface Callback {
         fun onClickSeeDetails(point: SimplePoint)
         fun onSave(newState: SimplePoint)
-        fun onDelete(pointId: String)
+        fun onDelete(point: SimplePoint)
+        fun onClickDeleteButton()
     }
 
     companion object {
