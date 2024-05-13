@@ -7,7 +7,6 @@ import br.com.atitude.finder.databinding.ActivitySearchBinding
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.CustomChip
-import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.StringChip
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation._base.WeekDayChip
@@ -179,18 +178,8 @@ class SearchActivity : ToolbarActivity() {
             categories = getSelectedTags().toList(),
             times = getSelectedTimes().toList()
         )
-
-        binding.includeWithParams.textInputLayoutPostalCode.error = null
-
-        if (postalCode.isNotEmpty() && postalCode.length != 8) {
-            binding.includeWithParams.textInputLayoutPostalCode.error = "CEP inválido"
-            return
-        }
-
-        binding.includeWithParams.buttonSearch.isEnabled = false
         this.openSearchList(
             input = postalCode.takeIf { it.isNotBlank() },
-            type = postalCode.takeIf { it.isNotBlank() }?.let { SearchType.POSTAL_CODE },
             weekDays = getSelectedWeekDays(),
             tags = getSelectedTags(),
             times = getSelectedTimes()

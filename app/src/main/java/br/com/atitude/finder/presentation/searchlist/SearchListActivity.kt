@@ -1,29 +1,27 @@
 package br.com.atitude.finder.presentation.searchlist
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DividerItemDecoration
 import br.com.atitude.finder.R
+import br.com.atitude.finder.data.network.entity.Errors.NOT_FOUND_ADDRESS_OR_POSTAL_CODE
 import br.com.atitude.finder.databinding.ActivitySearchListBinding
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.EXTRA_INPUT
-import br.com.atitude.finder.presentation._base.EXTRA_INPUT_TYPE
 import br.com.atitude.finder.presentation._base.EXTRA_TAGS
 import br.com.atitude.finder.presentation._base.EXTRA_TIMES
 import br.com.atitude.finder.presentation._base.EXTRA_WEEK_DAYS
-import br.com.atitude.finder.presentation._base.SearchType
 import br.com.atitude.finder.presentation._base.ToolbarActivity
 import br.com.atitude.finder.presentation._base.openPointDetail
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
     private val input: String? by lazy { intent.getStringExtra(EXTRA_INPUT) }
-    private val inputType: SearchType? by lazy {
-        intent.getStringExtra(EXTRA_INPUT_TYPE)?.let { SearchType.findByType(it) }
-    }
+
     private val weekDays: List<WeekDay> by lazy {
         intent.getStringArrayExtra(EXTRA_WEEK_DAYS)?.mapNotNull { WeekDay.getByResponse(it) }
             ?: emptyList()
@@ -74,16 +72,6 @@ class SearchListActivity : ToolbarActivity() {
                 if (expanded) arrowUp else arrowDown
             )
             val stringBuilder = StringBuilder()
-            val inputType = inputType
-
-            if (inputType != null) {
-                val inputTypeFormatted = when (inputType) {
-                    SearchType.POSTAL_CODE -> "CEP"
-                    SearchType.ADDRESS -> "Endereço"
-                }
-
-                stringBuilder.append("$inputTypeFormatted: $input")
-            }
 
             if (expanded) {
                 if (weekDays.isNotEmpty()) {
@@ -106,20 +94,30 @@ class SearchListActivity : ToolbarActivity() {
     override fun onStart() {
         super.onStart()
 
-        when (inputType) {
-            SearchType.POSTAL_CODE -> binding.textViewInput.text =
-                getString(R.string.search_input, getString(R.string.postal_code), input)
-
-            else -> Unit
-        }
-
         initSearchList()
         initObservers()
         initViewModel()
     }
 
+    private fun showAddressOrPostalCodeNotFound() {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.search_address_or_postal_code_not_found)
+            .setPositiveButton(R.string.back) { _, _ -> finish() }
+            .setOnDismissListener { finish() }
+            .create()
+            .show()
+    }
+
     private fun initObservers() {
         initSearchParamsObservers()
+
+        getViewModel().lastApiErrorMessage.observe(this) {
+            it?.let { message ->
+                when (message) {
+                    NOT_FOUND_ADDRESS_OR_POSTAL_CODE -> showAddressOrPostalCodeNotFound()
+                }
+            }
+        }
 
         getViewModel().flow.observe(this) {
             when (it) {
@@ -179,12 +177,21 @@ class SearchListActivity : ToolbarActivity() {
 
     private fun fetchPoints() {
         input?.let { input ->
-            getViewModel().search(
-                postalCode = input,
-                weekDays = weekDays.map { it.response },
-                tags = tags,
-                times = times
-            )
+            if (getViewModel().isSearchV2Enabled()) {
+                getViewModel().searchByAddressOrPostalCode(
+                    input = input,
+                    weekDays = weekDays.map { it.response },
+                    tags = tags,
+                    times = times
+                )
+            } else {
+                getViewModel().search(
+                    postalCode = input,
+                    weekDays = weekDays.map { it.response },
+                    tags = tags,
+                    times = times
+                )
+            }
         } ?: run {
             getViewModel().fetchAllPoints()
         }
