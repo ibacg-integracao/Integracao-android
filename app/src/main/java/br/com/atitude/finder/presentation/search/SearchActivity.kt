@@ -2,6 +2,7 @@ package br.com.atitude.finder.presentation.search
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.inputmethod.EditorInfo
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivitySearchBinding
 import br.com.atitude.finder.domain.SearchParams
@@ -29,6 +30,7 @@ class SearchActivity : ToolbarActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configToolbar(binding.toolbar)
+        initSearchTextField()
         initObservers()
         initSearchButton()
         initCreateButton()
@@ -44,8 +46,15 @@ class SearchActivity : ToolbarActivity() {
         }
     }
 
+    private fun initSearchTextField() {
+        binding.includeWithParams.textInputPostalCode.inputType =
+            if (getViewModel().isSearchV2Enabled())
+                EditorInfo.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
+            else
+                EditorInfo.TYPE_NUMBER_FLAG_SIGNED
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        //menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
     }
 
