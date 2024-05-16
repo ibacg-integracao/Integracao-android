@@ -1,5 +1,10 @@
 package br.com.atitude.finder.data.network
 
+import br.com.atitude.finder.data.network.entity.response.PostalCodeAddressInfoResponse
+import br.com.atitude.finder.data.network.entity.response.search.SearchParamsResponse
+import br.com.atitude.finder.data.network.entity.response.sector.SectorResponse
+import br.com.atitude.finder.data.network.entity.response.SimplePointResponse
+import br.com.atitude.finder.data.network.entity.response.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.AuthenticatedUserResponse
 import br.com.atitude.finder.data.network.entity.PostalCodeAddressInfoResponse
 import br.com.atitude.finder.data.network.entity.SearchParamsResponse
@@ -10,6 +15,7 @@ import br.com.atitude.finder.data.network.entity.UserManagerItemResponse
 import br.com.atitude.finder.data.network.entity.WeekDayResponse
 import br.com.atitude.finder.data.network.entity.request.ChangePasswordRequest
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.response.pointdetail.PointDetailResponse
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
 import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
@@ -40,6 +46,14 @@ interface NetworkApi {
         @Query("time") times: List<String>,
     ): List<SimplePointResponse>
 
+    @GET("v2/point/search")
+    suspend fun searchPointsByAddressOrPostalCode(
+        @Query("input") input: String,
+        @Query("week_day") weekDays: List<String>,
+        @Query("tag") tags: List<String>,
+        @Query("time") times: List<String>,
+    ): List<SimplePointResponse>
+
     @GET("v1/point/")
     suspend fun getAllPoints(): List<SimplePointResponse>
 
@@ -60,6 +74,9 @@ interface NetworkApi {
 
     @GET("v1/sectors/")
     suspend fun getSectors(): List<SectorResponse>
+
+    @GET("v1/point/{id}")
+    suspend fun getPointById(@Path("id") id: String): PointDetailResponse
 
     @PUT("v1/point/{id}")
     suspend fun updatePoint(

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.detail.PointDetailActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIconTint="?attr/colorPrimary"
+            app:title="Detalhes da Célula"
+            app:titleTextColor="?attr/colorPrimary" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_point_name" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_name"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                app:textAllCaps="true"
+                tools:text="Cristo Vive" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_point_tag" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_tag"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                app:textAllCaps="true"
+                tools:text="beone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_point_leader_name" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_leader_name"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                app:textAllCaps="true"
+                tools:text="Gabriel Reis" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_week_day" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_week_day"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                app:textAllCaps="true"
+                tools:text="Terça" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_hour" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_hour_day"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                tools:text="20:30" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_address" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_address"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                tools:text="Rua Soldado Valdemar de Almeida, S/N - Campo Grande - Lote 23, Quadra 2 - 23042-100" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_postal_code"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                tools:text="12345-123" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_point_contacts" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_contacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                tools:itemCount="2"
+                tools:listitem="@layout/view_item_detail_contact" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_sector" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_point_sector"
+                style="@style/Text.Accent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textColor="?attr/colorPrimary"
+                app:textAllCaps="true"
+                tools:text="Unificados" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_last_update"
+                style="@style/Text.Italic.14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_last_update"
+                tools:text="Última atualização: 03/02/2024 12:07" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Button.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/detail_edit_point"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

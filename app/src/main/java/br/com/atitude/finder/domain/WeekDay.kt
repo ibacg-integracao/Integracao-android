@@ -9,10 +9,11 @@ enum class WeekDay(val response: String, @StringRes val localization: Int) {
     WEDNESDAY("wednesday", R.string.wednesday),
     THURSDAY("thursday", R.string.thursday),
     FRIDAY("friday", R.string.friday),
-    SATURDAY("saturday", R.string.saturday);
+    SATURDAY("saturday", R.string.saturday),
+    UNKNOWN("", R.string.unknown);
 
     companion object {
-        fun getByResponse(response: String): WeekDay? =
-            WeekDay.values().find { it.response == response }
+        fun getByResponse(response: String): WeekDay =
+            WeekDay.values().find { it.response == response } ?: UNKNOWN
     }
 }

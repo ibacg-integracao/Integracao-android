@@ -6,6 +6,10 @@ import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
 import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
+import br.com.atitude.finder.data.network.entity.response.pointdetail.toDomain
+import br.com.atitude.finder.data.network.entity.response.search.toDomain
+import br.com.atitude.finder.data.network.entity.response.sector.toDomain
+import br.com.atitude.finder.data.network.entity.response.toDomain
 import br.com.atitude.finder.data.network.entity.toDomain
 import br.com.atitude.finder.data.network.entity.toUser
 import br.com.atitude.finder.domain.PointContact
@@ -14,6 +18,7 @@ import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.UserManagerItem
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.domain.toRequest
 import br.com.atitude.finder.extensions.toPointTime
 
@@ -24,6 +29,9 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
     override suspend fun login(email: String, password: String) =
         networkApi.login(LoginRequest(email, password)).toDomain()
 
+    override suspend fun getPointById(id: String): PointDetail =
+        networkApi.getPointById(id).toDomain()
+
     override suspend fun deletePoint(id: String) {
         networkApi.deletePoint(id)
     }
@@ -32,7 +40,7 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.getAllPoints().map { it.toDomain() }
 
     override suspend fun getWeekDays(): List<WeekDay> =
-        networkApi.getWeekDays().mapNotNull { WeekDay.getByResponse(it.name) }
+        networkApi.getWeekDays().map { WeekDay.getByResponse(it.name) }
 
     override suspend fun searchPoints(
         postalCode: String,
@@ -45,8 +53,21 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
             weekDays = weekDays,
             tags = tags,
             times = times
-        )
-            .map { it.toDomain() }
+        ).map { it.toDomain() }
+    }
+
+    override suspend fun searchPointsByAddressOrPostalCode(
+        input: String,
+        weekDays: List<String>,
+        tags: List<String>,
+        times: List<String>
+    ): List<SimplePoint> {
+        return networkApi.searchPointsByAddressOrPostalCode(
+            input = input,
+            weekDays = weekDays,
+            tags = tags,
+            times = times
+        ).map { it.toDomain() }
     }
 
     override suspend fun getPointsTime() = networkApi.pointsTime().map { it.toPointTime() }
@@ -59,8 +80,6 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         state: String,
         city: String,
         complement: String?,
-        latitude: Double,
-        longitude: Double,
         postalCode: String,
         number: Int?,
         leaderName: String,
@@ -77,8 +96,6 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
                 name = name,
                 street = street,
                 leaderName = leaderName,
-                latitude = latitude,
-                longitude = longitude,
                 postalCode = postalCode,
                 number = number,
                 tag = tag,

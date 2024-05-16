@@ -10,29 +10,27 @@ import br.com.atitude.finder.presentation.creator.CreatorActivity
 import br.com.atitude.finder.presentation.map.PointMapActivity
 import br.com.atitude.finder.presentation.profile.ProfileActivity
 import br.com.atitude.finder.presentation.search.SearchActivity
+import br.com.atitude.finder.presentation.detail.PointDetailActivity
 import br.com.atitude.finder.presentation.searchlist.SearchListActivity
 import br.com.atitude.finder.presentation.users.UsersManagerActivity
 
-enum class SearchType(val type: String) {
-    POSTAL_CODE("postal_code"), ADDRESS("address");
-
-    companion object {
-        fun findByType(type: String): SearchType? = SearchType.values().find { it.type == type }
+fun Context.openPointDetail(pointId: String) {
+    val intent = Intent(this, PointDetailActivity::class.java).apply {
+        putExtra(EXTRA_POINT_ID, pointId)
     }
+    startActivity(intent)
 }
 
 fun Context.intentHome() = Intent(this, SearchActivity::class.java)
 
 fun Context.openSearchList(
     input: String?,
-    type: SearchType?,
     weekDays: Set<WeekDay> = setOf(),
     tags: Set<String> = setOf(),
     times: Set<String> = setOf()
 ) {
     val intent = Intent(this, SearchListActivity::class.java).apply {
         putExtra(EXTRA_INPUT, input)
-        putExtra(EXTRA_INPUT_TYPE, type?.type)
         putExtra(EXTRA_WEEK_DAYS, weekDays.map { it.response }.toTypedArray())
         putExtra(EXTRA_TAGS, tags.toTypedArray())
         putExtra(EXTRA_TIMES, times.toTypedArray())
@@ -43,12 +41,6 @@ fun Context.openSearchList(
 fun Context.openCreator() {
     val intent = Intent(this, CreatorActivity::class.java)
     startActivity(intent)
-}
-
-fun Context.intentPointMap(address: String?): Intent {
-    return Intent(this, PointMapActivity::class.java).apply {
-        address?.let { putExtra(EXTRA_ADDRESS_LINE, address) }
-    }
 }
 
 fun Context.intentAuthentication(): Intent {

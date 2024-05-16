@@ -12,12 +12,15 @@ import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.User
 import br.com.atitude.finder.domain.UserManagerItem
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.domain.pointdetail.PointDetail
 
 interface ApiRepository {
 
     suspend fun getAuthenticatedUser(): User
 
     suspend fun login(email: String, password: String): Token
+
+    suspend fun getPointById(id: String): PointDetail
 
     suspend fun deletePoint(id: String)
 
@@ -26,6 +29,13 @@ interface ApiRepository {
     suspend fun getWeekDays(): List<WeekDay>
     suspend fun searchPoints(
         postalCode: String,
+        weekDays: List<String>,
+        tags: List<String>,
+        times: List<String>
+    ): List<SimplePoint>
+
+    suspend fun searchPointsByAddressOrPostalCode(
+        input: String,
         weekDays: List<String>,
         tags: List<String>,
         times: List<String>
@@ -40,8 +50,6 @@ interface ApiRepository {
         state: String,
         city: String,
         complement: String?,
-        latitude: Double,
-        longitude: Double,
         postalCode: String,
         number: Int?,
         leaderName: String,
