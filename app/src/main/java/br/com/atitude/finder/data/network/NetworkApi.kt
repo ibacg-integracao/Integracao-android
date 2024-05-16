@@ -29,6 +29,14 @@ interface NetworkApi {
         @Query("time") times: List<String>,
     ): List<SimplePointResponse>
 
+    @GET("v2/point/search")
+    suspend fun searchPointsByAddressOrPostalCode(
+        @Query("input") input: String,
+        @Query("week_day") weekDays: List<String>,
+        @Query("tag") tags: List<String>,
+        @Query("time") times: List<String>,
+    ): List<SimplePointResponse>
+
     @GET("v1/point/")
     suspend fun getAllPoints(): List<SimplePointResponse>
 

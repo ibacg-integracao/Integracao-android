@@ -3,7 +3,7 @@
     <!--General-->
     <string name="date_format">%02d/%02d/%d</string>
     <string name="app_name">Integração Finder</string>
-    <string name="postal_code">CEP</string>
+    <string name="address_or_postal_code">Endereço ou CEP</string>
     <string name="postal_code_example">Ex.: 99999–999</string>
     <string name="week_days">Dias da semana</string>
     <string name="monday">Segunda-Feira</string>
@@ -44,6 +44,8 @@
     <string name="point_state_inactive">Inativo</string>
     <string name="point_state_suspended">Suspenso</string>
     <string name="point_state_unknown">Desconhecido</string>
+    <string name="back">Voltar</string>
+    <string name="search_address_or_postal_code_not_found">Endereço ou CEP não encontrado.</string>
 
     <!--Detail-->
 

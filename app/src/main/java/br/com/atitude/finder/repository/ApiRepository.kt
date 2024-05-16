@@ -26,6 +26,13 @@ interface ApiRepository {
         times: List<String>
     ): List<SimplePoint>
 
+    suspend fun searchPointsByAddressOrPostalCode(
+        input: String,
+        weekDays: List<String>,
+        tags: List<String>,
+        times: List<String>
+    ): List<SimplePoint>
+
     suspend fun getPointsTime(): List<PointTime>
     suspend fun searchParams(): SearchParams
     suspend fun createPoint(

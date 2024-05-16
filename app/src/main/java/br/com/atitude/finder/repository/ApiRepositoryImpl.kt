@@ -44,6 +44,20 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         ).map { it.toDomain() }
     }
 
+    override suspend fun searchPointsByAddressOrPostalCode(
+        input: String,
+        weekDays: List<String>,
+        tags: List<String>,
+        times: List<String>
+    ): List<SimplePoint> {
+        return networkApi.searchPointsByAddressOrPostalCode(
+            input = input,
+            weekDays = weekDays,
+            tags = tags,
+            times = times
+        ).map { it.toDomain() }
+    }
+
     override suspend fun getPointsTime() = networkApi.pointsTime().map { it.toPointTime() }
 
     override suspend fun searchParams(): SearchParams = networkApi.searchParams().toDomain()
