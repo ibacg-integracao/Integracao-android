@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.analytics.tracking.AnalyticsTracking
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
+import br.com.atitude.finder.data.remoteconfig.Constants
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
@@ -12,11 +13,13 @@ import br.com.atitude.finder.repository.ApiRepository
 class SearchViewModel(
     private val apiRepository: ApiRepository,
     private val analyticsTracking: AnalyticsTracking,
-    remoteConfig: AppRemoteConfig
+    private val remoteConfig: AppRemoteConfig
 ) : BaseViewModel(remoteConfig) {
 
     private val _searchParams = MutableLiveData<SearchParams?>()
     val searchParams: LiveData<SearchParams?> = _searchParams
+
+    fun isSearchV2Enabled() = remoteConfig.getBoolean(Constants.SEARCH_V2)
 
     fun trackCreateButton() {
         analyticsTracking.log("create_point")

@@ -35,7 +35,6 @@ class PointMapViewModel(
                 }
             }
         } else {
-            setLastError(Exception("Minimum SDK not met"))
             _searching.postValue(false)
         }
     }
