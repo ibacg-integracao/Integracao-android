@@ -8,8 +8,11 @@ import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.Sector
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.domain.pointdetail.PointDetail
 
 interface ApiRepository {
+
+    suspend fun getPointById(id: String): PointDetail
 
     suspend fun deletePoint(id: String)
 

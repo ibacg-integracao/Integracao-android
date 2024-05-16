@@ -1,4 +1,7 @@
 <resources>
+
+    <!--General-->
+    <string name="date_format">%02d/%02d/%d</string>
     <string name="app_name">Integração Finder</string>
     <string name="postal_code">CEP</string>
     <string name="postal_code_example">Ex.: 99999–999</string>
@@ -26,7 +29,7 @@
     <string name="title_activity_point_map">PointMapActivity</string>
     <string name="set_point_location"><u>Confirmar localização</u></string>
     <string name="edit_point_location">Editar localização da célula</string>
-    <string name="hour_format">%d:%02d</string>
+    <string name="hour_format">%02d:%02d</string>
     <string name="street_or_road">Rua ou Estrada</string>
     <string name="invalid_postal_code">CEP inválido</string>
     <string name="out_of_order_title">Manutenção!</string>
@@ -35,9 +38,31 @@
     <string name="remove">Remover</string>
     <string name="male">Masculino</string>
     <string name="female">Feminino</string>
+    <string name="unknown">Desconhecido</string>
     <string name="contact_name_gender_display">%s (%s)</string>
     <string name="point_state_active">Ativo</string>
     <string name="point_state_inactive">Inativo</string>
     <string name="point_state_suspended">Suspenso</string>
     <string name="point_state_unknown">Desconhecido</string>
+
+    <!--Detail-->
+
+    <string name="detail_point_name">Nome da Célula</string>
+    <string name="detail_point_tag">Categoria</string>
+    <string name="detail_point_leader_name">Nome da Líder</string>
+    <string name="detail_point_contacts">Contatos</string>
+    <string name="detail_week_day">Dia da Semana</string>
+    <string name="detail_hour">Horário</string>
+    <string name="detail_address">Endereço</string>
+    <string name="detail_sector">Setor</string>
+    <string name="detail_hour_format">%02d:%02d</string>
+    <string name="detail_contact_name">Nome do contato</string>
+    <string name="detail_edit_point">Editar</string>
+    <string name="detail_last_update">Última atualização: %s %s</string>
+    <string name="detail_toast_copy_phone">Telefone de %s copiado!</string>
+    <string name="point_exclusion_confirmation">Confirmação</string>
+    <string name="point_exclusion_confirmation_message">Tem certeza que deseja excluir a célula %1$s</string>
+    <string name="point_exclusion_action">Excluir</string>
+    <string name="point_change_state">Tornando %1$s como \'%2$s\'</string>
+
 </resources>

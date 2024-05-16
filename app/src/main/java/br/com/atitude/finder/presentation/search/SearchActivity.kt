@@ -164,6 +164,7 @@ class SearchActivity : ToolbarActivity() {
     private fun initCreateButton() {
         binding.includeWithParams.btnCreate.setOnClickListener {
             this.openCreator()
+            getViewModel().trackCreateButton()
         }
     }
 
@@ -172,7 +173,7 @@ class SearchActivity : ToolbarActivity() {
 
     private fun handleSearchButton() {
         val postalCode = getPostalCode()
-        getViewModel().trackSearch(
+        getViewModel().trackSearchButton(
             postalCode = postalCode,
             weekDays = getSelectedWeekDays().toList(),
             categories = getSelectedTags().toList(),

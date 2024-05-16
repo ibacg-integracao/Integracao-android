@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation.creator.CreatorActivity
+import br.com.atitude.finder.presentation.detail.PointDetailActivity
 import br.com.atitude.finder.presentation.searchlist.SearchListActivity
 
 enum class SearchType(val type: String) {
@@ -12,6 +13,13 @@ enum class SearchType(val type: String) {
     companion object {
         fun findByType(type: String): SearchType? = SearchType.values().find { it.type == type }
     }
+}
+
+fun Context.openPointDetail(pointId: String) {
+    val intent = Intent(this, PointDetailActivity::class.java).apply {
+        putExtra(EXTRA_POINT_ID, pointId)
+    }
+    startActivity(intent)
 }
 
 fun Context.openSearchList(

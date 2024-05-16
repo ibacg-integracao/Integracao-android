@@ -10,8 +10,20 @@
 
     <style name="Text" parent="Widget.MaterialComponents.TextView" />
 
-    <style name="Text.14sp" parent="Widget.MaterialComponents.TextView">
+    <style name="Text.14sp" parent="Text">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.16sp" parent="Text">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.18sp" parent="Text">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.20sp" parent="Text">
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="Text.Bold" parent="Text">
@@ -75,4 +87,6 @@
     </style>
 
     <style name="Theme.IntegracaoAndroid" parent="Base.Theme.IntegracaoAndroid" />
+
+    <style name="Text.Header" parent="Text.18sp"/>
 </resources>

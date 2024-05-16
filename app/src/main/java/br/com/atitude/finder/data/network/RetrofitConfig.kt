@@ -12,6 +12,7 @@ class RetrofitConfig {
             .addConverterFactory(
                 GsonConverterFactory.create(
                     GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                         .create()
                 )
             )

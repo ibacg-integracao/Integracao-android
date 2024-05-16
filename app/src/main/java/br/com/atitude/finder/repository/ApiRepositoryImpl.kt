@@ -3,16 +3,23 @@ package br.com.atitude.finder.repository
 import br.com.atitude.finder.data.network.NetworkApi
 import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
-import br.com.atitude.finder.data.network.entity.toDomain
+import br.com.atitude.finder.data.network.entity.response.pointdetail.toDomain
+import br.com.atitude.finder.data.network.entity.response.search.toDomain
+import br.com.atitude.finder.data.network.entity.response.sector.toDomain
+import br.com.atitude.finder.data.network.entity.response.toDomain
 import br.com.atitude.finder.domain.PointContact
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SearchParams
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.domain.toRequest
 import br.com.atitude.finder.extensions.toPointTime
 
 class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
+    override suspend fun getPointById(id: String): PointDetail =
+        networkApi.getPointById(id).toDomain()
+
     override suspend fun deletePoint(id: String) {
         networkApi.deletePoint(id)
     }
@@ -21,7 +28,7 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.getAllPoints().map { it.toDomain() }
 
     override suspend fun getWeekDays(): List<WeekDay> =
-        networkApi.getWeekDays().mapNotNull { WeekDay.getByResponse(it.name) }
+        networkApi.getWeekDays().map { WeekDay.getByResponse(it.name) }
 
     override suspend fun searchPoints(
         postalCode: String,
@@ -34,8 +41,7 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
             weekDays = weekDays,
             tags = tags,
             times = times
-        )
-            .map { it.toDomain() }
+        ).map { it.toDomain() }
     }
 
     override suspend fun getPointsTime() = networkApi.pointsTime().map { it.toPointTime() }
