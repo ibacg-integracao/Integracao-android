@@ -1,6 +1,7 @@
 package br.com.atitude.finder.di
 
 import br.com.atitude.finder.presentation.creator.CreatorViewModel
+import br.com.atitude.finder.presentation.detail.DetailViewModel
 import br.com.atitude.finder.presentation.search.SearchViewModel
 import br.com.atitude.finder.presentation.searchlist.SearchListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
