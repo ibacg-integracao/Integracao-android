@@ -1,6 +1,5 @@
 package br.com.atitude.finder.presentation.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
