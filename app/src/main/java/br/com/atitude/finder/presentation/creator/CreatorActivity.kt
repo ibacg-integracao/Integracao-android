@@ -3,7 +3,6 @@ package br.com.atitude.finder.presentation.creator
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.InputFilter
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -13,9 +12,7 @@ import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.ActivityCreatorBinding
 import br.com.atitude.finder.domain.PointTime
 import br.com.atitude.finder.domain.PostalCodeAddressInfo
-import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.ToolbarActivity
-import br.com.atitude.finder.presentation.map.PointMapResultContract
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Calendar
@@ -29,12 +26,6 @@ class CreatorActivity : ToolbarActivity() {
     override fun getViewModel() = creatorViewModel
 
     private lateinit var adapter: CreatorPointContactAdapter
-
-    private val pointMapResult =
-        registerForActivityResult(PointMapResultContract()) { pointAddress ->
-            if (pointAddress != null)
-                getViewModel().setAddressCoordinates(pointAddress)
-        }
 
     private fun initPointContactRecyclerView() {
         adapter = CreatorPointContactAdapter(this)
@@ -185,14 +176,6 @@ class CreatorActivity : ToolbarActivity() {
         } != null
     }
 
-    private fun configConfirmLocationClickListener() {
-        binding.textViewPointLocation.setOnClickListener {
-            if (validateAddressFields()) {
-                pointMapResult.launch(getInputtedFullAddress())
-            }
-        }
-    }
-
     private fun initTextInputPostalCode() {
         binding.textInputPostalCode.addTextChangedListener { editableText ->
             editableText?.let {
@@ -235,7 +218,6 @@ class CreatorActivity : ToolbarActivity() {
         initSectorInput()
         initTimePicker()
         configButtonCreateClickListener()
-        configConfirmLocationClickListener()
         configLeaderNameInputFocusListener()
         configPointTagFocusListener()
         focusTextInputPointName()
@@ -396,13 +378,6 @@ class CreatorActivity : ToolbarActivity() {
         val pointHour = pointTimeTokens.first
         val pointMinutes = pointTimeTokens.second
         val pointLeaderName = binding.textInputLeaderName.text.toString()
-        val pointCoordinates = getViewModel().addressCoordinates.value
-
-        if (pointCoordinates == null) {
-            pointMapResult.launch(getInputtedFullAddress())
-            return
-        }
-
         val weekDay = getViewModel().weekDay.value ?: return
         val sector = getViewModel().selectedSector ?: return
         val pointPostalCode = binding.textInputPostalCode.text.toString()
@@ -445,7 +420,6 @@ class CreatorActivity : ToolbarActivity() {
                 city = pointPostalCity,
                 complement = pointComplement,
                 leaderName = pointLeaderName,
-                coordinates = pointCoordinates,
                 postalCode = pointPostalCode,
                 number = pointNumber,
                 tag = pointTag,

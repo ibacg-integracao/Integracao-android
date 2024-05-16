@@ -51,8 +51,8 @@ class SearchListViewHolder(
             point.minute
         )
 
+        textViewPointAddressReference.visibleOrGone(point.reference != null)
         point.reference?.let { reference ->
-            textViewPointAddressReference.visibleOrGone(true)
             textViewPointAddressReference.text = reference
         }
 
