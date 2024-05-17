@@ -24,28 +24,11 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.deletePoint(id)
     }
 
-    override suspend fun getAllPoints(): List<SimplePoint> =
-        networkApi.getAllPoints().map { it.toDomain() }
-
     override suspend fun getWeekDays(): List<WeekDay> =
         networkApi.getWeekDays().map { WeekDay.getByResponse(it.name) }
 
-    override suspend fun searchPoints(
-        postalCode: String,
-        weekDays: List<String>,
-        tags: List<String>,
-        times: List<String>
-    ): List<SimplePoint> {
-        return networkApi.searchPoints(
-            postalCode = postalCode,
-            weekDays = weekDays,
-            tags = tags,
-            times = times
-        ).map { it.toDomain() }
-    }
-
     override suspend fun searchPointsByAddressOrPostalCode(
-        input: String,
+        input: String?,
         weekDays: List<String>,
         tags: List<String>,
         times: List<String>

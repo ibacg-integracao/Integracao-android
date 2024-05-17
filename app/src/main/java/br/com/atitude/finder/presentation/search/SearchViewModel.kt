@@ -19,8 +19,6 @@ class SearchViewModel(
     private val _searchParams = MutableLiveData<SearchParams?>()
     val searchParams: LiveData<SearchParams?> = _searchParams
 
-    fun isSearchV2Enabled() = remoteConfig.getBoolean(Constants.SEARCH_V2)
-
     fun trackCreateButton() {
         analyticsTracking.log("create_point")
     }

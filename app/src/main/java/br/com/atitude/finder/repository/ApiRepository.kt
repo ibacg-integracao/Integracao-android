@@ -16,18 +16,10 @@ interface ApiRepository {
 
     suspend fun deletePoint(id: String)
 
-    suspend fun getAllPoints(): List<SimplePoint>
-
     suspend fun getWeekDays(): List<WeekDay>
-    suspend fun searchPoints(
-        postalCode: String,
-        weekDays: List<String>,
-        tags: List<String>,
-        times: List<String>
-    ): List<SimplePoint>
 
     suspend fun searchPointsByAddressOrPostalCode(
-        input: String,
+        input: String?,
         weekDays: List<String>,
         tags: List<String>,
         times: List<String>

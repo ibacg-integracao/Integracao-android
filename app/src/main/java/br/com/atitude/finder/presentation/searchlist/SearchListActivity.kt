@@ -176,25 +176,12 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     private fun fetchPoints() {
-        input?.let { input ->
-            if (getViewModel().isSearchV2Enabled()) {
-                getViewModel().searchByAddressOrPostalCode(
-                    input = input,
-                    weekDays = weekDays.map { it.response },
-                    tags = tags,
-                    times = times
-                )
-            } else {
-                getViewModel().search(
-                    postalCode = input,
-                    weekDays = weekDays.map { it.response },
-                    tags = tags,
-                    times = times
-                )
-            }
-        } ?: run {
-            getViewModel().fetchAllPoints()
-        }
+        getViewModel().searchByAddressOrPostalCode(
+            input = input,
+            weekDays = weekDays.map { it.response },
+            tags = tags,
+            times = times
+        )
     }
 
     fun openPointOptionsModal(simplePoint: SimplePoint) {

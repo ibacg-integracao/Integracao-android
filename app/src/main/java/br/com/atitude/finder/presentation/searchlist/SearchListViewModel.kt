@@ -6,7 +6,6 @@ import br.com.atitude.finder.data.analytics.tracking.AnalyticsTracking
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.data.remoteconfig.Constants.CAN_DELETE_POINT
 import br.com.atitude.finder.data.remoteconfig.Constants.SEARCH_PARAMS_VIEW_ENABLED
-import br.com.atitude.finder.data.remoteconfig.Constants.SEARCH_V2
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.presentation._base.BaseViewModel
@@ -57,15 +56,6 @@ class SearchListViewModel(
         _expandedSearchParams.value = !(expandedSearchParams.value ?: false)
     }
 
-    fun fetchAllPoints() {
-        launch {
-            val points = repository.getAllPoints()
-
-            if (points.isEmpty()) _flow.postValue(Flow.NoPoints)
-            else _flow.postValue(Flow.Success(points))
-        }
-    }
-
     fun deletePoint(id: String) {
         launch(loadingReason = "Deletando célula") {
             repository.deletePoint(id)
@@ -74,7 +64,7 @@ class SearchListViewModel(
     }
 
     fun searchByAddressOrPostalCode(
-        input: String,
+        input: String?,
         weekDays: List<String> = emptyList(),
         tags: List<String> = emptyList(),
         times: List<String>
@@ -83,26 +73,6 @@ class SearchListViewModel(
             val points =
                 repository.searchPointsByAddressOrPostalCode(
                     input = input,
-                    weekDays = weekDays,
-                    tags = tags,
-                    times = times
-                )
-
-            if (points.isEmpty()) _flow.postValue(Flow.NoPoints)
-            else _flow.postValue(Flow.Success(points))
-        }
-    }
-
-    fun search(
-        postalCode: String,
-        weekDays: List<String> = emptyList(),
-        tags: List<String> = emptyList(),
-        times: List<String>
-    ) {
-        launch {
-            val points =
-                repository.searchPoints(
-                    postalCode = postalCode,
                     weekDays = weekDays,
                     tags = tags,
                     times = times
@@ -133,8 +103,6 @@ class SearchListViewModel(
     }
 
     fun canDeletePoint() = remoteConfig.getBoolean(CAN_DELETE_POINT)
-
-    fun isSearchV2Enabled() = remoteConfig.getBoolean(SEARCH_V2)
 
     sealed class Flow {
         data object SearchingPoints : Flow()

@@ -21,24 +21,13 @@ interface NetworkApi {
     @DELETE("v1/point/{id}")
     suspend fun deletePoint(@Path("id") id: String)
 
-    @GET("v1/point/search")
-    suspend fun searchPoints(
-        @Query("postal_code") postalCode: String,
-        @Query("week_day") weekDays: List<String>,
-        @Query("tag") tags: List<String>,
-        @Query("time") times: List<String>,
-    ): List<SimplePointResponse>
-
     @GET("v2/point/search")
     suspend fun searchPointsByAddressOrPostalCode(
-        @Query("input") input: String,
+        @Query("input") input: String?,
         @Query("week_day") weekDays: List<String>,
         @Query("tag") tags: List<String>,
         @Query("time") times: List<String>,
     ): List<SimplePointResponse>
-
-    @GET("v1/point/")
-    suspend fun getAllPoints(): List<SimplePointResponse>
 
     @GET("v1/point/time")
     suspend fun pointsTime(): List<String>

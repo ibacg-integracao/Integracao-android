@@ -47,11 +47,7 @@ class SearchActivity : ToolbarActivity() {
     }
 
     private fun initSearchTextField() {
-        binding.includeWithParams.textInputPostalCode.inputType =
-            if (getViewModel().isSearchV2Enabled())
-                EditorInfo.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
-            else
-                EditorInfo.TYPE_NUMBER_FLAG_SIGNED
+        binding.includeWithParams.textInputPostalCode.inputType = EditorInfo.TYPE_TEXT_VARIATION_POSTAL_ADDRESS
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
