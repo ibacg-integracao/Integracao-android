@@ -16,7 +16,7 @@ import br.com.atitude.finder.repository.SharedPrefs
 class SearchListViewModel(
     private val repository: ApiRepository,
     private val remoteConfig: AppRemoteConfig,
-    private val analyticsTracking: AnalyticsTracking
+    private val analyticsTracking: AnalyticsTracking,
     sharedPreferences: SharedPrefs
 ) : BaseViewModel(remoteConfig, sharedPreferences) {
 
@@ -142,7 +142,7 @@ class SearchListViewModel(
         data object SearchingPoints : Flow()
         data class Success(val points: List<SimplePoint>) : Flow()
         data object NoPoints : Flow()
-        data object DeletedPoint: Flow()
+        data object DeletedPoint : Flow()
         data object UpdatedPoint : Flow()
     }
 }

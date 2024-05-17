@@ -112,4 +112,6 @@
     <string name="users_manager_accept">Aceitar</string>
     <string name="users_manager_not_accepted">Não Aceito</string>
     <string name="users_manager_accepted">Aceito</string>
+    <string name="users_manager_verified">Verificado</string>
+    <string name="users_manager_not_verified">Não verificado</string>
 </resources>

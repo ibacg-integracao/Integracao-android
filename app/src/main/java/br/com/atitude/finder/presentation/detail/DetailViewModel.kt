@@ -6,9 +6,14 @@ import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.domain.pointdetail.PointDetail
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
+import br.com.atitude.finder.repository.SharedPrefs
 
-class DetailViewModel(appRemoteConfig: AppRemoteConfig, private val apiRepository: ApiRepository) :
-    BaseViewModel(appRemoteConfig) {
+class DetailViewModel(
+    appRemoteConfig: AppRemoteConfig,
+    private val apiRepository: ApiRepository,
+    sharedPrefs: SharedPrefs
+) :
+    BaseViewModel(appRemoteConfig, sharedPrefs) {
 
     private val _pointDetail = MutableLiveData<State>()
     val pointDetail: LiveData<State> = _pointDetail

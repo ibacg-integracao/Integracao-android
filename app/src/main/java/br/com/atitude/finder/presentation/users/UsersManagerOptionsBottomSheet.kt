@@ -1,9 +1,11 @@
 package br.com.atitude.finder.presentation.users
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import br.com.atitude.finder.R
 import br.com.atitude.finder.databinding.FragmentUsersManagerOptionsBottomSheetBinding
@@ -63,13 +65,13 @@ class UsersManagerOptionsBottomSheet(
     }
 
     private fun handleDeletedUserEvent() {
-        dismiss()
         callback.onDeletedUser()
+        dismiss()
     }
 
     private fun handleEnabledOrDisableUserEvent() {
-        dismiss()
         callback.onEnabledOrDisabledUser()
+        dismiss()
     }
 
     private fun handleLoadingDeleteUserEvent() {
@@ -83,6 +85,8 @@ class UsersManagerOptionsBottomSheet(
     }
 
     private fun configState() {
+        binding.buttonDeleteUser.isEnabled = !userManagerItem.accepted
+
         if (userManagerItem.accepted) {
             configStateWhenUserIsAccepted()
         } else {
@@ -102,7 +106,18 @@ class UsersManagerOptionsBottomSheet(
 
         with(binding.buttonDeleteUser) {
             setOnClickListener {
-                usersManagerOptionsViewModel.deleteUser(userManagerItem.id)
+                val alertDialogBuilder = AlertDialog.Builder(context).create()
+                alertDialogBuilder.setTitle(getString(R.string.point_exclusion_confirmation))
+                alertDialogBuilder.setMessage(
+                    ""
+                )
+                alertDialogBuilder.setButton(
+                    DialogInterface.BUTTON_POSITIVE, getString(R.string.point_exclusion_action)
+                ) { _, _ ->
+                    usersManagerOptionsViewModel.deleteUser(userManagerItem.id)
+                    dismiss()
+                }
+                alertDialogBuilder.show()
             }
         }
     }

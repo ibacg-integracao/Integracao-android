@@ -18,29 +18,27 @@ class UsersManagerViewHolder(itemView: View, private val callback: UsersManagerL
     fun bind(userManagerItem: UserManagerItem) {
         textViewName.text = userManagerItem.name
 
-        if (userManagerItem.accepted) {
-            configWhenAcceptedState()
-        } else {
-            configWhenNotAcceptedState(userManagerItem)
+        with(buttonAccept) {
+            visibleOrGone(!userManagerItem.accepted)
+            setOnClickListener {
+                callback.onClickAccept(userManagerItem)
+            }
         }
+
+        handleUserAcceptState(userManagerItem.accepted)
 
         itemView.setOnClickListener {
             callback.onClick(userManagerItem)
         }
     }
 
-    private fun configWhenAcceptedState() {
-        textViewAcceptStatus.setText(R.string.users_manager_accepted)
-        textViewAcceptStatus.setTextColor(itemView.resources.getColor(R.color.green, null))
-        buttonAccept.visibleOrGone(false)
-    }
-
-    private fun configWhenNotAcceptedState(userManagerItem: UserManagerItem) {
-        textViewAcceptStatus.setText(R.string.users_manager_not_accepted)
-        textViewAcceptStatus.setTextColor(itemView.resources.getColor(R.color.red, null))
-        buttonAccept.visibleOrGone(true)
-        buttonAccept.setOnClickListener {
-            callback.onClickAccept(userManagerItem)
+    private fun handleUserAcceptState(accepted: Boolean) {
+        if (accepted) {
+            textViewAcceptStatus.setText(R.string.users_manager_accepted)
+            textViewAcceptStatus.setTextColor(itemView.resources.getColor(R.color.green, null))
+        } else {
+            textViewAcceptStatus.setText(R.string.users_manager_not_accepted)
+            textViewAcceptStatus.setTextColor(itemView.resources.getColor(R.color.red, null))
         }
     }
 }

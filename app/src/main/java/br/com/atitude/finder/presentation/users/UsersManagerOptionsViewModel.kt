@@ -34,7 +34,7 @@ class UsersManagerOptionsViewModel(
     fun deleteUser(userId: String) {
         _event.postValue(Event.LoadingDeleteUser)
 
-        launch(showAlertOnError = false, finally = { _event.postValue(null) }) {
+        launch(finally = { _event.postValue(null) }) {
             apiRepository.deleteUser(userId)
             _event.postValue(Event.DeletedUser)
         }

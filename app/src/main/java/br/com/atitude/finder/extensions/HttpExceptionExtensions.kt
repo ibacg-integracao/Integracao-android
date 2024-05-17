@@ -1,10 +1,9 @@
 package br.com.atitude.finder.extensions
 
-import br.com.atitude.finder.data.network.entity.ErrorResponse
+import br.com.atitude.finder.data.network.entity.response.ErrorResponse
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import com.google.gson.Gson
 import retrofit2.HttpException
-import java.lang.Exception
 
 fun HttpException.toBackendFriendlyError(): BaseViewModel.BackendFriendlyError? {
 

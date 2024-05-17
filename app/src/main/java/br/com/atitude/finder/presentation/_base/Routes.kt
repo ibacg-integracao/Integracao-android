@@ -7,10 +7,9 @@ import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation.authentication.AuthenticatorActivity
 import br.com.atitude.finder.presentation.authentication.RegisterAccountActivity
 import br.com.atitude.finder.presentation.creator.CreatorActivity
-import br.com.atitude.finder.presentation.map.PointMapActivity
+import br.com.atitude.finder.presentation.detail.PointDetailActivity
 import br.com.atitude.finder.presentation.profile.ProfileActivity
 import br.com.atitude.finder.presentation.search.SearchActivity
-import br.com.atitude.finder.presentation.detail.PointDetailActivity
 import br.com.atitude.finder.presentation.searchlist.SearchListActivity
 import br.com.atitude.finder.presentation.users.UsersManagerActivity
 

@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_enable_disable_user"
-        style="@style/Button"
+        style="@style/Button.Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/users_manager_disable_user" />
@@ -25,10 +25,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_delete_user"
-        android:enabled="false"
         style="@style/Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:enabled="false"
         android:text="@string/users_manager_delete_user" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

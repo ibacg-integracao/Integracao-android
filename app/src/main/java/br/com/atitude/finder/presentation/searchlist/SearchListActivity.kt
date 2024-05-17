@@ -16,8 +16,8 @@ import br.com.atitude.finder.presentation._base.EXTRA_TAGS
 import br.com.atitude.finder.presentation._base.EXTRA_TIMES
 import br.com.atitude.finder.presentation._base.EXTRA_WEEK_DAYS
 import br.com.atitude.finder.presentation._base.ToolbarActivity
-import br.com.atitude.finder.presentation.searchlist.PointOptionsBottomSheet.Companion.openPointOptionsBottomSheet
 import br.com.atitude.finder.presentation._base.openPointDetail
+import br.com.atitude.finder.presentation.searchlist.PointOptionsBottomSheet.Companion.openPointOptionsBottomSheet
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
@@ -83,7 +83,7 @@ class SearchListActivity : ToolbarActivity() {
                 }
             }
 
-            if(stringBuilder.isBlank()) {
+            if (stringBuilder.isBlank()) {
                 binding.textViewInput.visibleOrGone(false)
             } else {
                 binding.textViewInput.text = stringBuilder.toString()
@@ -213,7 +213,7 @@ class SearchListActivity : ToolbarActivity() {
         }
     }
 
-    inner class SearchListAdapterCallbackImpl: SearchListAdapterCallback {
+    inner class SearchListAdapterCallbackImpl : SearchListAdapterCallback {
         override fun onClick(simplePoint: SimplePoint) {
             openPointOptionsModal(simplePoint)
         }
@@ -250,16 +250,15 @@ class SearchListActivity : ToolbarActivity() {
         }
 
         override fun onDelete(point: SimplePoint) {
-            getViewModel().deletePoint(point.id)
+            getViewModel().deletePoint(
+                loadingReason = getString(R.string.deleting_point),
+                id = point.id
+            )
             getViewModel().trackSuccessDeletePoint(point)
         }
 
-        override fun onClickDeleteButton(pointId: String) {
+        override fun onClickDeleteButton() {
             getViewModel().trackClickDeletePointButton()
-            getViewModel().deletePoint(
-                loadingReason = getString(R.string.deleting_point),
-                id = pointId
-            )
         }
     }
 }

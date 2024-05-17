@@ -5,12 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.atitude.finder.BuildConfig
-import br.com.atitude.finder.data.network.entity.response.ErrorResponse
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.extensions.isAuthenticationError
 import br.com.atitude.finder.extensions.toBackendFriendlyError
 import br.com.atitude.finder.repository.SharedPrefs
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -23,9 +21,6 @@ abstract class BaseViewModel(
     val errorState: LiveData<ErrorState?> = _errorState
     private val _lastApiErrorMessage = MutableLiveData<String?>()
     val lastApiErrorMessage: LiveData<String?> = _lastApiErrorMessage
-
-    private val _apiError = MutableLiveData<ApiError?>()
-    val apiError: LiveData<ApiError?> = _apiError
 
     private val _loading = MutableLiveData<String?>()
     val loading: LiveData<String?> = _loading
@@ -51,11 +46,10 @@ abstract class BaseViewModel(
                 block.invoke()
                 _loading.postValue(null)
             } catch (err: Throwable) {
-                if(BuildConfig.DEBUG)
+                if (BuildConfig.DEBUG)
                     err.printStackTrace()
 
                 (err as? HttpException)?.let {
-                    _apiError.postValue(ApiError(showAlertOnError, it))
 
                     err.toBackendFriendlyError()?.let { backendFriendlyError ->
                         if (backendFriendlyError.isAuthenticationError()) {
@@ -82,7 +76,7 @@ abstract class BaseViewModel(
         sharedPreferences.clearToken()
     }
 
-    sealed  class ErrorState {
+    sealed class ErrorState {
         data object Unauthorized : ErrorState()
         data class Generic(val message: String, val statusCode: Int) : ErrorState()
     }
