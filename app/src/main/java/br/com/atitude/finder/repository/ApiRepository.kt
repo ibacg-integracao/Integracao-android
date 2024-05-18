@@ -19,7 +19,8 @@ interface ApiRepository {
     suspend fun getWeekDays(): List<WeekDay>
 
     suspend fun searchPointsByAddressOrPostalCode(
-        input: String?,
+        input: String,
+        pointName: String?,
         weekDays: List<String>,
         tags: List<String>,
         times: List<String>

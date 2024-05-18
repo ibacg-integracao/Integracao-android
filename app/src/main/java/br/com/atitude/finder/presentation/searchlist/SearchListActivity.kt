@@ -1,15 +1,18 @@
 package br.com.atitude.finder.presentation.searchlist
 
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DividerItemDecoration
 import br.com.atitude.finder.R
-import br.com.atitude.finder.data.network.entity.Errors.NOT_FOUND_ADDRESS_OR_POSTAL_CODE
 import br.com.atitude.finder.databinding.ActivitySearchListBinding
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.domain.WeekDay
+import br.com.atitude.finder.extensions.gone
+import br.com.atitude.finder.extensions.hideKeyboard
+import br.com.atitude.finder.extensions.visible
 import br.com.atitude.finder.extensions.visibleOrGone
 import br.com.atitude.finder.presentation._base.EXTRA_INPUT
 import br.com.atitude.finder.presentation._base.EXTRA_TAGS
@@ -20,7 +23,7 @@ import br.com.atitude.finder.presentation._base.openPointDetail
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SearchListActivity : ToolbarActivity() {
-    private val input: String? by lazy { intent.getStringExtra(EXTRA_INPUT) }
+    private val input: String by lazy { intent.getStringExtra(EXTRA_INPUT).orEmpty() }
 
     private val weekDays: List<WeekDay> by lazy {
         intent.getStringArrayExtra(EXTRA_WEEK_DAYS)?.mapNotNull { WeekDay.getByResponse(it) }
@@ -48,46 +51,18 @@ class SearchListActivity : ToolbarActivity() {
         binding = ActivitySearchListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configToolbar(binding.toolbar)
+        configPointNameSearchTextInput()
         setFinishOnBack()
         initObservers()
-        initSearchParamsView()
     }
 
-    private fun initSearchParamsView() {
-
-        binding.viewSearchParams.visibleOrGone(getViewModel().isSearchParamsViewEnabled())
-
-        binding.viewSearchParams.setOnClickListener {
-            getViewModel().toggleExpandSearchParams()
+    private fun configPointNameSearchTextInput() {
+        binding.textInputPointName.setOnEditorActionListener { textView, i, keyEvent ->
+            performSearchWithPointName()
+            return@setOnEditorActionListener true
         }
-    }
-
-    private fun initSearchParamsObservers() {
-        getViewModel().expandedSearchParams.observe(this) { expanded ->
-            val arrowDown =
-                AppCompatResources.getDrawable(this, R.drawable.round_arrow_drop_down_24)
-            val arrowUp = AppCompatResources.getDrawable(this, R.drawable.round_arrow_drop_up_24)
-
-            binding.ibArrow.setImageDrawable(
-                if (expanded) arrowUp else arrowDown
-            )
-            val stringBuilder = StringBuilder()
-
-            if (expanded) {
-                if (weekDays.isNotEmpty()) {
-                    stringBuilder.appendLine()
-                    val weekDaysFormatted =
-                        weekDays.joinToString(", ") { getString(it.localization) }
-                    stringBuilder.append("Dias: $weekDaysFormatted")
-                }
-            }
-
-            if(stringBuilder.isBlank()) {
-                binding.textViewInput.visibleOrGone(false)
-            } else {
-                binding.textViewInput.text = stringBuilder.toString()
-            }
-
+        binding.textInputLayoutPointName.setEndIconOnClickListener {
+            performSearchWithPointName()
         }
     }
 
@@ -99,34 +74,76 @@ class SearchListActivity : ToolbarActivity() {
         initViewModel()
     }
 
-    private fun showAddressOrPostalCodeNotFound() {
-        AlertDialog.Builder(this)
-            .setMessage(R.string.search_address_or_postal_code_not_found)
-            .setPositiveButton(R.string.back) { _, _ -> finish() }
-            .setOnDismissListener { finish() }
-            .create()
-            .show()
-    }
-
     private fun initObservers() {
-        initSearchParamsObservers()
-
-        getViewModel().lastApiErrorMessage.observe(this) {
-            it?.let { message ->
-                when (message) {
-                    NOT_FOUND_ADDRESS_OR_POSTAL_CODE -> showAddressOrPostalCodeNotFound()
-                }
-            }
-        }
 
         getViewModel().flow.observe(this) {
             when (it) {
                 is SearchListViewModel.Flow.Success -> handleSuccessState(it)
-                is SearchListViewModel.Flow.SearchingPoints -> handleSearchingPoints()
                 is SearchListViewModel.Flow.NoPoints -> handleNoPoints()
                 is SearchListViewModel.Flow.DeletedPoint -> handleDeletedPoint()
                 is SearchListViewModel.Flow.UpdatedPoint -> handleUpdatedPoint()
+                is SearchListViewModel.Flow.Error -> handleErrorState()
+                is SearchListViewModel.Flow.AddressOrPostalCodeNotFound -> handleAddressOrPostalCodeNotFoundState()
+                else -> Unit
             }
+
+            if (it is SearchListViewModel.Flow.Loading) {
+                hidePointNameInputAction()
+                showLoader()
+            } else {
+                showPointNameInputAction()
+                hideLoader()
+            }
+        }
+    }
+
+    private fun handleAddressOrPostalCodeNotFoundState() {
+        showErrorState(
+            drawableRes = R.drawable.no_results,
+            title = R.string.search_no_address_or_postal_code_title,
+            description = R.string.search_no_address_or_postal_code_description,
+            action = R.string.search_no_address_or_postal_code_action
+        ) {
+            fetchPoints()
+        }
+    }
+
+    private fun hideErrorState() {
+        binding.viewErrorState.gone()
+    }
+
+    private fun showErrorState(
+        @DrawableRes drawableRes: Int,
+        @StringRes title: Int,
+        @StringRes description: Int,
+        @StringRes action: Int,
+        onAction: () -> Unit
+    ) {
+        binding.viewErrorState.visible()
+        binding.imageViewErrorState.setImageDrawable(
+            AppCompatResources.getDrawable(
+                this,
+                drawableRes
+            )
+        )
+        binding.textViewErrorTitle.setText(title)
+        binding.textViewErrorDescription.setText(description)
+        binding.buttonErrorAction.setText(action)
+        binding.buttonErrorAction.setOnClickListener {
+            onAction()
+        }
+    }
+
+    private fun handleErrorState() {
+        hideLoader()
+        binding.recyclerViewPoints.visibleOrGone(false)
+        showErrorState(
+            drawableRes = R.drawable.error,
+            title = R.string.search_error_title,
+            description = R.string.search_error_description,
+            action = R.string.search_no_results_action
+        ) {
+            fetchPoints()
         }
     }
 
@@ -138,27 +155,40 @@ class SearchListActivity : ToolbarActivity() {
         fetchPoints()
     }
 
+    private fun hideLoader() {
+        binding.viewLoading.visibleOrGone(false)
+    }
+
+    private fun showLoader() {
+        binding.viewLoading.visibleOrGone(true)
+    }
+
     private fun handleNoPoints() {
-        with(binding.textViewPlaceholder) {
-            visibleOrGone(true)
-            text = getString(R.string.no_points)
-        }
-        
-        with(binding.recyclerViewPoints) {
-            visibleOrGone(false)
+        hideLoader()
+        binding.recyclerViewPoints.visibleOrGone(false)
+        showErrorState(
+            drawableRes = R.drawable.no_results,
+            title = R.string.search_no_results_title,
+            description = R.string.search_no_results_description,
+            action = R.string.search_no_results_action
+        ) {
+            finish()
         }
     }
 
-    private fun handleSearchingPoints() {
-        with(binding.textViewPlaceholder) {
-            visibleOrGone(true)
-            text = getString(R.string.searching)
-        }
+    private fun hidePointNameInputAction() {
+        binding.textInputLayoutPointName.isEndIconVisible = false
+    }
+
+    private fun showPointNameInputAction() {
+        binding.textInputLayoutPointName.isEndIconVisible = true
     }
 
     private fun handleSuccessState(flow: SearchListViewModel.Flow.Success) {
+        hideErrorState()
+        hideLoader()
+        binding.recyclerViewPoints.visibleOrGone(true)
         adapter.points = flow.points
-        binding.textViewPlaceholder.visibleOrGone(false)
     }
 
     private fun initSearchList() {
@@ -175,12 +205,28 @@ class SearchListActivity : ToolbarActivity() {
         fetchPoints()
     }
 
+    private fun getPointNameFromInput() = binding.textInputPointName.text?.toString().orEmpty()
+
+    private fun performSearchWithPointName() {
+        val pointName = getPointNameFromInput()
+        hideKeyboard()
+        getViewModel().trackSearchPointName(pointName)
+        getViewModel().searchByAddressOrPostalCode(
+            input = input,
+            pointName = pointName,
+            weekDays = weekDays.map { it.response },
+            tags = tags,
+            times = times
+        )
+    }
+
     private fun fetchPoints() {
         getViewModel().searchByAddressOrPostalCode(
             input = input,
             weekDays = weekDays.map { it.response },
             tags = tags,
-            times = times
+            times = times,
+            pointName = null
         )
     }
 

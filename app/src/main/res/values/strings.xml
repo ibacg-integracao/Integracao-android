@@ -66,5 +66,17 @@
     <string name="point_exclusion_confirmation_message">Tem certeza que deseja excluir a célula %1$s</string>
     <string name="point_exclusion_action">Excluir</string>
     <string name="point_change_state">Tornando %1$s como \'%2$s\'</string>
+    
+    <string name="search_no_results_title">Nenhum resultado</string>
+    <string name="search_no_results_description">Vish… com base nos parâmetros de busca, não encontramos nenhuma célula.</string>
+    <string name="search_no_results_action">Voltar</string>
+
+    <string name="search_error_title">Erro inesperado</string>
+    <string name="search_error_description">Aconteceu um erro que não estávamos esperando, poderia reportar isso aos adminstradores?</string>
+    <string name="search_error_action">Tentar novamente</string>
+
+    <string name="search_no_address_or_postal_code_title">Endereço, referência ou CEP não encontrado</string>
+    <string name="search_no_address_or_postal_code_description">Vish… o endereço, referência ou CEP inserido parece inválido.</string>
+    <string name="search_no_address_or_postal_code_action">Voltar</string>
 
 </resources>

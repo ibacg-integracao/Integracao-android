@@ -1,13 +1,13 @@
 package br.com.atitude.finder.data.network
 
+import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.response.PostalCodeAddressInfoResponse
-import br.com.atitude.finder.data.network.entity.response.search.SearchParamsResponse
-import br.com.atitude.finder.data.network.entity.response.sector.SectorResponse
 import br.com.atitude.finder.data.network.entity.response.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.response.WeekDayResponse
-import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.response.pointdetail.PointDetailResponse
-import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
+import br.com.atitude.finder.data.network.entity.response.search.SearchParamsResponse
+import br.com.atitude.finder.data.network.entity.response.sector.SectorResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -23,7 +23,8 @@ interface NetworkApi {
 
     @GET("v2/point/search")
     suspend fun searchPointsByAddressOrPostalCode(
-        @Query("input") input: String?,
+        @Query("input") input: String,
+        @Query("point_name") pointName: String?,
         @Query("week_day") weekDays: List<String>,
         @Query("tag") tags: List<String>,
         @Query("time") times: List<String>,
