@@ -28,13 +28,15 @@ class ApiRepositoryImpl(private val networkApi: NetworkApi) : ApiRepository {
         networkApi.getWeekDays().map { WeekDay.getByResponse(it.name) }
 
     override suspend fun searchPointsByAddressOrPostalCode(
-        input: String?,
+        input: String,
+        pointName: String?,
         weekDays: List<String>,
         tags: List<String>,
         times: List<String>
     ): List<SimplePoint> {
         return networkApi.searchPointsByAddressOrPostalCode(
             input = input,
+            pointName = pointName,
             weekDays = weekDays,
             tags = tags,
             times = times

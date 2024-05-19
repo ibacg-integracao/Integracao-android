@@ -3,11 +3,12 @@ package br.com.atitude.finder.presentation.searchlist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.atitude.finder.data.analytics.tracking.AnalyticsTracking
+import br.com.atitude.finder.data.network.entity.Errors
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
 import br.com.atitude.finder.data.remoteconfig.Constants.CAN_DELETE_POINT
-import br.com.atitude.finder.data.remoteconfig.Constants.SEARCH_PARAMS_VIEW_ENABLED
 import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
+import br.com.atitude.finder.extensions.hasErrorMessage
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
 
@@ -17,11 +18,14 @@ class SearchListViewModel(
     private val analyticsTracking: AnalyticsTracking
 ) : BaseViewModel(remoteConfig) {
 
-    private val _flow = MutableLiveData<Flow>(Flow.SearchingPoints)
+    private val _flow = MutableLiveData<Flow>(Flow.Loading)
     val flow: LiveData<Flow> = _flow
 
-    private val _expandedSearchParams = MutableLiveData(false)
-    val expandedSearchParams: LiveData<Boolean> = _expandedSearchParams
+    fun trackSearchPointName(pointName: String) {
+        analyticsTracking.log("search_point_name") {
+            param("value", pointName)
+        }
+    }
 
     fun trackSeeDetails(simplePoint: SimplePoint) {
         analyticsTracking.log("see_point_details") {
@@ -50,12 +54,6 @@ class SearchListViewModel(
         }
     }
 
-    fun isSearchParamsViewEnabled() = remoteConfig.getBoolean(SEARCH_PARAMS_VIEW_ENABLED)
-
-    fun toggleExpandSearchParams() {
-        _expandedSearchParams.value = !(expandedSearchParams.value ?: false)
-    }
-
     fun deletePoint(id: String) {
         launch(loadingReason = "Deletando célula") {
             repository.deletePoint(id)
@@ -64,15 +62,24 @@ class SearchListViewModel(
     }
 
     fun searchByAddressOrPostalCode(
-        input: String?,
+        input: String,
+        pointName: String?,
         weekDays: List<String> = emptyList(),
         tags: List<String> = emptyList(),
         times: List<String>
     ) {
-        launch {
+        _flow.postValue(Flow.Loading)
+        launch(errorBlock = {
+            if(it.hasErrorMessage(Errors.NOT_FOUND_ADDRESS_OR_POSTAL_CODE)) {
+                _flow.postValue(Flow.AddressOrPostalCodeNotFound)
+                return@launch
+            }
+            _flow.postValue(Flow.Error)
+        }) {
             val points =
                 repository.searchPointsByAddressOrPostalCode(
                     input = input,
+                    pointName = pointName,
                     weekDays = weekDays,
                     tags = tags,
                     times = times
@@ -105,10 +112,12 @@ class SearchListViewModel(
     fun canDeletePoint() = remoteConfig.getBoolean(CAN_DELETE_POINT)
 
     sealed class Flow {
-        data object SearchingPoints : Flow()
+        data object Loading : Flow()
         data class Success(val points: List<SimplePoint>) : Flow()
         data object NoPoints : Flow()
         data object DeletedPoint: Flow()
         data object UpdatedPoint : Flow()
+        data object Error : Flow()
+        data object AddressOrPostalCodeNotFound : Flow()
     }
 }

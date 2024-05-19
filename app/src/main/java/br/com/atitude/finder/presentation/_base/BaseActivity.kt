@@ -16,7 +16,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getViewModel()?.let { viewModel ->
-            viewModel.loading.observe(this) { reason ->
+            viewModel.loadingReason.observe(this) { reason ->
                 if (reason == null) {
                     progressDialog?.dismiss()
                 } else {

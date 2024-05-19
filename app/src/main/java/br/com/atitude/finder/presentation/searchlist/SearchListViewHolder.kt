@@ -8,6 +8,7 @@ import br.com.atitude.finder.domain.PointState
 import br.com.atitude.finder.domain.SimplePoint
 import br.com.atitude.finder.extensions.visibleOrGone
 
+
 class SearchListViewHolder(
     itemView: View,
     private val callback: SearchListAdapterCallback
@@ -29,6 +30,7 @@ class SearchListViewHolder(
         }
 
         textViewPointName.text = point.name
+
         val distancePrecision = point.getPreciseDistance()
 
         if (distancePrecision != null) {
