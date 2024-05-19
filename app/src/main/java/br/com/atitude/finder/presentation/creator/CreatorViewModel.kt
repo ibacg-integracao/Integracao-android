@@ -11,7 +11,6 @@ import br.com.atitude.finder.domain.WeekDay
 import br.com.atitude.finder.presentation._base.BaseViewModel
 import br.com.atitude.finder.repository.ApiRepository
 import br.com.atitude.finder.repository.SharedPrefs
-import com.google.android.gms.maps.model.LatLng
 
 class CreatorViewModel(
     private val apiRepository: ApiRepository,
@@ -64,7 +63,6 @@ class CreatorViewModel(
     fun fetchPostalCodeData(loadingReason: String, postalCode: String) {
         launch(
             loadingReason = loadingReason,
-            showAlertOnError = false,
             errorBlock = {
                 _postalCodeData.postValue(null)
             }) {

@@ -6,11 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.atitude.finder.BuildConfig
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
-import br.com.atitude.finder.extensions.isAuthenticationError
-import br.com.atitude.finder.extensions.toBackendFriendlyError
 import br.com.atitude.finder.repository.SharedPrefs
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 abstract class BaseViewModel(
     private val appRemoteConfig: AppRemoteConfig,
@@ -22,8 +19,11 @@ abstract class BaseViewModel(
     private val _lastApiErrorMessage = MutableLiveData<String?>()
     val lastApiErrorMessage: LiveData<String?> = _lastApiErrorMessage
 
-    private val _loading = MutableLiveData<String?>()
-    val loading: LiveData<String?> = _loading
+    private val _apiError = MutableLiveData<ApiError?>()
+    val apiError: LiveData<ApiError?> = _apiError
+
+    private val _loadingReason = MutableLiveData<String?>()
+    val loadingReason: LiveData<String?> = _loadingReason
 
     fun hasToken(): Boolean = sharedPreferences.hasToken()
 
@@ -31,43 +31,24 @@ abstract class BaseViewModel(
 
     open fun launch(
         loadingReason: String? = null,
-        showAlertOnError: Boolean = true,
         errorBlock: ((Throwable) -> Unit)? = null,
         apiErrorBlock: ((BackendFriendlyError) -> Unit)? = null,
         finally: (() -> Unit)? = null,
         block: suspend () -> Unit
     ) {
         if (loadingReason != null) {
-            _loading.value = loadingReason
+            _loadingReason.value = loadingReason
         }
 
         viewModelScope.launch {
             try {
                 block.invoke()
-                _loading.postValue(null)
+                _loadingReason.postValue(null)
             } catch (err: Throwable) {
                 if (BuildConfig.DEBUG)
                     err.printStackTrace()
-
-                (err as? HttpException)?.let {
-
-                    err.toBackendFriendlyError()?.let { backendFriendlyError ->
-                        if (backendFriendlyError.isAuthenticationError()) {
-                            _errorState.postValue(ErrorState.Unauthorized)
-                        } else {
-                            _errorState.postValue(
-                                ErrorState.Generic(
-                                    backendFriendlyError.message,
-                                    backendFriendlyError.statusCode
-                                )
-                            )
-                        }
-
-                        apiErrorBlock?.invoke(backendFriendlyError)
-                    }
-                }
                 errorBlock?.invoke(err)
-                _loading.postValue(null)
+                _loadingReason.postValue(null)
             }
         }
     }

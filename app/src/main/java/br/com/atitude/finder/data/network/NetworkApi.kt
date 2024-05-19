@@ -1,13 +1,13 @@
 package br.com.atitude.finder.data.network
 
+import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
+import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.AuthenticatedUserResponse
 import br.com.atitude.finder.data.network.entity.TokenResponse
 import br.com.atitude.finder.data.network.entity.UserManagerItemResponse
 import br.com.atitude.finder.data.network.entity.request.ChangePasswordRequest
-import br.com.atitude.finder.data.network.entity.request.CreatePointRequest
 import br.com.atitude.finder.data.network.entity.request.LoginRequest
 import br.com.atitude.finder.data.network.entity.request.RegisterAccountRequest
-import br.com.atitude.finder.data.network.entity.request.UpdatePointRequest
 import br.com.atitude.finder.data.network.entity.response.PostalCodeAddressInfoResponse
 import br.com.atitude.finder.data.network.entity.response.SimplePointResponse
 import br.com.atitude.finder.data.network.entity.response.WeekDayResponse
@@ -33,24 +33,14 @@ interface NetworkApi {
     @DELETE("v1/point/{id}")
     suspend fun deletePoint(@Path("id") id: String)
 
-    @GET("v1/point/search")
-    suspend fun searchPoints(
-        @Query("postal_code") postalCode: String,
-        @Query("week_day") weekDays: List<String>,
-        @Query("tag") tags: List<String>,
-        @Query("time") times: List<String>,
-    ): List<SimplePointResponse>
-
     @GET("v2/point/search")
     suspend fun searchPointsByAddressOrPostalCode(
         @Query("input") input: String,
+        @Query("point_name") pointName: String?,
         @Query("week_day") weekDays: List<String>,
         @Query("tag") tags: List<String>,
         @Query("time") times: List<String>,
     ): List<SimplePointResponse>
-
-    @GET("v1/point/")
-    suspend fun getAllPoints(): List<SimplePointResponse>
 
     @GET("v1/point/time")
     suspend fun pointsTime(): List<String>

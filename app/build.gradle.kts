@@ -17,8 +17,8 @@ android {
         applicationId = "br.com.atitude.finder"
         minSdk = 24
         targetSdk = 34
-        versionCode = 21
-        versionName = "1.6.1"
+        versionCode = 23
+        versionName = "1.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

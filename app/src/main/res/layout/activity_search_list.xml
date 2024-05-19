@@ -16,81 +16,102 @@
         app:title="Resultados"
         app:titleTextColor="?attr/colorPrimary" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/view_search_params"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout_point_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:hint="@string/point_name"
+        app:endIconDrawable="@drawable/round_search_24"
+        app:endIconMode="custom"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_point_name"
+            android:imeOptions="actionDone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_search"
-                style="@style/Text.Italic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:text="Parâmetro de busca"
-                android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_view_input"
-                style="@style/Text.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@android:color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_search"
-                tools:text="CEP: 99999-999" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_arrow"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_margin="8dp"
-                android:background="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_search"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/text_view_search"
-                app:srcCompat="@drawable/round_arrow_drop_down_24"
-                app:tint="@android:color/white" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+            android:singleLine="true"
+            android:textColorHint="#6B6B6B" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_points"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_search_params"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_point_name"
         tools:listitem="@layout/point_list_item" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/text_view_placeholder"
-        style="@style/Text.Italic"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/view_error_state"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:background="?attr/colorSurface"
         android:gravity="center"
-        android:text="@string/searching"
+        android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_search_params"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_point_name"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view_error_state"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            tools:src="@drawable/no_results" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_view_error_title"
+            style="@style/Text.Bold.18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:maxWidth="300dp"
+            android:textAlignment="center"
+            tools:text="Nenhum resultado" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_view_error_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxWidth="300dp"
+            android:textAlignment="center"
+            tools:text="Vish... com base nos parâmetros de busca, não encontramos nenhuma célula." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_error_action"
+            style="@style/Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            tools:text="Voltar" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <LinearLayout
+        android:id="@+id/view_loading"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="?attr/colorSurface"
+        android:gravity="center"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_layout_point_name"
+        tools:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
