@@ -56,8 +56,8 @@ class SearchListViewModel(
         }
     }
 
-    fun deletePoint(id: String) {
-        launch(loadingReason = "Deletando célula") {
+    fun deletePoint(loadingReason: String, id: String) {
+        launch(loadingReason = loadingReason) {
             repository.deletePoint(id)
             _flow.postValue(Flow.DeletedPoint)
         }

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.atitude.finder.BuildConfig
 import br.com.atitude.finder.data.remoteconfig.AppRemoteConfig
+import br.com.atitude.finder.extensions.hasErrorMessage
+import br.com.atitude.finder.extensions.hasErrorStatusCode
 import br.com.atitude.finder.repository.SharedPrefs
 import kotlinx.coroutines.launch
 
@@ -16,11 +18,6 @@ abstract class BaseViewModel(
 
     private val _errorState = MutableLiveData<ErrorState?>()
     val errorState: LiveData<ErrorState?> = _errorState
-    private val _lastApiErrorMessage = MutableLiveData<String?>()
-    val lastApiErrorMessage: LiveData<String?> = _lastApiErrorMessage
-
-    private val _apiError = MutableLiveData<ApiError?>()
-    val apiError: LiveData<ApiError?> = _apiError
 
     private val _loadingReason = MutableLiveData<String?>()
     val loadingReason: LiveData<String?> = _loadingReason
@@ -32,7 +29,6 @@ abstract class BaseViewModel(
     open fun launch(
         loadingReason: String? = null,
         errorBlock: ((Throwable) -> Unit)? = null,
-        apiErrorBlock: ((BackendFriendlyError) -> Unit)? = null,
         finally: (() -> Unit)? = null,
         block: suspend () -> Unit
     ) {
@@ -45,13 +41,23 @@ abstract class BaseViewModel(
                 block.invoke()
                 _loadingReason.postValue(null)
             } catch (err: Throwable) {
-                if (BuildConfig.DEBUG)
+                if (BuildConfig.DEBUG) {
                     err.printStackTrace()
+                }
+
+                if (isAuthenticationError(err)) {
+                    _errorState.postValue(ErrorState.Unauthorized)
+                }
+
                 errorBlock?.invoke(err)
                 _loadingReason.postValue(null)
             }
         }
     }
+
+    private fun isAuthenticationError(err: Throwable) = err.hasErrorStatusCode(401) ||
+            err.hasErrorStatusCode(403) ||
+            err.hasErrorMessage(listOf("no authorization header", "Invalid token"))
 
     fun logout() {
         sharedPreferences.clearToken()

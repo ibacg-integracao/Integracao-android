@@ -23,7 +23,7 @@ class UsersManagerOptionsViewModel(
     fun enableOrDisableUser(userId: String, enable: Boolean) {
         _event.postValue(Event.LoadingEnableOrDisableEvent)
 
-        launch(showAlertOnError = false, finally = { _event.postValue(null) }) {
+        launch(finally = { _event.postValue(null) }) {
             if (enable) apiRepository.enableUser(userId)
             else apiRepository.disableUser(userId)
 

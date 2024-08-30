@@ -125,8 +125,6 @@ class AuthenticatorActivity : BaseActivity() {
     }
 
     private fun handleInvalidCredentials() {
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.invalid_credentials))
-            .show()
+        Snackbar.make(binding.root, "Credenciais inválidas", Snackbar.LENGTH_LONG).show()
     }
 }

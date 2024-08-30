@@ -58,7 +58,7 @@ class SearchListActivity : ToolbarActivity() {
     }
 
     private fun configPointNameSearchTextInput() {
-        binding.textInputPointName.setOnEditorActionListener { textView, i, keyEvent ->
+        binding.textInputPointName.setOnEditorActionListener { _, _, _ ->
             performSearchWithPointName()
             return@setOnEditorActionListener true
         }
